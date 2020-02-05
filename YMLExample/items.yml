@@ -1,0 +1,12 @@
+itemname1:
+   type: typ
+   lore: lore
+   enchantments:
+   -  enchantmentTyp1: level
+   -  enchantmentTyp2: level
+itemname2:
+   type: typ
+   lore: lore
+   enchantments:
+   -  enchantmentTyp1: level
+   -  enchantmentTyp2: level

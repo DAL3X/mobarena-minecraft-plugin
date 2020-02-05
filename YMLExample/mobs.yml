@@ -1,0 +1,5 @@
+mobName1:
+   type: mobtyp
+   equip:
+   -  ItemBlueprint1: slot
+   -  ItemBlueprint2: slot

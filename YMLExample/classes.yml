@@ -1,0 +1,6 @@
+klasse1:
+   leftClickSkill: skillname
+   rightClickSkill: skillname
+   equip:
+   -  itemblueprint1: slot
+   -  itemblueprint2: slot

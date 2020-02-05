@@ -1,0 +1,7 @@
+name: Soulcraft-Mobarena
+version: 0.1
+main: de.dal3x.mobarena.main.MobArenaPlugin
+authors:
+- DAL3X
+- DrKeiter
+commands: null
