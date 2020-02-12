@@ -8,6 +8,8 @@ public class Config {
 	public static final String classFileName = "classes.yml";
 	public static final String waveFileName = "waves.yml";
 	public static final String arenaFileName = "arenas.yml";
+	public static final String pointFilePath = dirPath + "Punkte/";
+	public static final String points = "points";
 	
 	public static final String joinCommand = "join";
 	public static final String leaveCommand = "leave";
@@ -25,6 +27,10 @@ public class Config {
 	public static final double healtAddMultiPerWave = 0.05;
 	public static final double bossHealthMultiPerPlayer = 3;
 	
-	public static final double damageTakenMultiPerWave = 0.05;
+	public static final double damageTakenMultiPerWave = 0.03;
+	
+	public static final int pointPerMobkill = 1;
+	public static final int pointPerBosskill = 50;
+	public static final int pointPerWave = 8;
 	
 }

@@ -41,7 +41,7 @@ public class MobArenaPlugin extends JavaPlugin{
 	}
 	
 	private void init() {
-		this.fileHandler = new Filehandler();
+		this.fileHandler = Filehandler.getInstance();
 		this.fileHandler.loadRessources();
 		InventoryStorage.getInstance();
 	}
@@ -55,6 +55,7 @@ public class MobArenaPlugin extends JavaPlugin{
 		MobGenerator.clearInstance();
 		MobwaveController.clearInstance();
 		InventoryStorage.clearInstance();
+		Filehandler.clearInstance();
 	}
 
 	public Filehandler getFileHandler() {

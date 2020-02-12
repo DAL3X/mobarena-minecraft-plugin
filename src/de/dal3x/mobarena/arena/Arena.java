@@ -1,5 +1,6 @@
 package de.dal3x.mobarena.arena;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import de.dal3x.mobarena.boss.BossStorage;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.config.Config;
+import de.dal3x.mobarena.file.Filehandler;
 import de.dal3x.mobarena.listener.ClassPickListener;
 import de.dal3x.mobarena.listener.DamageListener;
 import de.dal3x.mobarena.listener.DeathListener;
@@ -39,6 +41,7 @@ public class Arena {
 	private List<Mobwave> waves;
 	private List<Player> participants;
 	private List<Player> spectator;
+	private HashMap<Player, Integer> arenaPoints;
 	private boolean isFree;
 	private int waveCounter;
 	private int numberOfCurrentWave;
@@ -51,8 +54,8 @@ public class Arena {
 	private BossStorage bossStorage;
 	private Mob activeBoss;
 
-	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation, List<Location> mobspawns,
-			List<Location> playerspawn, List<Mobwave> waves) {
+	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation,
+			List<Location> mobspawns, List<Location> playerspawn, List<Mobwave> waves) {
 		this.name = name;
 		this.spectate = spectate;
 		this.lobby = lobby;
@@ -68,6 +71,7 @@ public class Arena {
 		this.setActiveMobs(new LinkedList<Mob>());
 		this.setQueue(new QueueController());
 		this.spectator = new LinkedList<Player>();
+		this.arenaPoints = new HashMap<Player, Integer>();
 		this.waveCounter = 1;
 		this.numberOfCurrentWave = 0;
 		isFree = true;
@@ -173,6 +177,7 @@ public class Arena {
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		this.participants.add(p);
 		setInventory(p);
+		this.arenaPoints.put(p, 0);
 	}
 
 	public void removeParticipant(Player p) {
@@ -180,6 +185,8 @@ public class Arena {
 		this.spectator.remove(p);
 		p.teleport(this.spawnLocation);
 		clearInventory(p);
+		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
+		this.arenaPoints.remove(p);
 		if (this.participants.size() == 0) {
 			reset();
 		}
@@ -214,22 +221,28 @@ public class Arena {
 		this.activeMobs.clear();
 		this.spectator.clear();
 		this.participants.clear();
+		this.arenaPoints.clear();
 		this.isFree = true;
 		this.waveCounter = 1;
 	}
 
-	public boolean removeMobAndAskIfEmpty(Mob mob) {
+	public boolean removeMobAndAskIfEmpty(Mob mob, Player killer) {
 		this.activeMobs.remove(mob);
-		if (this.activeMobs.size() == 0) {
-			return true;
-		} 
-		else if(this.activeBoss != null) {
-			if(this.activeBoss.equals(mob)) {
+		if (this.activeBoss != null) {
+			if (this.activeBoss.equals(mob)) {
+				if (killer != null) {
+					addBossPoints();
+				}
 				return true;
 			}
 			return false;
 		}
-		else {
+		if (killer != null) {
+			addMobPoints(killer);
+		}
+		if (this.activeMobs.size() == 0) {
+			return true;
+		} else {
 			IngameOutput.sendRemainingMobs(this.activeMobs.size(),
 					this.controller.getMobwave(this.numberOfCurrentWave).getMobs().size(), this.participants);
 			return false;
@@ -367,16 +380,32 @@ public class Arena {
 	public Mob getActiveBoss() {
 		return activeBoss;
 	}
-	
+
 	public boolean isActiveBoss(Mob mob) {
-		if(mob.equals(this.activeBoss)) {
+		if (mob.equals(this.activeBoss)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public void setActiveBoss(Mob boss) {
 		this.activeBoss = boss;
+	}
+
+	public void addMobPoints(Player p) {
+		this.arenaPoints.put(p, this.arenaPoints.get(p) + Config.pointPerMobkill);
+	}
+
+	public void addBossPoints() {
+		for (Player p : this.arenaPoints.keySet()) {
+			this.arenaPoints.put(p, this.arenaPoints.get(p) + Config.pointPerBosskill);
+		}
+	}
+
+	public void addWavePoints() {
+		for (Player p : this.arenaPoints.keySet()) {
+			this.arenaPoints.put(p, this.arenaPoints.get(p) + Config.pointPerWave);
+		}
 	}
 
 }

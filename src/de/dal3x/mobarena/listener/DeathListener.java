@@ -7,6 +7,7 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public class DeathListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onMobArenaMobDeath(EntityDeathEvent event) {
+	public void onArenaMobDeath(EntityDeathEvent event) {
 		if (!(event.getEntity() instanceof Mob) || event.getEntity() instanceof Player) {
 			return;
 		}
@@ -42,15 +43,20 @@ public class DeathListener implements Listener {
 			return;
 		}
 		event.getDrops().addAll(getDrops(event));
-		boolean waveDone = arena.removeMobAndAskIfEmpty(mob);
+		Player killer = event.getEntity().getKiller();
+		if(event.getEntity().getKiller() instanceof Projectile) {
+			killer = (Player) ((Projectile)event.getEntity().getKiller()).getShooter();
+		}
+		boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
 		if (waveDone) {
+			arena.addWavePoints();
 			arena.respawnAllSpectators();
 			arena.spawnNextWave();
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerArenaMobDeath(EntityDamageByEntityEvent event) {
+	public void onArenaPlayerDeath(EntityDamageByEntityEvent event) {
 		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}

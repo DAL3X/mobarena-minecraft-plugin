@@ -1,6 +1,7 @@
 package de.dal3x.mobarena.file;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.arena.ArenaStorage;
@@ -36,13 +38,25 @@ public class Filehandler {
 	private ArenaStorage arenaStorage;
 	private MobwaveController mobwaveController;
 	private ItemStorage itemStorage;
+	private static Filehandler instance;
 
-	public Filehandler() {
+	private Filehandler() {
 		this.classController = ClassController.getInstance();
 		this.mobStorage = MobBlueprintStorage.getInstance();
 		this.arenaStorage = ArenaStorage.getInstance();
 		this.mobwaveController = MobwaveController.getInstance();
 		this.itemStorage = ItemStorage.getInstance();
+	}
+	
+	public static Filehandler getInstance() {
+		if(instance == null) {
+			instance = new Filehandler();
+		}
+		return instance;
+	}
+	
+	public static void clearInstance() {
+		instance = null;
 	}
 
 	public void loadRessources() {
@@ -270,5 +284,31 @@ public class Filehandler {
 		float pitch = (float) cfg.getDouble(path + ".pitch");
 		return new Location(w, x, y, z, yaw, pitch);
 	}
+	
+	public void addArenaPoints(Player p, int points) {
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId());
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
+		if(!playerfile.exists()) {
+			cfg.set(Config.points, points);
+		}
+		else {
+			cfg.set(Config.points, getArenaPoints(p) + points);
+		}
+		try {
+			cfg.save(playerfile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int getArenaPoints(Player p) {
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId());
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
+		if(!playerfile.exists()) {
+			return 0;
+		}
+		return cfg.getInt(Config.points);
+	}
+	
 	
 }
