@@ -9,8 +9,10 @@ public class PlayerClass {
 	private ILeftClickSkill leftClickSkill;
 	private IRightClickSkill rightClickSkill;
 	private String[] equip;
+	private int glory;
 	
-	public PlayerClass(String name, ILeftClickSkill leftClickSkill, IRightClickSkill rightClickSkill, String[] equip) {
+	public PlayerClass(String name, ILeftClickSkill leftClickSkill, IRightClickSkill rightClickSkill, String[] equip, int glory) {
+		setGlory(glory);
 		setName(name);
 		setLeftClickSkill(leftClickSkill);
 		setRightClickSkill(rightClickSkill);
@@ -51,6 +53,14 @@ public class PlayerClass {
 
 	public void setEquip(String[] equip) {
 		this.equip = equip;
+	}
+
+	public int getGlory() {
+		return glory;
+	}
+
+	public void setGlory(int glory) {
+		this.glory = glory;
 	}
 	
 	

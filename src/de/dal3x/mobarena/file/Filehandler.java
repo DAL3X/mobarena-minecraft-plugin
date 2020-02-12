@@ -168,6 +168,9 @@ public class Filehandler {
 				IRightClickSkill rightSkill = SkillController.getRightClickSkill(rightClickSkill);
 				playerClass.setRightClickSkill(rightSkill);
 			}
+			//Load and set Glory
+			int glory = cfg.getInt(entry + ".glory");
+			playerClass.setGlory(glory);
 			// Load and set Equipment
 			String[] eq = new String[6];
 			Set<String> itemEntrys = cfg.getConfigurationSection(entry + ".equip").getKeys(false);
@@ -286,7 +289,7 @@ public class Filehandler {
 	}
 	
 	public void addArenaPoints(Player p, int points) {
-		File playerfile = new File(Config.pointFilePath + p.getUniqueId());
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
 		if(!playerfile.exists()) {
 			cfg.set(Config.points, points);
@@ -302,13 +305,40 @@ public class Filehandler {
 	}
 	
 	public int getArenaPoints(Player p) {
-		File playerfile = new File(Config.pointFilePath + p.getUniqueId());
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
 		if(!playerfile.exists()) {
 			return 0;
 		}
 		return cfg.getInt(Config.points);
 	}
+	
+	public List<PlayerClass> getPlayersClasses(Player p) {
+		List<PlayerClass> classes = new LinkedList<PlayerClass>();
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
+		if(!playerfile.exists()) {
+			return classes;
+		}
+		for(String s : cfg.getStringList("classes")) {
+			classes.add(this.classController.getClassByName(s));
+		}
+		return classes;
+	}
+	
+	public void unlockPlayerClass(Player p, PlayerClass klasse) {
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
+		List<String> names = cfg.getStringList("classes");
+		names.add(klasse.getName());
+		cfg.set("classes", names);
+		try {
+			cfg.save(playerfile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import de.dal3x.mobarena.file.Filehandler;
 import de.dal3x.mobarena.item.ItemStorage;
 
 public class ClassController {
@@ -110,6 +111,16 @@ public class ClassController {
 				}
 			}
 		}
+	}
+	
+	public boolean hasClass(Player p, PlayerClass klasse) {
+		if(klasse.getGlory() == 0) {
+			return true;
+		}
+		if(Filehandler.getInstance().getPlayersClasses(p).contains(klasse)) {
+			return true;
+		}
+		return false;
 	}
 
 }

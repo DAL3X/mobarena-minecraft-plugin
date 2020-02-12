@@ -186,6 +186,7 @@ public class Arena {
 		p.teleport(this.spawnLocation);
 		clearInventory(p);
 		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
+		IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
 		this.arenaPoints.remove(p);
 		if (this.participants.size() == 0) {
 			reset();
@@ -215,6 +216,9 @@ public class Arena {
 		int count = this.waveCounter - 1;
 		IngameOutput.sendDefeatMessage(count, this.participants);
 		for (Player p : this.participants) {
+			clearInventory(p);
+			Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
+			IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
 			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 			p.teleport(this.spawnLocation);
 		}

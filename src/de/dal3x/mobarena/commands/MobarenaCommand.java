@@ -33,6 +33,9 @@ public class MobarenaCommand implements CommandExecutor {
 				p.sendMessage(IngameOutput.prefix + IngameOutput.arenaTaken);
 				return true;
 			}
+			if(a.getQueue().isJoined(p)) {
+				return true;
+			}
 			a.addToJoinQueue(p);
 			p.teleport(a.getLobby());
 			return true;
@@ -56,6 +59,11 @@ public class MobarenaCommand implements CommandExecutor {
 			sendArenaList(p, ArenaStorage.getInstance().getArenas());
 			return true;
 		}
+		// Glory
+		else if(args.length == 1 && args[0].equalsIgnoreCase(Config.gloryCommand)) {
+			IngameOutput.sendGloryMessage(p);
+			return true;
+		}
 		// Help
 		else {
 			IngameOutput.sendHelpMessage(p);
@@ -64,14 +72,7 @@ public class MobarenaCommand implements CommandExecutor {
 	}
 
 	private void sendArenaList(Player p, List<Arena> arenaList) {
-		p.sendMessage(IngameOutput.listArenas);
-		for (Arena a : arenaList) {
-			if (a.isFree()) {
-				p.sendMessage(IngameOutput.arenaListPrefix + a.getName() + IngameOutput.arenaFree);
-			} else {
-				p.sendMessage(IngameOutput.arenaListPrefix + a.getName() + IngameOutput.arenaNotFree);
-			}
-		}
+		IngameOutput.sendArenaList(p, arenaList);
 	}
 
 	private void reload(Player p) {

@@ -12,6 +12,7 @@ import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.classes.PlayerClass;
 import de.dal3x.mobarena.config.Config;
+import de.dal3x.mobarena.file.Filehandler;
 import de.dal3x.mobarena.output.IngameOutput;
 
 public class ClassPickListener implements Listener {
@@ -50,12 +51,28 @@ public class ClassPickListener implements Listener {
 			// Class sign
 			else {
 				String klassenName = s.getLine(1);
-				if(s.getLine(1).contains("&")) {
+				if(s.getLine(1).contains("&") || s.getLine(1).contains("§")) {
 					klassenName = s.getLine(1).substring(2);
 				}
 				PlayerClass klasse = ClassController.getInstance().getClassByName(klassenName);
-				ClassController.getInstance().addClassToPlayer(event.getPlayer(), klasse);
-				IngameOutput.sendClassPickeMessage(event.getPlayer(), klassenName);
+				//Class unlocked
+				if(ClassController.getInstance().hasClass(event.getPlayer(), klasse)) {
+					ClassController.getInstance().addClassToPlayer(event.getPlayer(), klasse);
+					IngameOutput.sendClassPickMessage(event.getPlayer(), klassenName);
+					return;
+				}
+				//Class locked
+				else {
+					if(Filehandler.getInstance().getArenaPoints(event.getPlayer()) >= klasse.getGlory()) {
+						Filehandler.getInstance().addArenaPoints(event.getPlayer(), -klasse.getGlory());
+						Filehandler.getInstance().unlockPlayerClass(event.getPlayer(), klasse);
+						IngameOutput.sendClassEnabled(event.getPlayer(), klasse);
+						return;
+					}
+					else{
+						IngameOutput.sendClassNotUnlocked(event.getPlayer(), klasse);
+					}
+				}
 			}
 		}
 	}

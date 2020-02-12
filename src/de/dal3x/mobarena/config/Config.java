@@ -8,16 +8,16 @@ public class Config {
 	public static final String classFileName = "classes.yml";
 	public static final String waveFileName = "waves.yml";
 	public static final String arenaFileName = "arenas.yml";
-	public static final String pointFilePath = dirPath + "Punkte/";
+	public static final String pointFilePath = dirPath + "PlayerData/";
 	public static final String points = "points";
 	
 	public static final String joinCommand = "join";
 	public static final String leaveCommand = "leave";
 	public static final String reloadCommand = "reload";
 	public static final String listCommand = "list";
-	public static final String forceStartCommand = "force";
+	public static final String gloryCommand = "glory";
 	
-	public static final String reloadPerm = "soulcraft.mobarena";
+	public static final String reloadPerm = "soulcraft.mobarena.admin";
 	
 	public static final String signClassIdentifier = "§8[§3Mob§bArena§8]";
 	public static final String signReadyIdentifier = "Bereit setzen";
