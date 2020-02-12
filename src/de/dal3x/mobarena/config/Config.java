@@ -7,6 +7,24 @@ public class Config {
 	public static final String mobFileName = "mobs.yml";
 	public static final String classFileName = "classes.yml";
 	public static final String waveFileName = "waves.yml";
-	public static final String arenaFileName = "arena.yml";
-
+	public static final String arenaFileName = "arenas.yml";
+	
+	public static final String joinCommand = "join";
+	public static final String leaveCommand = "leave";
+	public static final String reloadCommand = "reload";
+	public static final String listCommand = "list";
+	public static final String forceStartCommand = "force";
+	
+	public static final String reloadPerm = "soulcraft.mobarena";
+	
+	public static final String signClassIdentifier = "§8[§3Mob§bArena§8]";
+	public static final String signReadyIdentifier = "Bereit setzen";
+	
+	public static final float multiSpawnForPlayer = 0.8f;
+	
+	public static final double healtAddMultiPerWave = 0.05;
+	public static final double bossHealthMultiPerPlayer = 3;
+	
+	public static final double damageTakenMultiPerWave = 0.05;
+	
 }

@@ -1,6 +1,6 @@
 
 
-
+Player#spigot().sendMessage(ChatMessageType.ACTION_BAR, "Hello player");
 
 MobArena:
 Main Command /mobarena

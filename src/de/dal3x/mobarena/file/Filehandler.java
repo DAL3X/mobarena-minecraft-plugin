@@ -2,39 +2,63 @@ package de.dal3x.mobarena.file;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 
+import de.dal3x.mobarena.arena.Arena;
+import de.dal3x.mobarena.arena.ArenaStorage;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.classes.PlayerClass;
 import de.dal3x.mobarena.config.Config;
 import de.dal3x.mobarena.item.ItemBlueprint;
+import de.dal3x.mobarena.item.ItemStorage;
 import de.dal3x.mobarena.mobs.MobBlueprint;
+import de.dal3x.mobarena.mobs.MobBlueprintStorage;
 import de.dal3x.mobarena.output.ConsoleOutputs;
 import de.dal3x.mobarena.skill.ILeftClickSkill;
 import de.dal3x.mobarena.skill.IRightClickSkill;
 import de.dal3x.mobarena.skill.SkillController;
-import de.dal3x.mobarena.storage.BlueprintStorage;
 import de.dal3x.mobarena.utility.EnchantmentMeta;
+import de.dal3x.mobarena.wave.Mobwave;
+import de.dal3x.mobarena.wave.MobwaveController;
 
 public class Filehandler {
 
-	private BlueprintStorage storage;
+	private MobBlueprintStorage mobStorage;
 	private ClassController classController;
-	
+	private ArenaStorage arenaStorage;
+	private MobwaveController mobwaveController;
+	private ItemStorage itemStorage;
 
-	public Filehandler(BlueprintStorage storage, ClassController classController) {
-		this.classController = classController;
-		this.storage = storage;
+	public Filehandler() {
+		this.classController = ClassController.getInstance();
+		this.mobStorage = MobBlueprintStorage.getInstance();
+		this.arenaStorage = ArenaStorage.getInstance();
+		this.mobwaveController = MobwaveController.getInstance();
+		this.itemStorage = ItemStorage.getInstance();
 	}
 
-	public void loadMobBlueprints() {
+	public void loadRessources() {
+		// Festgelegte Reihenfolge, nicht aendern!
+		loadItemBlueprints();
+		loadMobBlueprints();
+		loadClasses();
+		loadWaves();
+		loadArenas();
+	}
+
+	private void loadMobBlueprints() {
 		File mobFile = new File(Config.dirPath + Config.mobFileName);
 		if (!mobFile.exists()) {
-			System.out.println(ConsoleOutputs.consolePrefix + " (Mobs) " +ConsoleOutputs.fileNotFound);
+			System.out.println(
+					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.mobs + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(mobFile);
@@ -42,30 +66,35 @@ public class Filehandler {
 		int counter = 0;
 		for (String entry : entrys) {
 			MobBlueprint mob = new MobBlueprint();
-			//Set the name
+			// Set the name
 			mob.setName(entry);
-			//Load and set EntityType
+			// Load and set EntityType
 			EntityType type = EntityType.valueOf(cfg.getString(entry + ".type"));
 			mob.setMobType(type);
-			//Load and set Equipment
-			String[] eq = new String[6];
-			Set<String> itemEntrys = cfg.getConfigurationSection((entry + ".equip")).getKeys(false);
-			if(itemEntrys != null) {
-				for(String itemName : itemEntrys) {
-					eq[cfg.getInt(entry + ".equip." + itemName)] = itemName;
+			// Load and set Equipment
+			if (cfg.getConfigurationSection(entry + ".equip") != null) {
+				String[] eq = new String[6];
+				Set<String> itemEntrys = cfg.getConfigurationSection((entry + ".equip")).getKeys(false);
+				if (itemEntrys != null) {
+					for (String itemName : itemEntrys) {
+						eq[cfg.getInt(entry + ".equip." + itemName)] = itemName;
+					}
 				}
+				mob.setEquip(eq);
 			}
-			mob.setEquip(eq);
-			this.storage.addMobBlueprint(mob);
-			counter ++;
+			// Register
+			this.mobStorage.addMobBlueprint(mob);
+			counter++;
 		}
-		System.out.println(ConsoleOutputs.consolePrefix + counter + " Mobs " + ConsoleOutputs.successload);
+		System.out.println(
+				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.mobs + ConsoleOutputs.successload);
 	}
 
-	public void loadItemBlueprints() {
+	private void loadItemBlueprints() {
 		File itemFile = new File(Config.dirPath + Config.itemFileName);
 		if (!itemFile.exists()) {
-			System.out.println(ConsoleOutputs.consolePrefix + " (Items) " +ConsoleOutputs.fileNotFound);
+			System.out.println(
+					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.items + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(itemFile);
@@ -82,61 +111,164 @@ public class Filehandler {
 			String lore = cfg.getString(entry + ".lore");
 			item.setLore(lore);
 			// Load and set Enchantments
-			Set<String> enchEntrys = cfg.getConfigurationSection((entry + ".enchantments")).getKeys(false);
-			if (enchEntrys != null) {
-				LinkedList<EnchantmentMeta> enchList = new LinkedList<EnchantmentMeta>();
-				for (String enchName : enchEntrys) {
-					int level = cfg.getInt(entry + ".enchantments." + enchName);
-					enchList.add(new EnchantmentMeta(enchName, level));
+			if (cfg.getConfigurationSection(entry + ".enchantments") != null) {
+				Set<String> enchEntrys = cfg.getConfigurationSection((entry + ".enchantments")).getKeys(false);
+				if (enchEntrys != null) {
+					LinkedList<EnchantmentMeta> enchList = new LinkedList<EnchantmentMeta>();
+					for (String enchName : enchEntrys) {
+						int level = cfg.getInt(entry + ".enchantments." + enchName);
+						enchList.add(new EnchantmentMeta(enchName, level));
+					}
+					item.setEnchantments(enchList);
 				}
-				item.setEnchantments(enchList);
 			}
-			this.storage.addItemBlueprint(item);
-			counter ++;
+			// Register
+			this.itemStorage.addItem(item);
+			counter++;
 		}
-		System.out.println(ConsoleOutputs.consolePrefix + counter + " Items " + ConsoleOutputs.successload);
+		System.out.println(
+				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.items + ConsoleOutputs.successload);
 	}
 
-	public void loadClasses() {
+	private void loadClasses() {
 		File classFile = new File(Config.dirPath + Config.classFileName);
 		if (!classFile.exists()) {
-			System.out.println(ConsoleOutputs.consolePrefix + " (Klassen) " +ConsoleOutputs.fileNotFound);
+			System.out.println(
+					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.classes + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(classFile);
 		Set<String> entrys = cfg.getKeys(false);
 		int counter = 0;
 		for (String entry : entrys) {
-			//Set the name
+			// Set the name
 			PlayerClass playerClass = new PlayerClass(entry);
-			//Load and set Skills
+			// Load and set Skills
 			String leftClickSkill = cfg.getString(entry + ".leftClickSkill");
-			if(leftClickSkill != null) {
+			if (leftClickSkill != null) {
 				ILeftClickSkill leftSkill = SkillController.getLeftClickSkill(leftClickSkill);
 				playerClass.setLeftClickSkill(leftSkill);
 			}
 			String rightClickSkill = cfg.getString(entry + ".rightClickSkill");
-			if(rightClickSkill != null) {
+			if (rightClickSkill != null) {
 				IRightClickSkill rightSkill = SkillController.getRightClickSkill(rightClickSkill);
 				playerClass.setRightClickSkill(rightSkill);
 			}
-			//Load and set Equipment
+			// Load and set Equipment
 			String[] eq = new String[6];
-			Set<String> itemEntrys = cfg.getConfigurationSection((entry + ".equip")).getKeys(false);
-			if(itemEntrys != null) {
-				for(String itemName : itemEntrys) {
+			Set<String> itemEntrys = cfg.getConfigurationSection(entry + ".equip").getKeys(false);
+			if (itemEntrys != null) {
+				for (String itemName : itemEntrys) {
 					eq[cfg.getInt(entry + ".equip." + itemName)] = itemName;
 				}
 			}
 			playerClass.setEquip(eq);
+			// Register
 			this.classController.addClass(playerClass);
-			counter ++;
+			counter++;
 		}
-		System.out.println(ConsoleOutputs.consolePrefix + counter + " Klassen " + ConsoleOutputs.successload);
+		System.out.println(
+				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.classes + ConsoleOutputs.successload);
 	}
 
-	public void loadArenaAndMobewaves() {
-		
+	private void loadArenas() {
+		File arenaFile = new File(Config.dirPath + Config.arenaFileName);
+		if (!arenaFile.exists()) {
+			System.out.println(
+					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.arenas + ") " + ConsoleOutputs.fileNotFound);
+			return;
+		}
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(arenaFile);
+		Set<String> entrys = cfg.getKeys(false);
+		int counter = 0;
+		for (String entry : entrys) {
+			// Load world
+			World world = Bukkit.getServer().getWorld(cfg.getString(entry + ".world"));
+			// Load Lobbylocation
+			Location lobby = createLocation(cfg, entry + ".lobbyPunkt", world);
+			// Load Spectatorlocation
+			Location spectator = createLocation(cfg, entry + ".spectatorPunkt", world);
+			// Load BossSpawnlocation
+			Location bossLocation = createLocation(cfg, entry + ".bossSpawn", world);
+			// Load spawnLocation
+			World spawnWorld = Bukkit.getServer().getWorld(cfg.getString(entry + ".spawn.world"));
+			Location spawnLocation = createLocation(cfg, entry + ".spawn", spawnWorld);
+			// Load playerSpawnpoints
+			List<Location> playerspawnpoints = new LinkedList<Location>();
+			Set<String> playerSpawnpointEntrys = cfg.getConfigurationSection((entry + ".spielerSpawnPunkte"))
+					.getKeys(false);
+			for (String playerSpawnPunkt : playerSpawnpointEntrys) {
+				playerspawnpoints.add(createLocation(cfg, entry + ".spielerSpawnPunkte." + playerSpawnPunkt , world));
+			}
+			// Load mobSpawnpoints
+			List<Location> mobspawnpoints = new LinkedList<Location>();
+			Set<String> mobSpawnpointEntrys = cfg.getConfigurationSection((entry + ".monsterSpawnPunkte"))
+					.getKeys(false);
+			for (String mobSpawnPunkt : mobSpawnpointEntrys) {
+				mobspawnpoints.add(createLocation(cfg, entry + ".monsterSpawnPunkte." + mobSpawnPunkt , world));
+			}
+			// Load and set wavenumbers
+			@SuppressWarnings("unchecked")
+			List<Integer> wavenumbers = (List<Integer>) cfg.getList(entry + ".wellen");
+			LinkedList<Mobwave> mobwaves = new LinkedList<Mobwave>();
+			for (int number : wavenumbers) {
+				if(mobwaveController.getMobwave(number) != null) {
+					mobwaves.add(mobwaveController.getMobwave(number));
+				}
+			}
+			// Register
+			Arena arena = new Arena(entry, lobby, spectator, spawnLocation, bossLocation, mobspawnpoints, playerspawnpoints, mobwaves);
+			this.arenaStorage.addArena(arena);
+			counter++;
+		}
+		System.out.println(
+				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.arenas + ConsoleOutputs.successload);
 	}
 
+	private void loadWaves() {
+		File waveFile = new File(Config.dirPath + Config.waveFileName);
+		if (!waveFile.exists()) {
+			System.out.println(
+					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.waves + ") " + ConsoleOutputs.fileNotFound);
+			return;
+		}
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(waveFile);
+		Set<String> entrys = cfg.getKeys(false);
+		int counter = 0;
+		for (String entry : entrys) {
+			Mobwave mobwave = new Mobwave();
+			// Load and set name
+			mobwave.setName(entry);
+			// Load and set number
+			int number = cfg.getInt(entry + ".nummer");
+			mobwave.setNumber(number);
+			// Load and set mobs
+			Set<String> mobEntrys = cfg.getConfigurationSection((entry + ".mobs")).getKeys(false);
+			for (String mob : mobEntrys) {
+				MobBlueprint mobBP = this.mobStorage.getMobBluprint(mob);
+				int amount = cfg.getInt(entry + ".mobs." + mob);
+				mobwave.addMob(mobBP, amount);
+			}
+			// Register
+			if (cfg.get(entry + ".isBoss") != null && cfg.getBoolean(entry + ".isBoss")) {
+				String bossName = cfg.getString(entry + ".bossname");
+				this.mobwaveController.addBossWave(bossName, mobwave);
+			} else {
+				this.mobwaveController.addWave(number, mobwave);
+			}
+			counter++;
+		}
+		System.out.println(
+				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.waves + ConsoleOutputs.successload);
+	}
+
+	private Location createLocation(FileConfiguration cfg, String path, World w) {
+		double x = cfg.getDouble(path + ".x");
+		double y = cfg.getDouble(path + ".y");
+		double z = cfg.getDouble(path + ".z");
+		float yaw = (float) cfg.getDouble(path + ".yaw");
+		float pitch = (float) cfg.getDouble(path + ".pitch");
+		return new Location(w, x, y, z, yaw, pitch);
+	}
+	
 }

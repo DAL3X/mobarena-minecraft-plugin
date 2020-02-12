@@ -7,12 +7,28 @@ import org.bukkit.entity.Player;
 
 public class QueueController {
 	
-	LinkedList<Player> readyQueue;
+	List<Player> readyQueue;
 	List<Player> joinedQueue;
 	
 	public QueueController() {
 		this.readyQueue = new LinkedList<Player>();
 		this.joinedQueue = new LinkedList<Player>();
+	}
+	
+	public List<Player> getJoinedQueue() {
+		return this.joinedQueue;
+	}
+	
+	public List<Player> getReadyQueue() {
+		return this.readyQueue;
+	}
+	
+	public void flushJoinedQueue() {
+		this.joinedQueue = new LinkedList<Player>();
+	}
+	
+	public void flushReadyQueue() {
+		this.readyQueue = new LinkedList<Player>();
 	}
 	
 	public void putInReadyQueue(Player p) {
@@ -23,7 +39,7 @@ public class QueueController {
 		readyQueue.remove(p);
 	}
 	
-	public void addToJoinedQueue(Player p) {
+	public void putInJoinedQueue(Player p) {
 		joinedQueue.add(p);
 	}
 	
@@ -31,6 +47,13 @@ public class QueueController {
 		joinedQueue.remove(p);
 	}
 	
+	public boolean isJoined(Player p) {
+		return this.joinedQueue.contains(p);
+	}
+	
+	public boolean isReady(Player p) {
+		return this.readyQueue.contains(p);
+	}
 	
 	public boolean allReady() {
 		if(readyQueue.size() != joinedQueue.size()) {

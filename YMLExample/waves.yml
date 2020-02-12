@@ -1,0 +1,5 @@
+welle1:
+   nummer: 1
+   mobs:
+      mobName1: 3
+   isBoss: false
