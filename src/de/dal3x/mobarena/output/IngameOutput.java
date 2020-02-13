@@ -41,15 +41,17 @@ public class IngameOutput {
 			}
 		}
 		p.sendMessage("§8[§3Mob§bArena§8] §8------------------------------------------------");
+		p.sendMessage("§8Klicke auf eine Arena um beizutreten");
+		p.sendMessage(""); //Leerzeile
 		for(Arena a : freeArenas) {
 			TextComponent tc = new TextComponent();
-			tc.setText("§a■ §e" + a.getName());
+			tc.setText("§a■  §e" + a.getName());
 			tc.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/mobarena join " + a.getName()));
 			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§aKlick zum Beitreten").create()));
 			p.spigot().sendMessage(tc);
 		}
 		for(Arena a: takenArenas) {
-			p.sendMessage("&c■ &e" + a.getName());
+			p.sendMessage("&c■  &e" + a.getName());
 		}
 	}
 	
