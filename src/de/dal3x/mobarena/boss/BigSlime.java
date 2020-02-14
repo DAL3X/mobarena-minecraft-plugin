@@ -37,7 +37,7 @@ public class BigSlime implements Boss, Listener {
 	public Mob spawn(Location loc, Arena arena) {
 		this.arena = arena;
 		Slime bigSlime = (Slime) loc.getWorld().spawnEntity(loc, EntityType.SLIME);
-		bigSlime.setSize(8);
+		bigSlime.setSize(7);
 		bigSlime.setCustomName(this.name);
 		bigSlime.setCustomNameVisible(true);
 		this.mob = bigSlime;
@@ -53,6 +53,7 @@ public class BigSlime implements Boss, Listener {
 		if (event.getDamager().equals(this.mob)) {
 			// Slime makes Dmg
 			event.setDamage(event.getDamage() * 0.5);
+			((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 1), true);
 			return;
 		}
 		if (event.getEntity().equals(this.mob)) {
@@ -70,7 +71,7 @@ public class BigSlime implements Boss, Listener {
 			slime.setCustomName("§cSlime");
 			slime.setCustomNameVisible(true);
 			Vector vec = event.getDamager().getLocation().toVector().subtract(mob.getLocation().toVector()).normalize()
-					.multiply(0.4);
+					.multiply(0.6);
 			slime.setVelocity(vec);
 			this.minions.add(slime);
 		}
