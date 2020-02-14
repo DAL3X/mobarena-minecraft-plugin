@@ -33,8 +33,10 @@ public class MobarenaCommand implements CommandExecutor {
 				p.sendMessage(IngameOutput.prefix + IngameOutput.arenaTaken);
 				return true;
 			}
-			if(a.getQueue().isJoined(p)) {
-				return true;
+			for (Arena checkArena : ArenaStorage.getInstance().getArenas()) {
+				if(checkArena.getQueue().isJoined(p) || checkArena.isParticipant(p)) {
+					return true;
+				}
 			}
 			a.addToJoinQueue(p);
 			p.teleport(a.getLobby());
