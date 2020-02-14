@@ -105,8 +105,8 @@ public class Arena {
 
 	public void spawnNextWave() {
 		// Bosswave
-		if ((waveCounter % bossWaveDivi == 0)) {
-			spawnInBossWave();
+		if ((waveCounter % bossWaveDivi == 0) || this.waves.size() == 0) {
+			spawnInBoss();
 		}
 		// Normale Wave
 		else {
@@ -121,14 +121,12 @@ public class Arena {
 		}
 		final Mobwave wave = getNextWave();
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			@SuppressWarnings("deprecation")
 			public void run() {
 				if (isRunning()) {
 					numberOfCurrentWave = wave.getNumber();
 					activeMobs = controller.spawnWave(wave, mobspawns, getRevisions());
 					for (Mob mob : activeMobs) {
-						mob.setMaxHealth((mob.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave))));
-						mob.setHealth(mob.getMaxHealth());
+						setScaledMobHealth(mob);
 					}
 					waveCounter++;
 				}
@@ -136,7 +134,7 @@ public class Arena {
 		}, 100);
 	}
 
-	private void spawnInBossWave() {
+	private void spawnInBoss() {
 		for (Player p : getParticipants()) {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.boss));
 		}
@@ -146,12 +144,6 @@ public class Arena {
 			public void run() {
 				if (isRunning()) {
 					Mob boss = bossStorage.spawnRandomBoss(bossLocation, instance);
-					activeMobs = controller.spawnWave(controller.getBossWave(boss.getName()), mobspawns,
-							getRevisions());
-					for (Mob mob : activeMobs) {
-						mob.setMaxHealth((mob.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave))));
-						mob.setHealth(mob.getMaxHealth());
-					}
 					boss.setMaxHealth((boss.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave
 							* (getParticipants().size() * Config.bossHealthMultiPerPlayer)))));
 					boss.setHealth(boss.getMaxHealth());
@@ -161,6 +153,12 @@ public class Arena {
 				}
 			}
 		}, 100);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void setScaledMobHealth(Mob mob) {
+		mob.setMaxHealth((mob.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave))));
+		mob.setHealth(mob.getMaxHealth());
 	}
 
 	private void registerListeners() {

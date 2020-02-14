@@ -21,7 +21,7 @@ public class BossStorage {
 	
 	private void init() {
 		//Hier werden alle Bosse eingefügt
-		this.bosses.add(new TestBoss());
+		this.bosses.add(new BigSlime());
 	}
 	
 	public static BossStorage getInstance() {

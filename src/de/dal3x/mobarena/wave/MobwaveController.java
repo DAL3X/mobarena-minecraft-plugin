@@ -15,12 +15,10 @@ public class MobwaveController {
 
 	private static MobwaveController instance;
 	private HashMap<Integer, Mobwave> mobWaves;
-	private HashMap<String, Mobwave> BossWaves;
 	private MobGenerator gen;
 
 	private MobwaveController(MobGenerator gen) {
 		this.mobWaves = new HashMap<Integer, Mobwave>();
-		this.BossWaves = new HashMap<String, Mobwave>();
 		this.gen = gen;
 	}
 
@@ -41,14 +39,6 @@ public class MobwaveController {
 
 	public Mobwave getMobwave(int number) {
 		return this.mobWaves.get(number);
-	}
-
-	public void addBossWave(String boss, Mobwave wave) {
-		this.BossWaves.put(boss, wave);
-	}
-
-	public Mobwave getBossWave(String boss) {
-		return this.BossWaves.get(boss);
 	}
 
 	public List<Mob> spawnWave(int number, List<Location> locs, int revisions) {

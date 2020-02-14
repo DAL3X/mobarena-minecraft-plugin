@@ -47,14 +47,14 @@ public class Filehandler {
 		this.mobwaveController = MobwaveController.getInstance();
 		this.itemStorage = ItemStorage.getInstance();
 	}
-	
+
 	public static Filehandler getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new Filehandler();
 		}
 		return instance;
 	}
-	
+
 	public static void clearInstance() {
 		instance = null;
 	}
@@ -168,7 +168,7 @@ public class Filehandler {
 				IRightClickSkill rightSkill = SkillController.getRightClickSkill(rightClickSkill);
 				playerClass.setRightClickSkill(rightSkill);
 			}
-			//Load and set Glory
+			// Load and set Glory
 			int glory = cfg.getInt(entry + ".glory");
 			playerClass.setGlory(glory);
 			// Load and set Equipment
@@ -215,26 +215,29 @@ public class Filehandler {
 			Set<String> playerSpawnpointEntrys = cfg.getConfigurationSection((entry + ".spielerSpawnPunkte"))
 					.getKeys(false);
 			for (String playerSpawnPunkt : playerSpawnpointEntrys) {
-				playerspawnpoints.add(createLocation(cfg, entry + ".spielerSpawnPunkte." + playerSpawnPunkt , world));
+				playerspawnpoints.add(createLocation(cfg, entry + ".spielerSpawnPunkte." + playerSpawnPunkt, world));
 			}
 			// Load mobSpawnpoints
 			List<Location> mobspawnpoints = new LinkedList<Location>();
 			Set<String> mobSpawnpointEntrys = cfg.getConfigurationSection((entry + ".monsterSpawnPunkte"))
 					.getKeys(false);
 			for (String mobSpawnPunkt : mobSpawnpointEntrys) {
-				mobspawnpoints.add(createLocation(cfg, entry + ".monsterSpawnPunkte." + mobSpawnPunkt , world));
+				mobspawnpoints.add(createLocation(cfg, entry + ".monsterSpawnPunkte." + mobSpawnPunkt, world));
 			}
 			// Load and set wavenumbers
 			@SuppressWarnings("unchecked")
 			List<Integer> wavenumbers = (List<Integer>) cfg.getList(entry + ".wellen");
 			LinkedList<Mobwave> mobwaves = new LinkedList<Mobwave>();
-			for (int number : wavenumbers) {
-				if(mobwaveController.getMobwave(number) != null) {
-					mobwaves.add(mobwaveController.getMobwave(number));
+			if (wavenumbers != null) {
+				for (int number : wavenumbers) {
+					if (mobwaveController.getMobwave(number) != null) {
+						mobwaves.add(mobwaveController.getMobwave(number));
+					}
 				}
 			}
 			// Register
-			Arena arena = new Arena(entry, lobby, spectator, spawnLocation, bossLocation, mobspawnpoints, playerspawnpoints, mobwaves);
+			Arena arena = new Arena(entry, lobby, spectator, spawnLocation, bossLocation, mobspawnpoints,
+					playerspawnpoints, mobwaves);
 			this.arenaStorage.addArena(arena);
 			counter++;
 		}
@@ -267,12 +270,7 @@ public class Filehandler {
 				mobwave.addMob(mobBP, amount);
 			}
 			// Register
-			if (cfg.get(entry + ".isBoss") != null && cfg.getBoolean(entry + ".isBoss")) {
-				String bossName = cfg.getString(entry + ".bossname");
-				this.mobwaveController.addBossWave(bossName, mobwave);
-			} else {
-				this.mobwaveController.addWave(number, mobwave);
-			}
+			this.mobwaveController.addWave(number, mobwave);
 			counter++;
 		}
 		System.out.println(
@@ -287,14 +285,13 @@ public class Filehandler {
 		float pitch = (float) cfg.getDouble(path + ".pitch");
 		return new Location(w, x, y, z, yaw, pitch);
 	}
-	
+
 	public void addArenaPoints(Player p, int points) {
-		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId() + ".yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
-		if(!playerfile.exists()) {
+		if (!playerfile.exists()) {
 			cfg.set(Config.points, points);
-		}
-		else {
+		} else {
 			cfg.set(Config.points, getArenaPoints(p) + points);
 		}
 		try {
@@ -303,31 +300,31 @@ public class Filehandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public int getArenaPoints(Player p) {
-		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId() + ".yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
-		if(!playerfile.exists()) {
+		if (!playerfile.exists()) {
 			return 0;
 		}
 		return cfg.getInt(Config.points);
 	}
-	
+
 	public List<PlayerClass> getPlayersClasses(Player p) {
 		List<PlayerClass> classes = new LinkedList<PlayerClass>();
-		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId() + ".yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
-		if(!playerfile.exists()) {
+		if (!playerfile.exists()) {
 			return classes;
 		}
-		for(String s : cfg.getStringList("classes")) {
+		for (String s : cfg.getStringList("classes")) {
 			classes.add(this.classController.getClassByName(s));
 		}
 		return classes;
 	}
-	
+
 	public void unlockPlayerClass(Player p, PlayerClass klasse) {
-		File playerfile = new File(Config.pointFilePath + p.getUniqueId()+".yml");
+		File playerfile = new File(Config.pointFilePath + p.getUniqueId() + ".yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
 		List<String> names = cfg.getStringList("classes");
 		names.add(klasse.getName());
@@ -338,7 +335,5 @@ public class Filehandler {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+
 }

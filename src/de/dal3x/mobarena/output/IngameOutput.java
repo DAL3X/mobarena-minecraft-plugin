@@ -26,8 +26,8 @@ public class IngameOutput {
 
 	public static final String successfullReload = "§aPlugin wurde erfolgreich neu geladen.";
 	
-	public static final String wave = "§7Welle ";
-	public static final String boss = "§7Bosswelle";
+	public static final String wave = "Welle ";
+	public static final String boss = "§cBosswelle";
 	
 	
 	public static void sendArenaList(Player p, List<Arena> arenaList) {
@@ -42,7 +42,6 @@ public class IngameOutput {
 		}
 		p.sendMessage("§8[§3Mob§bArena§8] §8------------------------------------------------");
 		p.sendMessage("§8Klicke auf eine Arena um beizutreten");
-		p.sendMessage(""); //Leerzeile
 		for(Arena a : freeArenas) {
 			TextComponent tc = new TextComponent();
 			tc.setText("§a■  §e" + a.getName());
@@ -51,7 +50,7 @@ public class IngameOutput {
 			p.spigot().sendMessage(tc);
 		}
 		for(Arena a: takenArenas) {
-			p.sendMessage("&c■  &e" + a.getName());
+			p.sendMessage("§c■  §e" + a.getName());
 		}
 	}
 	
@@ -65,12 +64,12 @@ public class IngameOutput {
 	
 	public static void sendRemainingMobs(int alive, int all, List<Player> players) {
 		for(Player p : players) {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§7" + alive + " von " + all + " Mobs verbleiben"));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(alive + " Mobs verbleiben"));
 		}
 	}
 	
 	public static void sendDefeatMessage(int count, List<Player> players) {
-		sendMessageToPlayers(prefix + "§7Alle Spieler wurden besiegt. Deine erreichte Welle ist: §e"+ count, players);
+		sendMessageToPlayers(prefix + "§7Alle Spieler wurden besiegt. Du hast es bis Welle §e"+ count + " §7geschafft", players);
 	}
 	
 	public static void sendReadyMessageToPlayers(Player p, List<Player> players) {
@@ -104,6 +103,9 @@ public class IngameOutput {
 		p.sendMessage("§e§o/mobarena join §8[§eArena-Name§8] §8- §7Trete einer Arena bei");
 		p.sendMessage("§e§o/mobarena leave  §8- §7Arena verlassen");
 		p.sendMessage("§e§o/mobarena glory  §8- §7Zeigt deinen Ruhm an");
+		if(p.hasPermission(Config.reloadPerm)) {
+			p.sendMessage("§e§o/mobarena reload  §8- §7Läd das Plugin neu");
+		}
 		p.sendMessage("§8-------------------------------------------------------------------");
 	}
 
