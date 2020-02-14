@@ -27,7 +27,7 @@ public class BigSlime implements Boss, Listener {
 	private Arena arena;
 	private Mob mob;
 	private List<Mob> minions;
-	private final String name = "§6§lBig§c§lSlime";
+	private final String name = "ï¿½6ï¿½lBigï¿½cï¿½lSlime";
 
 	public BigSlime() {
 		this.minions = new LinkedList<Mob>();
@@ -52,7 +52,7 @@ public class BigSlime implements Boss, Listener {
 	public void onBigSlimeDmg(EntityDamageByEntityEvent event) {
 		if (event.getDamager().equals(this.mob)) {
 			// Slime makes Dmg
-			event.setDamage(event.getDamage() * 0.5);
+			event.setDamage(event.getDamage() * 0.4);
 			((LivingEntity) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 1), true);
 			return;
 		}
@@ -68,7 +68,7 @@ public class BigSlime implements Boss, Listener {
 			Slime slime = (Slime) this.mob.getLocation().getWorld().spawnEntity(this.mob.getLocation(),
 					EntityType.SLIME);
 			slime.setSize(2);
-			slime.setCustomName("§cSlime");
+			slime.setCustomName("ï¿½cSlime");
 			slime.setCustomNameVisible(true);
 			Vector vec = event.getDamager().getLocation().toVector().subtract(mob.getLocation().toVector()).normalize()
 					.multiply(0.6);
