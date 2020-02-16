@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Mob;
 
 import de.dal3x.mobarena.arena.Arena;
+import de.dal3x.mobarena.boss.implementation.BigSlime;
 
 public class BossStorage {
 

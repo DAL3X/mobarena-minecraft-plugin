@@ -1,4 +1,4 @@
-package de.dal3x.mobarena.boss;
+package de.dal3x.mobarena.boss.implementation;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import de.dal3x.mobarena.arena.Arena;
+import de.dal3x.mobarena.boss.Boss;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 
 public class BigSlime implements Boss, Listener {
