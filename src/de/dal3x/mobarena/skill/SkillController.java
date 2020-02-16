@@ -9,4 +9,8 @@ public class SkillController {
 	public static IRightClickSkill getRightClickSkill(String name) {
 		return null;
 	}
+	
+	public static IPassiveSkill getPassiveSkill(String name) {
+		return null;
+	}
 }

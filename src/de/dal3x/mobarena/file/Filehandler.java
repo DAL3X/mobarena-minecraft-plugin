@@ -25,6 +25,7 @@ import de.dal3x.mobarena.mobs.MobBlueprint;
 import de.dal3x.mobarena.mobs.MobBlueprintStorage;
 import de.dal3x.mobarena.output.ConsoleOutputs;
 import de.dal3x.mobarena.skill.ILeftClickSkill;
+import de.dal3x.mobarena.skill.IPassiveSkill;
 import de.dal3x.mobarena.skill.IRightClickSkill;
 import de.dal3x.mobarena.skill.SkillController;
 import de.dal3x.mobarena.utility.EnchantmentMeta;
@@ -167,6 +168,11 @@ public class Filehandler {
 			if (rightClickSkill != null) {
 				IRightClickSkill rightSkill = SkillController.getRightClickSkill(rightClickSkill);
 				playerClass.setRightClickSkill(rightSkill);
+			}
+			String passiveSkill = cfg.getString(entry + ".passiveSkill");
+			if (passiveSkill != null) {
+				IPassiveSkill passive = SkillController.getPassiveSkill(passiveSkill);
+				playerClass.setPassiveSkill(passive);
 			}
 			// Load and set Glory
 			int glory = cfg.getInt(entry + ".glory");

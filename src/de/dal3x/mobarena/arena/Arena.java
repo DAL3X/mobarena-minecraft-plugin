@@ -20,6 +20,7 @@ import de.dal3x.mobarena.listener.ClassPickListener;
 import de.dal3x.mobarena.listener.DamageListener;
 import de.dal3x.mobarena.listener.DeathListener;
 import de.dal3x.mobarena.listener.LeaveListener;
+import de.dal3x.mobarena.listener.SkillListener;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 import de.dal3x.mobarena.output.IngameOutput;
 import de.dal3x.mobarena.utility.InventoryStorage;
@@ -53,6 +54,7 @@ public class Arena {
 	private boolean running;
 	private BossStorage bossStorage;
 	private Mob activeBoss;
+	private SkillListener skillListener;
 
 	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation,
 			List<Location> mobspawns, List<Location> playerspawn, List<Mobwave> waves) {
@@ -74,6 +76,7 @@ public class Arena {
 		this.arenaPoints = new HashMap<Player, Integer>();
 		this.waveCounter = 1;
 		this.numberOfCurrentWave = 0;
+		this.skillListener = new SkillListener(this, plugin);
 		isFree = true;
 		running = false;
 		registerListeners();
@@ -176,6 +179,7 @@ public class Arena {
 		this.participants.add(p);
 		setInventory(p);
 		this.arenaPoints.put(p, 0);
+		this.skillListener.applyPassive(p);
 	}
 
 	public void removeParticipant(Player p) {
@@ -186,6 +190,8 @@ public class Arena {
 		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
 		IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
 		this.arenaPoints.remove(p);
+		this.skillListener.disapplyPassive(p);
+		ClassController.getInstance().clearClassForPlayer(p);
 		if (this.participants.size() == 0) {
 			reset();
 		}

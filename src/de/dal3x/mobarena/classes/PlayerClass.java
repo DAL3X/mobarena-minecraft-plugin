@@ -1,6 +1,7 @@
 package de.dal3x.mobarena.classes;
 
 import de.dal3x.mobarena.skill.ILeftClickSkill;
+import de.dal3x.mobarena.skill.IPassiveSkill;
 import de.dal3x.mobarena.skill.IRightClickSkill;
 
 public class PlayerClass {
@@ -8,15 +9,17 @@ public class PlayerClass {
 	private String name;
 	private ILeftClickSkill leftClickSkill;
 	private IRightClickSkill rightClickSkill;
+	private IPassiveSkill passiveSkill;
 	private String[] equip;
 	private int glory;
 	
-	public PlayerClass(String name, ILeftClickSkill leftClickSkill, IRightClickSkill rightClickSkill, String[] equip, int glory) {
+	public PlayerClass(String name, ILeftClickSkill leftClickSkill, IRightClickSkill rightClickSkill, IPassiveSkill passive, String[] equip, int glory) {
 		setGlory(glory);
 		setName(name);
 		setLeftClickSkill(leftClickSkill);
 		setRightClickSkill(rightClickSkill);
 		setEquip(equip);
+		setPassiveSkill(passive);
 	}
 	
 	public PlayerClass(String name) {
@@ -61,6 +64,14 @@ public class PlayerClass {
 
 	public void setGlory(int glory) {
 		this.glory = glory;
+	}
+
+	public IPassiveSkill getPassiveSkill() {
+		return passiveSkill;
+	}
+
+	public void setPassiveSkill(IPassiveSkill passiveSkill) {
+		this.passiveSkill = passiveSkill;
 	}
 	
 	
