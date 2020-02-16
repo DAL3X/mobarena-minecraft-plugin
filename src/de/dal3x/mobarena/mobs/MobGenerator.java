@@ -72,7 +72,7 @@ public class MobGenerator {
 	private Mob addCustomAttribute(Mob mob) {
 		if (mob instanceof Bee) {
 			Bee b = (Bee) mob;
-			b.setAnger(20000000);
+			b.setAnger(Integer.MAX_VALUE);
 			return b;
 		} else if (mob instanceof Rabbit) {
 			Rabbit r = (Rabbit) mob;
