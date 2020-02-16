@@ -2,61 +2,77 @@
 arena1:
    world: world
    lobbyPunkt:
-   -  x: 0
-   -  y: 0
-   -  z: 0
+       x: -3.5
+       y: 105
+       z: 0.5
+       yaw: 180
+       pitch: 0
    spectatorPunkt:
-   -  x: 0
-   -  y: 0
-   -  z: 0
+       x: 3
+       y: 111
+       z: -1
+   spawn:
+       world: world
+       x: -3.5
+       y: 110
+       z: 0.5
+   bossSpawn:
+          x: 3.5
+          y: 105
+          z: -5.5
    spielerSpawnPunkte:
       punkt1:
-      -  x: 0
-      -  y: 0
-      -  z: 0
-      punkt2:
-      -  x: 10
-      -  y: 10
-      -  z: 10
+          x: 3.5
+          y: 105
+          z: 3.5
    monsterSpawnPunkte:
       punkt1:
-      -  x: 0
-      -  y: 0
-      -  z: 0
+          x: 4.5
+          y: 105
+          z: -3.5
       punkt2:
-      -  x: 10
-      -  y: 10
-      -  z: 10
+          x: 2.5
+          y: 105
+          z: -3.5
    wellen:
    - 1
-#Arena Nummer 2
+   - 2
+   - 3
+   - 4
+   - 5
 arena2:
    world: world
    lobbyPunkt:
-   -  x: 0
-   -  y: 0
-   -  z: 0
+       x: -3.5
+       y: 105
+       z: 0.5
+       yaw: 180
+       pitch: 0
    spectatorPunkt:
-   -  x: 0
-   -  y: 0
-   -  z: 0
+       x: 3
+       y: 111
+       z: -1
+   spawn:
+       world: world
+       x: -3.5
+       y: 110
+       z: 0.5
+   bossSpawn:
+          x: 3.5
+          y: 105
+          z: -5.5
    spielerSpawnPunkte:
       punkt1:
-      -  x: 0
-      -  y: 0
-      -  z: 0
-      punkt2:
-      -  x: 10
-      -  y: 10
-      -  z: 10
+          x: 3.5
+          y: 105
+          z: 3.5
    monsterSpawnPunkte:
       punkt1:
-      -  x: 0
-      -  y: 0
-      -  z: 0
+          x: 4.5
+          y: 105
+          z: -3.5
       punkt2:
-      -  x: 10
-      -  y: 10
-      -  z: 10
+          x: 2.5
+          y: 105
+          z: -3.5
    wellen:
-   - 1

@@ -1,12 +1,61 @@
-itemname1:
-   type: typ
-   lore: lore
-   enchantments:
-   -  enchantmentTyp1: level
-   -  enchantmentTyp2: level
-itemname2:
-   type: typ
-   lore: lore
-   enchantments:
-   -  enchantmentTyp1: level
-   -  enchantmentTyp2: level
+
+
+# RÜSTUNGEN
+lederhelm:
+    type: LEATHER_HELMET
+lederbrust:
+    type: LEATHER_CHESTPLATE
+lederschuhe:
+    type: LEATHER_BOOTS
+lederhose:
+    type: LEATHER_LEGGINGS
+chainhelm:
+    type: CHAINMAIL_HELMET
+chainbrust:
+    type: CHAINMAIL_CHESTPLATE
+chainschuhe:
+    type: CHAINMAIL_BOOTS
+chainhose:
+    type: CHAINMAIL_LEGGINGS    
+eisenhelm:
+    type: IRON_HELMET
+eisenbrust:
+    type: IRON_CHESTPLATE
+eisenschuhe:
+    type: IRON_BOOTS
+eisenhose:
+    type: IRON_LEGGINGS
+diahelm:
+    type: DIAMOND_HELMET
+diabrust:
+    type: DIAMOND_CHESTPLATE
+diaschuhe:
+    type: DIAMOND_BOOTS
+diahose:
+    type: DIAMOND_LEGGINGS
+# WAFFEN
+eisenschwert:
+    type: IRON_SWORD
+steinschwert:
+    type: STONE_SWORD
+diaschwert:
+    type: DIAMOND_SWORD
+bone:
+    type: BONE
+schild:
+    type: SHIELD
+    enchantments:
+        THORNS: 3
+goldaxt:
+    type: GOLD_AXE
+    enchantments:
+        DAMAGE_ALL: 3
+stock:
+    type: STICK
+    enchantments:
+        KNOCKBACK: 2
+        
+# SONSTIGES
+barriere:
+    type: BARRIER
+            

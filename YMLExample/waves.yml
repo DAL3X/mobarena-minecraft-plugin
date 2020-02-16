@@ -1,5 +1,21 @@
 welle1:
-   nummer: 1
-   mobs:
-      mobName1: 3
-   isBoss: false
+    nummer: 1
+    mobs:
+        "§7Skelett": 8
+welle3:
+    nummer: 3
+    mobs:
+        "§7Skelett-Bogenschütze": 3
+        "§7Skelett": 3
+welle4:
+    nummer: 4
+    mobs:
+        "§7Skelett-Bogenschütze": 2
+        "§7Skelett": 2
+        "§7Skelett-Krieger": 2
+        "§7Skelett-Tank": 2
+welle5:
+    nummer: 5
+    mobs:
+        "§eKiller-Biene": 3
+        "§cKiller-Kaninchen": 2

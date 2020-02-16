@@ -1,5 +1,91 @@
-mobName1:
-   type: mobtyp
-   equip:
-   -  ItemBlueprint1: slot
-   -  ItemBlueprint2: slot
+
+#0 = HEAD
+#1 = CHEST
+#2 = PANTS
+#3 = BOOTS
+#4 = MAINHAND
+#5 = OFFHAND
+
+# SKELETTE
+"§7Skelett":
+    type: SKELETON
+    equip:
+        bone: 4
+        barriere: 0
+"§7Skelett-Bogenschütze":
+    type: SKELETON
+    equip:
+        lederhelm: 0
+        lederbrust: 1
+        lederhose: 2
+        lederschuhe: 3
+"§7Skelett-Krieger":
+    type: SKELETON
+    equip:
+        chainhelm: 0
+        chainbrust: 1
+        chainhose: 2
+        chainschuhe: 3
+        eisenschwert: 4
+"§7Skelett-Tank":
+    type: SKELETON
+    equip:
+        eisenhelm: 0
+        eisenbrust: 1
+        eisenhose: 2
+        eisenschuhe: 3
+        steinschwert: 4
+        schild: 5
+"§8Wither-Scherg":
+    type: SKELETON
+    equip:
+        stock: 4
+# ZOMBIES
+"§3Zombie":
+    type: ZOMBIE
+"§3Wiedergänger":
+    type: ZOMBIE
+    equip:
+        chainbrust: 1
+        chainhose: 2
+        chainschuhe: 3
+"§bPaladin":
+    type: ZOMBIE
+    equip:
+        diahelm: 0
+        diabrust: 1
+        diahose: 2
+        diaschuhe: 3
+        eisenschwert: 4
+        schild: 5
+# SPINNEN
+"§8Spinne":
+    type: SPIDER
+"§aGift-Spinne":
+    type: CAVE_SPIDER
+"§8Baby-Spinne":
+    type: CAVE_SPIDER
+# Bienen
+"§eKiller-Biene":
+    type: BEE
+# Hase
+"§cKiller-Kaninchen":
+    type: RABBIT
+# Pigman
+"§dSchweineman":
+    type: PIG_ZOMBIE
+    equip:
+        goldaxt: 4
+# Whither SKELETTE
+"§8Wither-Skelett":
+    type: WITHER_SKELETON
+    equip:
+        eisenschwert: 4
+"§7[§5BOSS§7] §8Wither-Diener":
+    type: WITHER_SKELETON
+    equip:
+        eisenbrust: 1
+        eisenhose: 2
+        eisenschuhe: 3
+        diaschwert: 4
+        

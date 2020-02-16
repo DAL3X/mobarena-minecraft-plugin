@@ -2,5 +2,19 @@ klasse1:
    leftClickSkill: skillname
    rightClickSkill: skillname
    equip:
-   -  itemblueprint1: slot
-   -  itemblueprint2: slot
+      diahelm: 0
+      diabrust: 1
+      diahose: 2
+      diaschuhe: 3
+      diaschwert: 4
+   glory: 0
+klasse2:
+   leftClickSkill: skillname
+   rightClickSkill: skillname
+   equip:
+      diahelm: 0
+      diabrust: 1
+      diahose: 2
+      diaschuhe: 3
+      diaschwert: 4
+   glory: 20
