@@ -15,8 +15,8 @@ public class SpeedUpSkill implements IPassiveSkill {
 	}
 
 	public void disapply(Player p, Arena a) {
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 1), true);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 1, 1), true);
+		p.removePotionEffect(PotionEffectType.SPEED);
+		p.removePotionEffect(PotionEffectType.JUMP);
 	}
 
 }

@@ -15,52 +15,60 @@ import de.dal3x.mobarena.classes.PlayerClass;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 
 public class SkillListener implements Listener {
-	
+
 	private Arena arena;
 
 	public SkillListener(Arena arena, MobArenaPlugin p) {
 		p.getServer().getPluginManager().registerEvents(this, p);
 		this.arena = arena;
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerRightClickSkill(PlayerInteractEvent event) {
-		if(!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+		if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			return;
 		}
-		if(!this.arena.isParticipant(event.getPlayer())) {
+		if (!this.arena.isParticipant(event.getPlayer())) {
 			return;
 		}
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(event.getPlayer());
-		pClass.getRightClickSkill().execute(event.getPlayer());
-		
+		if (pClass.getRightClickSkill() != null) {
+			pClass.getRightClickSkill().execute(event.getPlayer());
+		}
+
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerLeftClickSkill(EntityDamageByEntityEvent event) {
-		if(!(event.getDamager() instanceof Player)) {
+		if (!(event.getDamager() instanceof Player)) {
 			return;
 		}
 		Player caster = (Player) event.getDamager();
-		if(!this.arena.isParticipant(caster)) {
+		if (!this.arena.isParticipant(caster)) {
 			return;
 		}
-		if(!(event.getEntity() instanceof LivingEntity)) {
+		if (!(event.getEntity() instanceof LivingEntity)) {
 			return;
 		}
 		LivingEntity target = (LivingEntity) event.getEntity();
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(caster);
-		pClass.getLeftClickSkill().execute(caster, target);
+		if (pClass.getLeftClickSkill() != null) {
+			pClass.getLeftClickSkill().execute(caster, target);
+		}
 	}
-	
+
 	public void applyPassive(Player p) {
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(p);
-		pClass.getPassiveSkill().apply(p, this.arena);
+		if (pClass.getPassiveSkill() != null) {
+			pClass.getPassiveSkill().apply(p, this.arena);
+		}
 	}
-	
+
 	public void disapplyPassive(Player p) {
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(p);
-		pClass.getPassiveSkill().disapply(p, this.arena);
+		if (pClass.getPassiveSkill() != null) {
+			pClass.getPassiveSkill().disapply(p, this.arena);
+		}
 	}
-	
+
 }

@@ -46,12 +46,16 @@ public class IngameOutput {
 			TextComponent tc = new TextComponent();
 			tc.setText("§a■  §e" + a.getName());
 			tc.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/mobarena join " + a.getName()));
-			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§aKlick zum Beitreten").create()));
+			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§aBeitreten").create()));
 			p.spigot().sendMessage(tc);
 		}
 		for(Arena a: takenArenas) {
-			p.sendMessage("§c■  §e" + a.getName());
+			TextComponent tc = new TextComponent();
+			tc.setText("§c■  §e" + a.getName());
+			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§cArena belegt").create()));
+			p.spigot().sendMessage(tc);
 		}
+		p.sendMessage("§8----------------------------------------------------------");
 	}
 	
 	public static void sendClassEnabled(Player p, PlayerClass klasse) {
@@ -99,14 +103,13 @@ public class IngameOutput {
 
 	public static void sendHelpMessage(Player p) {
 		p.sendMessage("§8[§3Mob§bArena§8] §8------------------------------------------------");
-		p.sendMessage("§e§o/mobarena list  §8- §7Liste aller Arenen");
-		p.sendMessage("§e§o/mobarena join §8[§eArena-Name§8] §8- §7Trete einer Arena bei");
+		p.sendMessage("§e§o/mobarena join §8- §7Arena beitreten");
 		p.sendMessage("§e§o/mobarena leave  §8- §7Arena verlassen");
-		p.sendMessage("§e§o/mobarena glory  §8- §7Zeigt deinen Ruhm an");
+		p.sendMessage("§e§o/mobarena glory  §8- §7Ruhm anzeigen");
 		if(p.hasPermission(Config.reloadPerm)) {
-			p.sendMessage("§e§o/mobarena reload  §8- §7Läd das Plugin neu");
+			p.sendMessage("§c§o/mobarena reload  §8- §7Plugin neu laden");
 		}
-		p.sendMessage("§8-------------------------------------------------------------------");
+		p.sendMessage("§8----------------------------------------------------------");
 	}
 
 }

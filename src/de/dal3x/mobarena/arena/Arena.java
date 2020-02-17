@@ -56,8 +56,8 @@ public class Arena {
 	private Mob activeBoss;
 	private SkillListener skillListener;
 
-	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation,
-			List<Location> mobspawns, List<Location> playerspawn, List<Mobwave> waves) {
+	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation, List<Location> mobspawns,
+			List<Location> playerspawn, List<Mobwave> waves) {
 		this.name = name;
 		this.spectate = spectate;
 		this.lobby = lobby;
@@ -119,8 +119,7 @@ public class Arena {
 
 	private void spawnInNormalWave() {
 		for (Player p : getParticipants()) {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-					TextComponent.fromLegacyText(IngameOutput.wave + getWaveCounter()));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.wave + getWaveCounter()));
 		}
 		final Mobwave wave = getNextWave();
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
@@ -147,8 +146,8 @@ public class Arena {
 			public void run() {
 				if (isRunning()) {
 					Mob boss = bossStorage.spawnRandomBoss(bossLocation, instance);
-					boss.setMaxHealth((boss.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave
-							* (getParticipants().size() * Config.bossHealthMultiPerPlayer)))));
+					boss.setMaxHealth((boss.getMaxHealth()
+							* (1 + (getWaveCounter() * Config.healtAddMultiPerWave * (getParticipants().size() * Config.bossHealthMultiPerPlayer)))));
 					boss.setHealth(boss.getMaxHealth());
 					activeMobs.add(boss);
 					setActiveBoss(boss);
@@ -157,7 +156,7 @@ public class Arena {
 			}
 		}, 100);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void setScaledMobHealth(Mob mob) {
 		mob.setMaxHealth((mob.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave))));
@@ -251,8 +250,8 @@ public class Arena {
 		if (this.activeMobs.size() == 0) {
 			return true;
 		} else {
-			IngameOutput.sendRemainingMobs(this.activeMobs.size(),
-					this.controller.getMobwave(this.numberOfCurrentWave).getMobs().size(), this.participants);
+			IngameOutput.sendRemainingMobs(this.activeMobs.size(), this.controller.getMobwave(this.numberOfCurrentWave).getMobs().size(),
+					this.participants);
 			return false;
 		}
 	}

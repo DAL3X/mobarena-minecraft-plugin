@@ -13,7 +13,7 @@ public class SkillController {
 	}
 	
 	public static IPassiveSkill getPassiveSkill(String name) {
-		if(name == "SpeedUp") {
+		if(name.equalsIgnoreCase("SpeedUp")) {
 			return new SpeedUpSkill();
 		}
 		return null;

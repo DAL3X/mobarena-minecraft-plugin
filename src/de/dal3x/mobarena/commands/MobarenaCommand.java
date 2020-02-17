@@ -34,7 +34,7 @@ public class MobarenaCommand implements CommandExecutor {
 				return true;
 			}
 			for (Arena checkArena : ArenaStorage.getInstance().getArenas()) {
-				if(checkArena.getQueue().isJoined(p) || checkArena.isParticipant(p)) {
+				if (checkArena.getQueue().isJoined(p) || checkArena.isParticipant(p)) {
 					return true;
 				}
 			}
@@ -57,12 +57,12 @@ public class MobarenaCommand implements CommandExecutor {
 			return true;
 		}
 		// List
-		else if (args.length == 1 && args[0].equalsIgnoreCase(Config.listCommand)) {
+		else if (args.length == 1 && args[0].equalsIgnoreCase(Config.joinCommand)) {
 			sendArenaList(p, ArenaStorage.getInstance().getArenas());
 			return true;
 		}
 		// Glory
-		else if(args.length == 1 && args[0].equalsIgnoreCase(Config.gloryCommand)) {
+		else if (args.length == 1 && args[0].equalsIgnoreCase(Config.gloryCommand)) {
 			IngameOutput.sendGloryMessage(p);
 			return true;
 		}
