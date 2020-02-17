@@ -38,13 +38,12 @@ Premium (Kaufbar mit Token):
 	-Iron Axe mit Sharpness 5
 	Fähigkeiten:
 		-Berserker (aktiviert Berserker Modus gibt Stärke 1 und Regeneration 1)
--Mage
+-Priester
 	-Leather Helmet and Leggings Lila
 	-Chainmail Chestplate mit Projetile Protection 1
 	-Diamond Boots
 	-Blaze Rod mit Sharpness 3 and Fire Aspect 2
 	Fähigkeiten:
-		-Fireball
 		-Heal (an sich selbst oder anderen Spielern)
 		
 		

@@ -35,7 +35,6 @@ public class SkillListener implements Listener {
 		if (pClass.getRightClickSkill() != null) {
 			pClass.getRightClickSkill().execute(event.getPlayer());
 		}
-
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
