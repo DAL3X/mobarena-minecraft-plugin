@@ -52,7 +52,6 @@ public class Arena {
 	private List<Mob> activeMobs;
 	private final int bossWaveDivi = 10;
 	private boolean running;
-	private BossStorage bossStorage;
 	private Mob activeBoss;
 	private SkillListener skillListener;
 
@@ -68,7 +67,6 @@ public class Arena {
 		this.bossLocation = bossLocation;
 		this.plugin = MobArenaPlugin.getInstance();
 		this.controller = MobwaveController.getInstance();
-		this.bossStorage = BossStorage.getInstance();
 		this.participants = new LinkedList<Player>();
 		this.setActiveMobs(new LinkedList<Mob>());
 		this.setQueue(new QueueController());
@@ -145,7 +143,7 @@ public class Arena {
 			@SuppressWarnings("deprecation")
 			public void run() {
 				if (isRunning()) {
-					Mob boss = bossStorage.spawnRandomBoss(bossLocation, instance);
+					Mob boss = BossStorage.getInstance().spawnRandomBoss(bossLocation, instance);
 					boss.setMaxHealth((boss.getMaxHealth()
 							* (1 + (getWaveCounter() * Config.healtAddMultiPerWave * (getParticipants().size() * Config.bossHealthMultiPerPlayer)))));
 					boss.setHealth(boss.getMaxHealth());
@@ -240,6 +238,7 @@ public class Arena {
 				if (killer != null) {
 					addBossPoints();
 				}
+				this.activeBoss = null;
 				return true;
 			}
 			return false;
@@ -358,6 +357,10 @@ public class Arena {
 
 	public void setActiveMobs(List<Mob> activeMobs) {
 		this.activeMobs = activeMobs;
+	}
+	
+	public void addActiveMob(Mob mob) {
+		this.activeMobs.add(mob);
 	}
 
 	public QueueController getQueue() {

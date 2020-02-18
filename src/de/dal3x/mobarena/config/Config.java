@@ -33,4 +33,7 @@ public class Config {
 	public static final int pointPerBosskill = 50;
 	public static final int pointPerWave = 8;
 	
+	public static final int LichLordSpawnCD = 15; // In seconds
+	public static final int LichLordMinionPerPlayer = 5;
+	
 }

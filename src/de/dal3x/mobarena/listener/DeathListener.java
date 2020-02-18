@@ -34,24 +34,28 @@ public class DeathListener implements Listener {
 			return;
 		}
 		Mob mob = (Mob) event.getEntity();
-		if (!arena.getActiveMobs().contains(mob)) {
+		if (arena.getActiveMobs().contains(mob)) {
+			event.setDroppedExp(0);
+			event.getDrops().clear();
+			if (!arena.isRunning()) {
+				return;
+			}
+			event.getDrops().addAll(getDrops(event));
+			Player killer = event.getEntity().getKiller();
+			if (event.getEntity().getKiller() instanceof Projectile) {
+				killer = (Player) ((Projectile) event.getEntity().getKiller()).getShooter();
+			}
+			boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
+			if (waveDone) {
+				arena.addWavePoints();
+				arena.respawnAllSpectators();
+				arena.spawnNextWave();
+			}
+		}
+		if (arena.getActiveBoss() != null && mob.equals(arena.getActiveBoss())) {
+			event.setDroppedExp(0);
+			event.getDrops().clear();
 			return;
-		}
-		event.setDroppedExp(0);
-		event.getDrops().clear();
-		if (!arena.isRunning()) {
-			return;
-		}
-		event.getDrops().addAll(getDrops(event));
-		Player killer = event.getEntity().getKiller();
-		if(event.getEntity().getKiller() instanceof Projectile) {
-			killer = (Player) ((Projectile)event.getEntity().getKiller()).getShooter();
-		}
-		boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
-		if (waveDone) {
-			arena.addWavePoints();
-			arena.respawnAllSpectators();
-			arena.spawnNextWave();
 		}
 	}
 

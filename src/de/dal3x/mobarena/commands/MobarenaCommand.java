@@ -47,6 +47,13 @@ public class MobarenaCommand implements CommandExecutor {
 			for (Arena a : ArenaStorage.getInstance().getArenas()) {
 				if (a.isParticipant(p)) {
 					a.removeParticipant(p);
+					return true;
+				}
+				if(a.getQueue().isJoined(p)) {
+					a.getQueue().takeOutOfJoinedQueue(p);
+					a.getQueue().takeOutOfReadyQueue(p);
+					p.teleport(a.getSpawnLocation());
+					return true;
 				}
 			}
 			return true;

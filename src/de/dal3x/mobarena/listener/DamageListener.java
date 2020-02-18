@@ -20,18 +20,18 @@ public class DamageListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onArenaMobDamagesArenaMob(EntityDamageByEntityEvent event) {
-		if (!this.arena.getActiveMobs().contains(event.getEntity())) {
+		if (!this.arena.getActiveMobs().contains(event.getEntity()) && !event.getEntity().equals(this.arena.getActiveBoss())) {
 			return;
 		}
 		// Getroffener Mob is in Arena
-		if(this.arena.getActiveMobs().contains(event.getDamager())) {
+		if(this.arena.getActiveMobs().contains(event.getDamager()) || event.getDamager().equals(this.arena.getActiveBoss())) {
 			//Mob schlaegt Mob
 			event.setDamage(0);
 			event.setCancelled(true);
 		}
 		if(event.getDamager() instanceof Projectile) {
 			Projectile p = (Projectile) event.getDamager();
-			if(this.arena.getActiveMobs().contains(p.getShooter())) {
+			if(this.arena.getActiveMobs().contains(p.getShooter()) || p.getShooter().equals(this.arena.getActiveBoss())) {
 				//Mob schieﬂt auf Mob
 				event.setDamage(0);
 				event.setCancelled(true);

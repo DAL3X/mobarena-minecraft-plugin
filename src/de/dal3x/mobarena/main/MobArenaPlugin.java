@@ -3,6 +3,7 @@ package de.dal3x.mobarena.main;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.dal3x.mobarena.arena.ArenaStorage;
+import de.dal3x.mobarena.boss.BossStorage;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.commands.MobarenaCommand;
 import de.dal3x.mobarena.file.Filehandler;
@@ -44,6 +45,7 @@ public class MobArenaPlugin extends JavaPlugin{
 		this.fileHandler = Filehandler.getInstance();
 		this.fileHandler.loadRessources();
 		InventoryStorage.getInstance();
+		BossStorage.getInstance();
 	}
 	
 	private void clearInstances() {
@@ -56,6 +58,7 @@ public class MobArenaPlugin extends JavaPlugin{
 		MobwaveController.clearInstance();
 		InventoryStorage.clearInstance();
 		Filehandler.clearInstance();
+		BossStorage.clearInstance();
 	}
 
 	public Filehandler getFileHandler() {

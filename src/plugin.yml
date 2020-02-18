@@ -5,6 +5,7 @@ authors:
 - DAL3X
 - DrKeiter
 - Keksilain
+api-version: 1.15
 commands: 
    mobarena:
       usage: /<command>

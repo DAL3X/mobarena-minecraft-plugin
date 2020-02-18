@@ -4,11 +4,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 
-import de.dal3x.mobarena.arena.Arena;
+public class TestBoss extends AbstractBoss {
 
-public class TestBoss implements Boss{
-
-	public Mob spawn(Location loc, Arena arena) {
+	public Mob spawn(Location loc) {
 		Mob m = (Mob) loc.getWorld().spawnEntity(loc, EntityType.SKELETON); 
 		m.setCustomName("test");
 		m.setCustomNameVisible(true);
