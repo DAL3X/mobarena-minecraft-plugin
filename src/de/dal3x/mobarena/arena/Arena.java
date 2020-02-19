@@ -144,7 +144,7 @@ public class Arena {
 			public void run() {
 				if (isRunning()) {
 					Mob boss = BossStorage.getInstance().spawnRandomBoss(bossLocation, instance);
-					boss.setMaxHealth((boss.getMaxHealth()
+					boss.setMaxHealth((Config.baseBossHealth
 							* (1 + (getWaveCounter() * Config.healtAddMultiPerWave * (getParticipants().size() * Config.bossHealthMultiPerPlayer)))));
 					boss.setHealth(boss.getMaxHealth());
 					activeMobs.add(boss);
@@ -358,7 +358,7 @@ public class Arena {
 	public void setActiveMobs(List<Mob> activeMobs) {
 		this.activeMobs = activeMobs;
 	}
-	
+
 	public void addActiveMob(Mob mob) {
 		this.activeMobs.add(mob);
 	}

@@ -11,6 +11,7 @@ import org.bukkit.entity.Mob;
 import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.arena.ArenaStorage;
 import de.dal3x.mobarena.boss.implementation.BigSlime;
+import de.dal3x.mobarena.boss.implementation.BroodMother;
 import de.dal3x.mobarena.boss.implementation.LichLord;
 
 public class BossStorage {
@@ -30,6 +31,7 @@ public class BossStorage {
 			// -----------------------------
 			bossList.add(new BigSlime(a));
 			bossList.add(new LichLord(a));
+			bossList.add(new BroodMother(a));
 			// -----------------------------
 			this.bosses.put(a, bossList);
 		}

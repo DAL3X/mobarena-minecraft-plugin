@@ -15,8 +15,6 @@ import org.bukkit.entity.Spider;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.boss.MinionBoss;
@@ -28,8 +26,8 @@ public class BroodMother extends MinionBoss {
 	
 	private TempBlockChanger blockChanger;
 
-	protected BroodMother(Arena arena) {
-		super("BroodMother", arena);
+	public BroodMother(Arena arena) {
+		super("§1§lBrut§3§lMutter", arena);
 		this.blockChanger = new TempBlockChanger();
 	}
 
@@ -37,8 +35,7 @@ public class BroodMother extends MinionBoss {
 		Spider mother = (Spider) loc.getWorld().spawnEntity(loc, EntityType.SPIDER);
 		mother.setGlowing(true);
 		mother.setTarget(getNearestPlayer(loc));
-		mother.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
-		startWebSequence(bossInstance.getLocation());
+		startWebSequence(mother.getLocation());
 		startSpawnSequence();
 		mother.setCustomName(name);
 		mother.setCustomNameVisible(true);
@@ -48,7 +45,7 @@ public class BroodMother extends MinionBoss {
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onMotherDeath(EntityDeathEvent event) {
-		if (bossInstance.equals(event.getEntity())) {
+		if (event.getEntity().equals(bossInstance)) {
 			blockChanger.resetAllBlocks();
 		}
 	}
@@ -72,10 +69,10 @@ public class BroodMother extends MinionBoss {
 					for(int i = 0; i < Config.BroodMotherWebPerCycle; i++) {
 						blockChanger.setSingleBlock(getWebPosition(old), Material.COBWEB);
 					}
-					startWebSequence(old);
+					startWebSequence(bossInstance.getLocation());
 				}
 			}
-		}, Config.BroodMotherWebCD * 20);
+		}, (long) (Config.BroodMotherWebCD * 20));
 	}
 	
 	private void spawnMinions(Location loc) {
@@ -83,6 +80,8 @@ public class BroodMother extends MinionBoss {
 		int missingSpawns = Config.BroodMotherMinionPerPlayer * arena.getParticipants().size() - minions.size();
 		for(int i = 0; i < missingSpawns; i++) {
 			Mob m = (Mob) loc.getWorld().spawnEntity(getMinionSpawnPosition(i, loc), EntityType.CAVE_SPIDER);
+			m.setCustomName("§2Gift§3Spinne");
+			m.setCustomNameVisible(true);
 			this.addToMinions(m, arena);
 			newMinions.add(m);
 		}
@@ -106,7 +105,7 @@ public class BroodMother extends MinionBoss {
 	
 	private Location getWebPosition(Location loc) {
 		Random rand = new Random();
-		return loc.add(rand.nextInt(4), rand.nextInt(4), rand.nextInt(4));
+		return loc.add(rand.nextInt(7) - 3, rand.nextInt(3) - 1, rand.nextInt(7) - 3);
 	}
 	
 	private void setTargetsToAllPlayer(List<Mob> mobs) {
