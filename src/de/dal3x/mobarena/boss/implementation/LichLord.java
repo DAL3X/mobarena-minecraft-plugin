@@ -28,11 +28,8 @@ import de.dal3x.mobarena.main.MobArenaPlugin;
 
 public class LichLord extends MinionBoss implements IBoss, Listener {
 
-	private Arena arena;
-	private final String name = "§0§lLich§f§lLord";
-
 	public LichLord(Arena arena) {
-		super();
+		super("§0§lLich§f§lLord", arena);
 		this.arena = arena;
 	}
 
@@ -179,10 +176,6 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 		ItemMeta meta = item.getItemMeta();
 		meta.setUnbreakable(true);
 		item.setItemMeta(meta);
-	}
-
-	public String getBossName() {
-		return this.name;
 	}
 
 }

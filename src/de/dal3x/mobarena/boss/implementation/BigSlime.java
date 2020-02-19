@@ -21,12 +21,8 @@ import de.dal3x.mobarena.boss.MinionBoss;
 
 public class BigSlime extends MinionBoss {
 
-	private Arena arena;
-	private final String name = "§6§lBig§c§lSlime";
-
 	public BigSlime(Arena arena) {
-		super();
-		this.arena = arena;
+		super("§6§lBig§c§lSlime", arena);
 	}
 
 	public Mob spawn(Location loc) {
@@ -36,10 +32,6 @@ public class BigSlime extends MinionBoss {
 		bigSlime.setCustomNameVisible(true);
 		this.bossInstance = bigSlime;
 		return bigSlime;
-	}
-
-	public String getBossName() {
-		return this.name;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

@@ -18,7 +18,8 @@ public abstract class MinionBoss extends AbstractBoss implements Listener {
 
 	protected List<Mob> minions;
 	
-	protected MinionBoss() {
+	protected MinionBoss(String name, Arena arena) {
+		super(name, arena);
 		this.minions = new LinkedList<Mob>();
 		MobArenaPlugin.getInstance().getServer().getPluginManager().registerEvents(this, MobArenaPlugin.getInstance());
 	}
