@@ -141,7 +141,6 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 			return loc.add(0, 1, -1);
 		}
 		return loc;
-
 	}
 
 	private void equipRandomArmor(Mob minion) {

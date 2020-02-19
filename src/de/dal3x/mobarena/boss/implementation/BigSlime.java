@@ -27,7 +27,7 @@ public class BigSlime extends MinionBoss {
 
 	public Mob spawn(Location loc) {
 		Slime bigSlime = (Slime) loc.getWorld().spawnEntity(loc, EntityType.SLIME);
-		bigSlime.setSize(7);
+		bigSlime.setSize(8);
 		bigSlime.setCustomName(this.name);
 		bigSlime.setCustomNameVisible(true);
 		this.bossInstance = bigSlime;

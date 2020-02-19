@@ -20,7 +20,7 @@ public class Config {
 	public static final String reloadPerm = "soulcraft.mobarena.admin";
 	
 	public static final String signClassIdentifier = "§8[§3Mob§bArena§8]";
-	public static final String signReadyIdentifier = "Bereit setzen";
+	public static final String signReadyIdentifier = "Ready";
 	
 	public static final float multiSpawnForPlayer = 0.8f;
 	
@@ -35,5 +35,10 @@ public class Config {
 	
 	public static final int LichLordSpawnCD = 15; // In seconds
 	public static final int LichLordMinionPerPlayer = 5;
+	
+	public static final int BroodMotherSpawnCD = 17; // In seconds
+	public static final int BroodMotherWebCD = 4; // In seconds
+	public static final int BroodMotherWebPerCycle = 3; 
+	public static final int BroodMotherMinionPerPlayer = 5;
 	
 }
