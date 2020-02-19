@@ -14,7 +14,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.boss.MinionBoss;
@@ -23,7 +25,7 @@ import de.dal3x.mobarena.main.MobArenaPlugin;
 import de.dal3x.mobarena.utility.TempBlockChanger;
 
 public class BroodMother extends MinionBoss {
-	
+
 	private TempBlockChanger blockChanger;
 
 	public BroodMother(Arena arena) {
@@ -42,31 +44,57 @@ public class BroodMother extends MinionBoss {
 		bossInstance = mother;
 		return mother;
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onMotherDeath(EntityDeathEvent event) {
 		if (event.getEntity().equals(bossInstance)) {
 			blockChanger.resetAllBlocks();
 		}
 	}
-	
+
+	@Override
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onMinionDeath(EntityDeathEvent event) {
+		if (this.minions.contains(event.getEntity())) {
+			if (bossInstance.getHealth() > 0) {
+				blockChanger.setSingleBlock(event.getEntity().getLocation(), Material.COBWEB);
+				minions.remove(event.getEntity());
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onCobWebClickedEvent(PlayerInteractEvent event) {
+		if (arena.getParticipants().contains(event.getPlayer())) {
+			if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if (event.getClickedBlock().getType().equals(Material.COBWEB)) {
+					if (bossInstance.getHealth() > 0) {
+						blockChanger.resetSingleBlock(event.getClickedBlock().getLocation());
+					}
+				}
+			}
+		}
+	}
+
 	private void startSpawnSequence() {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
 				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+					clearMinions();
 					spawnMinions(bossInstance.getLocation());
+					bossInstance.setTarget(getNearestPlayer(bossInstance.getLocation()));
 					startSpawnSequence();
 				}
 			}
 		}, Config.BroodMotherSpawnCD * 20);
 	}
-	
+
 	private void startWebSequence(Location loc) {
 		final Location old = loc;
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
 				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
-					for(int i = 0; i < Config.BroodMotherWebPerCycle; i++) {
+					for (int i = 0; i < Config.BroodMotherWebPerCycle; i++) {
 						blockChanger.setSingleBlock(getWebPosition(old), Material.COBWEB);
 					}
 					startWebSequence(bossInstance.getLocation());
@@ -74,20 +102,20 @@ public class BroodMother extends MinionBoss {
 			}
 		}, (long) (Config.BroodMotherWebCD * 20));
 	}
-	
+
 	private void spawnMinions(Location loc) {
 		List<Mob> newMinions = new LinkedList<Mob>();
 		int missingSpawns = Config.BroodMotherMinionPerPlayer * arena.getParticipants().size() - minions.size();
-		for(int i = 0; i < missingSpawns; i++) {
+		for (int i = 0; i < missingSpawns; i++) {
 			Mob m = (Mob) loc.getWorld().spawnEntity(getMinionSpawnPosition(i, loc), EntityType.CAVE_SPIDER);
 			m.setCustomName("§2Gift§3Spinne");
 			m.setCustomNameVisible(true);
-			this.addToMinions(m, arena);
+			addToMinions(m, arena);
 			newMinions.add(m);
 		}
 		setTargetsToAllPlayer(newMinions);
 	}
-	
+
 	private Location getMinionSpawnPosition(int counter, Location loc) {
 		int mod = counter % 4;
 		switch (mod) {
@@ -102,26 +130,26 @@ public class BroodMother extends MinionBoss {
 		}
 		return loc;
 	}
-	
+
 	private Location getWebPosition(Location loc) {
 		Random rand = new Random();
 		return loc.add(rand.nextInt(7) - 3, rand.nextInt(3) - 1, rand.nextInt(7) - 3);
 	}
-	
+
 	private void setTargetsToAllPlayer(List<Mob> mobs) {
 		Collections.shuffle(mobs);
-		for(int i = 0; i < mobs.size(); i++) {
+		for (int i = 0; i < mobs.size(); i++) {
 			mobs.get(i).setTarget(arena.getParticipants().get(i % arena.getParticipants().size()));
 		}
 	}
-	
+
 	private Player getNearestPlayer(Location loc) {
 		Player nearest = null;
-		for(Player p : arena.getParticipants()) {
-			if(nearest == null) {
+		for (Player p : arena.getParticipants()) {
+			if (nearest == null) {
 				nearest = p;
 			}
-			if(nearest.getLocation().distance(loc) > p.getLocation().distance(loc)) {
+			if (nearest.getLocation().distance(loc) > p.getLocation().distance(loc)) {
 				nearest = p;
 			}
 		}

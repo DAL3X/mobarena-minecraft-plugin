@@ -18,8 +18,12 @@ public class TempBlockChanger {
 	}
 
 	public void setSingleBlock(Location loc, Material material) {
-		this.blocks.put(loc.clone(), loc.clone().getBlock().getType());
-		this.data.put(loc.clone(), loc.clone().getBlock().getBlockData());
+		Location centered = loc.getWorld().getBlockAt(loc).getLocation();
+		if(this.blocks.containsKey(centered)) {
+			return;
+		}
+		this.blocks.put(centered, centered.getBlock().getType());
+		this.data.put(centered, centered.getBlock().getBlockData());
 		loc.getBlock().setType(material);
 	}
 
@@ -28,11 +32,22 @@ public class TempBlockChanger {
 			setSingleBlock(loc, material);
 		}
 	}
+	
+	public void resetSingleBlock(Location loc) {
+		Location centered = loc.getWorld().getBlockAt(loc).getLocation();
+		if(!this.blocks.containsKey(centered)) {
+			return;
+		}
+		centered.getBlock().setType(this.blocks.get(centered));
+		centered.getBlock().setBlockData(this.data.get(centered));
+		this.blocks.remove(centered);
+		this.data.remove(centered);
+	}
 
 	public void resetAllBlocks() {
 		for (Location loc : this.blocks.keySet()) {
-			loc.getWorld().getBlockAt(loc).setType(this.blocks.get(loc));
-			loc.getWorld().getBlockAt(loc).setBlockData(this.data.get(loc));
+			loc.getBlock().setType(this.blocks.get(loc));
+			loc.getBlock().setBlockData(this.data.get(loc));
 		}
 		this.blocks.clear();
 		this.data.clear();

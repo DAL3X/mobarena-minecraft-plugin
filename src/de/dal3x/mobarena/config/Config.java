@@ -26,7 +26,7 @@ public class Config {
 	
 	public static final double healtAddMultiPerWave = 0.05;
 	public static final double bossHealthMultiPerPlayer = 3;
-	public static final double baseBossHealth = 150;
+	public static final double baseBossHealth = 50;
 	
 	public static final double damageTakenMultiPerWave = 0.025;
 	
@@ -37,9 +37,9 @@ public class Config {
 	public static final int LichLordSpawnCD = 15; // In seconds
 	public static final int LichLordMinionPerPlayer = 5;
 	
-	public static final int BroodMotherSpawnCD = 17; // In seconds
+	public static final int BroodMotherSpawnCD = 8; // In seconds
 	public static final double BroodMotherWebCD = 5; // In seconds
-	public static final int BroodMotherWebPerCycle = 6; 
+	public static final int BroodMotherWebPerCycle = 40; 
 	public static final int BroodMotherMinionPerPlayer = 5;
 	
 }
