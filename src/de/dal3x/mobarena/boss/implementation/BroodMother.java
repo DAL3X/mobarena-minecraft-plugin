@@ -37,6 +37,7 @@ public class BroodMother extends MinionBoss {
 		Spider mother = (Spider) loc.getWorld().spawnEntity(loc, EntityType.SPIDER);
 		mother.setGlowing(true);
 		mother.setTarget(getNearestPlayer(loc));
+		spawnMinions(mother.getLocation());
 		startWebSequence(mother.getLocation());
 		startSpawnSequence();
 		mother.setCustomName(name);
@@ -95,7 +96,10 @@ public class BroodMother extends MinionBoss {
 			public void run() {
 				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
 					for (int i = 0; i < Config.BroodMotherWebPerCycle; i++) {
-						blockChanger.setSingleBlock(getWebPosition(old), Material.COBWEB);
+						Location webLoc = getWebPosition(old);
+						if (webLoc.getBlock().getType().equals(Material.AIR)) {
+							blockChanger.setSingleBlock(webLoc, Material.COBWEB);
+						}
 					}
 					startWebSequence(bossInstance.getLocation());
 				}
