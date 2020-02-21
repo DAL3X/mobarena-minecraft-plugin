@@ -11,15 +11,16 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class TargetHeal extends CooldownSkill implements ILeftClickSkill {
 	
 	public TargetHeal() {
-		setCooldown(8);
+		setCooldown(6);
 	}
 
 	public void execute(Player p, LivingEntity target) {
 		if(!(target instanceof Player)) {
 			return;
 		}
+		Player targetPlayer = (Player) target;
 		if (this.isReady()) {
-			p.setHealth(p.getHealth() + 8);
+			targetPlayer.setHealth(targetPlayer.getHealth() + 8);
 		}
 		else {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cSkill nicht bereit"));
