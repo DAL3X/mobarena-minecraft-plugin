@@ -1,5 +1,8 @@
 package de.dal3x.mobarena.boss.implementation;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -11,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WitherSkeleton;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -56,6 +60,7 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 		this.bossInstance = lich;
 		spawnMinions(arena.getParticipants().size() * Config.LichLordMinionPerPlayer);
 		startSpawnSequence();
+		startDebuffSequence();
 		return this.bossInstance;
 	}
 
@@ -78,6 +83,31 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 		}
 	}
 
+	private void startDebuffSequence() {
+		int amountPlayer = arena.getAliveParticipants().size();
+		List<Player> partCopy = new LinkedList<Player>();
+		for (Player pl : arena.getAliveParticipants()) {
+			partCopy.add(pl);
+		}
+		Collections.shuffle(partCopy);
+		int border = amountPlayer / 2;
+		final List<Player> speedTargets = partCopy.subList(0, border);
+		final List<Player> slowTargets = partCopy.subList(border, partCopy.size());
+		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
+			public void run() {
+				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+					for(Player p : speedTargets) {
+						p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1), true);
+					}
+					for(Player p : slowTargets) {
+						p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1), true);
+					}
+					startDebuffSequence();
+				}
+			}
+		}, Config.LichLordDebuffCD * 20);
+	}
+
 	private void startSpawnSequence() {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
@@ -93,13 +123,15 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 	private void spawnMinions(int amount) {
 		World w = this.bossInstance.getLocation().getWorld();
 		Random rand = new Random();
-		for (int i = 0; i < amount; i++) {
-			for (Player p : this.arena.getParticipants()) {
+		for (Player p : this.arena.getAliveParticipants()) {
+			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 2), true);
+			for (int i = 0; i < amount; i++) {
 				Location loc = getMinionSpawnPosition(i, p.getLocation());
 				Mob minion;
 				// Minion is skeleton
 				if (rand.nextInt(2) == 0) {
 					minion = (Mob) w.spawnEntity(loc, EntityType.SKELETON);
+					minion.setTarget(p);
 					// Minion is melee-skeleton
 					if (rand.nextInt(2) == 0) {
 						// Stone knockback sword
@@ -114,6 +146,7 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 				// Minion is zombie
 				else {
 					minion = (Mob) w.spawnEntity(loc, EntityType.ZOMBIE);
+					((Zombie) minion).setBaby(false);
 					// Iron sword
 					ItemStack sword = new ItemStack(Material.IRON_SWORD, 1);
 					makeItemUnbreakable(sword);

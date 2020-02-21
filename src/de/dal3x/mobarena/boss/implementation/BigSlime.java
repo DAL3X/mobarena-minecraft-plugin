@@ -43,7 +43,7 @@ public class BigSlime extends MinionBoss {
 		}
 		if (event.getEntity().equals(this.bossInstance)) {
 			// Slime gets Dmg
-			for (Player p : arena.getParticipants()) {
+			for (Player p : arena.getAliveParticipants()) {
 				if (p.getLocation().distance(bossInstance.getLocation()) <= 5) {
 					Vector vec = p.getLocation().toVector().subtract(bossInstance.getLocation().toVector());
 					p.setVelocity(vec.normalize().multiply(5 / vec.length()).multiply(0.3));

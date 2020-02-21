@@ -143,13 +143,13 @@ public class BroodMother extends MinionBoss {
 	private void setTargetsToAllPlayer(List<Mob> mobs) {
 		Collections.shuffle(mobs);
 		for (int i = 0; i < mobs.size(); i++) {
-			mobs.get(i).setTarget(arena.getParticipants().get(i % arena.getParticipants().size()));
+			mobs.get(i).setTarget(arena.getAliveParticipants().get(i % arena.getAliveParticipants().size()));
 		}
 	}
 
 	private Player getNearestPlayer(Location loc) {
 		Player nearest = null;
-		for (Player p : arena.getParticipants()) {
+		for (Player p : arena.getAliveParticipants()) {
 			if (nearest == null) {
 				nearest = p;
 			}

@@ -201,6 +201,16 @@ public class Arena {
 	public List<Player> getParticipants() {
 		return this.participants;
 	}
+	
+	public List<Player> getAliveParticipants(){
+		List<Player> alive = new LinkedList<Player>();
+		for(Player p : this.participants) {
+			if(!this.spectator.contains(p)) {
+				alive.add(p);
+			}
+		}
+		return alive;
+	}
 
 	public void sendMessageToAllParticipants(String message) {
 		for (Player p : this.participants) {
