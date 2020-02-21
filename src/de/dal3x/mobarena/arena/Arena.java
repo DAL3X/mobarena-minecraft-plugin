@@ -131,7 +131,7 @@ public class Arena {
 					waveCounter++;
 				}
 			}
-		}, 100);
+		}, 140);
 	}
 
 	private void spawnInBoss() {
@@ -152,7 +152,7 @@ public class Arena {
 					waveCounter++;
 				}
 			}
-		}, 100);
+		}, 140);
 	}
 
 	@SuppressWarnings("deprecation")
