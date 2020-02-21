@@ -1,6 +1,5 @@
 package de.dal3x.mobarena.boss.implementation;
 
-
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -30,6 +29,7 @@ public class BigSlime extends MinionBoss {
 		bigSlime.setSize(8);
 		bigSlime.setCustomName(this.name);
 		bigSlime.setCustomNameVisible(true);
+		bigSlime.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 1), true);
 		this.bossInstance = bigSlime;
 		return bigSlime;
 	}
@@ -54,11 +54,10 @@ public class BigSlime extends MinionBoss {
 			slime.setSize(2);
 			slime.setCustomName("§cSlime");
 			slime.setCustomNameVisible(true);
-			if(event.getDamager() instanceof Projectile) {
+			if (event.getDamager() instanceof Projectile) {
 				Vector vec = event.getDamager().getLocation().toVector().subtract(bossInstance.getLocation().toVector()).multiply(0.45);
 				slime.setVelocity(vec);
-			}
-			else {
+			} else {
 				Vector vec = event.getDamager().getLocation().toVector().subtract(bossInstance.getLocation().toVector()).normalize();
 				slime.setVelocity(vec);
 			}

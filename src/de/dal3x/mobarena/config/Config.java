@@ -38,9 +38,9 @@ public class Config {
 	public static final int LichLordMinionPerPlayer = 5;
 	public static final int LichLordDebuffCD = 20; // In seconds
 	
-	public static final int BroodMotherSpawnCD = 8; // In seconds
+	public static final int BroodMotherSpawnCD = 10; // In seconds
 	public static final double BroodMotherWebCD = 5; // In seconds
-	public static final int BroodMotherWebPerCycle = 40; //In reality less, bc some blocks are blocked 
+	public static final int BroodMotherWebPerCycle = 50; //In reality less, bc some blocks are blocked 
 	public static final int BroodMotherMinionPerPlayer = 5;
 	
 }

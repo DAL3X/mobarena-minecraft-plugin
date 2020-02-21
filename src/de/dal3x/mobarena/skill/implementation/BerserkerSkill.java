@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import de.dal3x.mobarena.output.IngameOutput;
 import de.dal3x.mobarena.skill.CooldownSkill;
 import de.dal3x.mobarena.skill.IRightClickSkill;
 import net.md_5.bungee.api.ChatMessageType;
@@ -21,7 +22,7 @@ public class BerserkerSkill extends CooldownSkill implements IRightClickSkill {
 			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1), true);
 		}
 		else {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cSkill nicht bereit"));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));
 		}
 	}
 

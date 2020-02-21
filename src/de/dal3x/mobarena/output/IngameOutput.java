@@ -29,6 +29,8 @@ public class IngameOutput {
 	public static final String wave = "Welle ";
 	public static final String boss = "§cBosswelle";
 	
+	public static final String SkillNotReady = "§cSkill nich bereit";
+	
 	
 	public static void sendArenaList(Player p, List<Arena> arenaList) {
 		List<Arena> freeArenas = new LinkedList<Arena>();

@@ -3,6 +3,7 @@ package de.dal3x.mobarena.skill.implementation;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import de.dal3x.mobarena.output.IngameOutput;
 import de.dal3x.mobarena.skill.CooldownSkill;
 import de.dal3x.mobarena.skill.ILeftClickSkill;
 import net.md_5.bungee.api.ChatMessageType;
@@ -23,7 +24,7 @@ public class TargetHeal extends CooldownSkill implements ILeftClickSkill {
 			targetPlayer.setHealth(targetPlayer.getHealth() + 8);
 		}
 		else {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cSkill nicht bereit"));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));
 		}
 	}
 
