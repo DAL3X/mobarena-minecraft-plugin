@@ -10,13 +10,11 @@ import de.dal3x.mobarena.skill.IPassiveSkill;
 public class SpeedUpSkill implements IPassiveSkill {
 
 	public void apply(Player p, Arena a) {
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1), true);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1), true);
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0), true);
 	}
 
 	public void disapply(Player p, Arena a) {
 		p.removePotionEffect(PotionEffectType.SPEED);
-		p.removePotionEffect(PotionEffectType.JUMP);
 	}
 
 }

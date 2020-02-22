@@ -29,7 +29,7 @@ public class BigSlime extends MinionBoss {
 		bigSlime.setSize(8);
 		bigSlime.setCustomName(this.name);
 		bigSlime.setCustomNameVisible(true);
-		bigSlime.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 1), true);
+		bigSlime.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0), true);
 		this.bossInstance = bigSlime;
 		return bigSlime;
 	}
@@ -71,7 +71,7 @@ public class BigSlime extends MinionBoss {
 			// Little slime made dmg
 			if (event.getEntity() instanceof Player) {
 				Player p = (Player) event.getEntity();
-				p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 4), true);
+				p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 3), true);
 				p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 1), true);
 				((LivingEntity) event.getDamager()).setHealth(0);
 			}

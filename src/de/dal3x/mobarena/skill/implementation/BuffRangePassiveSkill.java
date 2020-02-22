@@ -26,8 +26,8 @@ public class BuffRangePassiveSkill implements IPassiveSkill {
 				if(arena.isRunning() && arena.getAliveParticipants().contains(p) && running) {
 					for(Player target : arena.getAliveParticipants()) {
 						if(target.getLocation().distance(p.getLocation()) < 5 && !target.equals(p)) {
-							target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 1), true);
-							target.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 1), true);
+							target.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 0), true);
+							target.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 0), true);
 						}
 					}
 					startBuffSequence(p);

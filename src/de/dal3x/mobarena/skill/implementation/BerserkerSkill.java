@@ -24,7 +24,7 @@ public class BerserkerSkill extends CooldownSkill implements IRightClickSkill {
 		if (this.isReady()) {
 			putOnCooldown();
 			p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 2), true);
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 2), true);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1), true);
 		}
 		else {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));

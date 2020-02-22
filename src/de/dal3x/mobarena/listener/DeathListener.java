@@ -12,6 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -68,13 +70,31 @@ public class DeathListener implements Listener {
 		if (!arena.isParticipant(p)) {
 			return;
 		}
-		if(event.getDamager() instanceof Player) {
+		if (event.getDamager() instanceof Player) {
 			return;
 		}
 		if ((p.getHealth() - event.getDamage()) <= 0) {
 			event.setDamage(0);
 			event.setCancelled(true);
 			arena.addToSpectator(p);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onArenaPlayerDeath(EntityDamageEvent event) {
+		if (!(event.getEntity() instanceof Player)) {
+			return;
+		}
+		Player p = (Player) event.getEntity();
+		if (!arena.isParticipant(p)) {
+			return;
+		}
+		if (event.getCause().equals(DamageCause.FALL) || event.getCause().equals(DamageCause.DROWNING)) {
+			if ((p.getHealth() - event.getDamage()) <= 0) {
+				event.setDamage(0);
+				event.setCancelled(true);
+				arena.addToSpectator(p);
+			}
 		}
 	}
 

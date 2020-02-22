@@ -73,10 +73,10 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 				return;
 			}
 			Player p = (Player) event.getEntity();
-			p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1), true);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0), true);
 			event.setCancelled(true);
 			for (Mob minion : this.minions) {
-				minion.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 80, 1), true);
+				minion.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 80, 0), true);
 			}
 		}
 	}
@@ -95,10 +95,10 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 			public void run() {
 				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
 					for(Player p : speedTargets) {
-						p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 140, 1), true);
+						p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 140, 0), true);
 					}
 					for(Player p : slowTargets) {
-						p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 1), true);
+						p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 0), true);
 					}
 					startDebuffSequence();
 				}
@@ -123,7 +123,7 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 		World w = this.bossInstance.getLocation().getWorld();
 		Random rand = new Random();
 		for (Player p : this.arena.getAliveParticipants()) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 2), true);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 1), true);
 			for (int i = 0; i < amount; i++) {
 				Location loc = getMinionSpawnPosition(i, p.getLocation());
 				Mob minion;

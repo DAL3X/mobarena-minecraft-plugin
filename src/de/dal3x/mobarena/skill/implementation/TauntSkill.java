@@ -27,7 +27,7 @@ public class TauntSkill extends CooldownSkill implements IRightClickSkill {
 			for(Mob m : a.getActiveMobs()) {
 				if(p.getLocation().distance(m.getLocation()) < 20){
 					m.setTarget(p);
-					m.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1), true);
+					m.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0), true);
 				}
 			}
 		}
