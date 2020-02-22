@@ -58,7 +58,7 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 		lich.getEquipment().setItemInMainHand(stick);
 		// init
 		this.bossInstance = lich;
-		spawnMinions(arena.getParticipants().size() * Config.LichLordMinionPerPlayer);
+		spawnMinions();
 		startSpawnSequence();
 		startDebuffSequence();
 		return this.bossInstance;
@@ -76,9 +76,7 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 			p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1), true);
 			event.setCancelled(true);
 			for (Mob minion : this.minions) {
-				minion.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1), true);
-				minion.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1), true);
-				minion.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 200, 1), true);
+				minion.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 80, 1), true);
 			}
 		}
 	}
@@ -97,10 +95,10 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 			public void run() {
 				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
 					for(Player p : speedTargets) {
-						p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1), true);
+						p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 140, 1), true);
 					}
 					for(Player p : slowTargets) {
-						p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 1), true);
+						p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 1), true);
 					}
 					startDebuffSequence();
 				}
@@ -113,18 +111,19 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 			public void run() {
 				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
 					clearMinions();
-					spawnMinions((arena.getParticipants().size() * Config.LichLordMinionPerPlayer));
+					spawnMinions();
 					startSpawnSequence();
 				}
 			}
 		}, Config.LichLordSpawnCD * 20);
 	}
 
-	private void spawnMinions(int amount) {
+	private void spawnMinions() {
+		int amount = Config.LichLordMinionPerPlayer;
 		World w = this.bossInstance.getLocation().getWorld();
 		Random rand = new Random();
 		for (Player p : this.arena.getAliveParticipants()) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 2), true);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 2), true);
 			for (int i = 0; i < amount; i++) {
 				Location loc = getMinionSpawnPosition(i, p.getLocation());
 				Mob minion;
@@ -182,6 +181,10 @@ public class LichLord extends MinionBoss implements IBoss, Listener {
 			// Helmet
 			ItemStack helmet = new ItemStack(Material.LEATHER_HELMET, 1);
 			makeItemUnbreakable(helmet);
+			minion.getEquipment().setHelmet(helmet);
+		}
+		else {
+			ItemStack helmet = new ItemStack(Material.STONE_BUTTON, 1);
 			minion.getEquipment().setHelmet(helmet);
 		}
 		if (rand.nextInt(3) == 0) {

@@ -34,13 +34,13 @@ public class Config {
 	public static final int pointPerBosskill = 50;
 	public static final int pointPerWave = 8;
 	
-	public static final int LichLordSpawnCD = 15; // In seconds
-	public static final int LichLordMinionPerPlayer = 5;
-	public static final int LichLordDebuffCD = 20; // In seconds
+	public static final int LichLordSpawnCD = 30; // In seconds
+	public static final int LichLordMinionPerPlayer = 3;
+	public static final int LichLordDebuffCD = 25; // In seconds
 	
 	public static final int BroodMotherSpawnCD = 10; // In seconds
 	public static final double BroodMotherWebCD = 5; // In seconds
-	public static final int BroodMotherWebPerCycle = 50; //In reality less, bc some blocks are blocked 
+	public static final int BroodMotherWebPerCycle = 70; //In reality less, bc some blocks are blocked 
 	public static final int BroodMotherMinionPerPlayer = 5;
 	
 }

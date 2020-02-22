@@ -33,7 +33,7 @@ public class SkillListener implements Listener {
 		}
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(event.getPlayer());
 		if (pClass.getRightClickSkill() != null) {
-			pClass.getRightClickSkill().execute(event.getPlayer());
+			pClass.getRightClickSkill().execute(event.getPlayer(), arena);
 		}
 	}
 
@@ -52,21 +52,21 @@ public class SkillListener implements Listener {
 		LivingEntity target = (LivingEntity) event.getEntity();
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(caster);
 		if (pClass.getLeftClickSkill() != null) {
-			pClass.getLeftClickSkill().execute(caster, target);
+			pClass.getLeftClickSkill().execute(caster, target, arena);
 		}
 	}
 
 	public void applyPassive(Player p) {
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(p);
 		if (pClass.getPassiveSkill() != null) {
-			pClass.getPassiveSkill().apply(p, this.arena);
+			pClass.getPassiveSkill().apply(p, arena);
 		}
 	}
 
 	public void disapplyPassive(Player p) {
 		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(p);
 		if (pClass.getPassiveSkill() != null) {
-			pClass.getPassiveSkill().disapply(p, this.arena);
+			pClass.getPassiveSkill().disapply(p, arena);
 		}
 	}
 

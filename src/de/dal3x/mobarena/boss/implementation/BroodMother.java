@@ -109,8 +109,8 @@ public class BroodMother extends MinionBoss {
 
 	private void spawnMinions(Location loc) {
 		List<Mob> newMinions = new LinkedList<Mob>();
-		int missingSpawns = Config.BroodMotherMinionPerPlayer * arena.getParticipants().size() - minions.size();
-		for (int i = 0; i < missingSpawns; i++) {
+		int spawns = Config.BroodMotherMinionPerPlayer * arena.getParticipants().size();
+		for (int i = 0; i < spawns; i++) {
 			Mob m = (Mob) loc.getWorld().spawnEntity(getMinionSpawnPosition(i, loc), EntityType.CAVE_SPIDER);
 			m.setCustomName("§2Gift§3Spinne");
 			m.setCustomNameVisible(true);

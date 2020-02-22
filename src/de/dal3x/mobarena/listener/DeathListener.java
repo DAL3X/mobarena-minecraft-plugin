@@ -68,6 +68,9 @@ public class DeathListener implements Listener {
 		if (!arena.isParticipant(p)) {
 			return;
 		}
+		if(event.getDamager() instanceof Player) {
+			return;
+		}
 		if ((p.getHealth() - event.getDamage()) <= 0) {
 			event.setDamage(0);
 			event.setCancelled(true);

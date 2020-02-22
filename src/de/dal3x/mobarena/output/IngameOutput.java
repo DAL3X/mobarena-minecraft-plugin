@@ -29,7 +29,7 @@ public class IngameOutput {
 	public static final String wave = "Welle ";
 	public static final String boss = "§cBosswelle";
 	
-	public static final String SkillNotReady = "§cSkill nich bereit";
+	public static final String SkillNotReady = "§cSkill nicht bereit";
 	
 	
 	public static void sendArenaList(Player p, List<Arena> arenaList) {
@@ -42,7 +42,7 @@ public class IngameOutput {
 				takenArenas.add(a);
 			}
 		}
-		p.sendMessage("§8[§3Mob§bArena§8] §8------------------------------------------------");
+		p.sendMessage("§8--------------§8[§3Mob§bArena§8]--------------");
 		p.sendMessage("§8Klicke auf eine Arena um beizutreten");
 		for(Arena a : freeArenas) {
 			TextComponent tc = new TextComponent();
@@ -57,7 +57,7 @@ public class IngameOutput {
 			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§cArena belegt").create()));
 			p.spigot().sendMessage(tc);
 		}
-		p.sendMessage("§8----------------------------------------------------------");
+		p.sendMessage("§8----------------------------");
 	}
 	
 	public static void sendClassEnabled(Player p, PlayerClass klasse) {
@@ -104,14 +104,28 @@ public class IngameOutput {
 	}
 
 	public static void sendHelpMessage(Player p) {
-		p.sendMessage("§8[§3Mob§bArena§8] §8------------------------------------------------");
-		p.sendMessage("§e§o/mobarena join §8- §7Arena beitreten");
-		p.sendMessage("§e§o/mobarena leave  §8- §7Arena verlassen");
-		p.sendMessage("§e§o/mobarena glory  §8- §7Ruhm anzeigen");
+		p.sendMessage("§8--------------§8[§3Mob§bArena§8]--------------");
+		TextComponent tcJ = new TextComponent();
+		tcJ.setText("§e§o/mobarena join §8- §7Arena beitreten");
+		tcJ.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/mobarena join"));
+		tcJ.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§ejoin").create()));
+		p.spigot().sendMessage(tcJ);
+		TextComponent tcL = new TextComponent();
+		tcL = new TextComponent();
+		tcL.setText("§e§o/mobarena leave  §8- §7Arena verlassen");
+		tcL.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/mobarena leave"));
+		tcL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eleave").create()));
+		p.spigot().sendMessage(tcL);
+		TextComponent tcG = new TextComponent();
+		tcG = new TextComponent();
+		tcG.setText("§e§o/mobarena glory  §8- §7Ruhm anzeigen");
+		tcG.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/mobarena glory"));
+		tcG.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eglory").create()));
+		p.spigot().sendMessage(tcG);
 		if(p.hasPermission(Config.reloadPerm)) {
 			p.sendMessage("§c§o/mobarena reload  §8- §7Plugin neu laden");
 		}
-		p.sendMessage("§8----------------------------------------------------------");
+		p.sendMessage("§8----------------------------");
 	}
 
 }

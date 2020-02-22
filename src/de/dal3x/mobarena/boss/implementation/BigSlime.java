@@ -38,13 +38,13 @@ public class BigSlime extends MinionBoss {
 	public void onBigSlimeDmg(EntityDamageByEntityEvent event) {
 		if (event.getDamager().equals(this.bossInstance)) {
 			// Slime makes Dmg
-			event.setDamage(event.getDamage() * 0.4);
+			event.setDamage(event.getDamage() * 0.8);
 			return;
 		}
 		if (event.getEntity().equals(this.bossInstance)) {
 			// Slime gets Dmg
 			for (Player p : arena.getAliveParticipants()) {
-				if (p.getLocation().distance(bossInstance.getLocation()) <= 5) {
+				if (p.getLocation().distance(bossInstance.getLocation()) <= 10) {
 					Vector vec = p.getLocation().toVector().subtract(bossInstance.getLocation().toVector());
 					p.setVelocity(vec.normalize().multiply(5 / vec.length()).multiply(0.3));
 				}

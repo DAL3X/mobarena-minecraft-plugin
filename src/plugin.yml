@@ -10,4 +10,5 @@ commands:
    mobarena:
       usage: /<command>
       description: Befehl zum nutzen der Mobarenen
+      aliases: [moa]
    
