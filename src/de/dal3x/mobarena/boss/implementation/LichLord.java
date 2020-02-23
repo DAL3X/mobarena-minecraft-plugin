@@ -59,7 +59,7 @@ public class LichLord extends MinionBoss implements Listener {
 		spawnMinions();
 		startSpawnSequence();
 		startDebuffSequence();
-		return this.bossInstance;
+		return lich;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

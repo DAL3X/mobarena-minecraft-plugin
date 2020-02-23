@@ -30,9 +30,9 @@ public class BossStorage {
 		for (Arena a : ArenaStorage.getInstance().getArenas()) {
 			List<IBoss> bossList = new LinkedList<IBoss>();
 			// -----------------------------
-			bossList.add(new BigSlime(a));
-			bossList.add(new LichLord(a));
-			bossList.add(new BroodMother(a));
+			//bossList.add(new BigSlime(a));
+			//bossList.add(new LichLord(a));
+			//bossList.add(new BroodMother(a));
 			bossList.add(new Shuffler(a));
 			// -----------------------------
 			this.bosses.put(a, bossList);

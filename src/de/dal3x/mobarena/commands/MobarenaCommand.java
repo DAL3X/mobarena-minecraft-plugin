@@ -17,6 +17,11 @@ import de.dal3x.mobarena.output.IngameOutput;
 public class MobarenaCommand implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		//reload
+		if (args.length == 1 && args[0].equalsIgnoreCase(Config.reloadCommand)) {
+			reload(sender);
+			return true;
+		}
 		if (!(sender instanceof Player)) {
 			sender.sendMessage(ConsoleOutputs.consolePrefix + ConsoleOutputs.notAPlayer);
 			return true;
@@ -58,11 +63,6 @@ public class MobarenaCommand implements CommandExecutor {
 			}
 			return true;
 		}
-		// Reload
-		else if (args.length == 1 && args[0].equalsIgnoreCase(Config.reloadCommand)) {
-			reload(p);
-			return true;
-		}
 		// List
 		else if (args.length == 1 && args[0].equalsIgnoreCase(Config.joinCommand)) {
 			sendArenaList(p, ArenaStorage.getInstance().getArenas());
@@ -84,7 +84,7 @@ public class MobarenaCommand implements CommandExecutor {
 		IngameOutput.sendArenaList(p, arenaList);
 	}
 
-	private void reload(Player p) {
+	private void reload(CommandSender p) {
 		if (p.hasPermission(Config.reloadPerm)) {
 			MobArenaPlugin.getInstance().reload();
 			p.sendMessage(IngameOutput.prefix + IngameOutput.successfullReload);

@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 
 import de.dal3x.mobarena.boss.BossStorage;
 import de.dal3x.mobarena.classes.ClassController;
@@ -184,6 +185,9 @@ public class Arena {
 		this.spectator.remove(p);
 		p.teleport(this.spawnLocation);
 		clearInventory(p);
+		for(PotionEffect effect : p.getActivePotionEffects()) {
+			p.removePotionEffect(effect.getType());
+		}
 		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
 		IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
 		this.arenaPoints.remove(p);
