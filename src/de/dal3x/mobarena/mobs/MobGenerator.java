@@ -3,6 +3,7 @@ package de.dal3x.mobarena.mobs;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Mob;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.inventory.ItemStack;
 
@@ -78,6 +79,9 @@ public class MobGenerator {
 			Rabbit r = (Rabbit) mob;
 			r.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
 			return r;
+		} else if (mob instanceof PigZombie) {
+			PigZombie pigZom = (PigZombie) mob;
+			pigZom.setAnger(Integer.MAX_VALUE);
 		}
 		return mob;
 	}

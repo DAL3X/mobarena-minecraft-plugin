@@ -2,10 +2,12 @@ package de.dal3x.mobarena.item;
 
 import java.util.LinkedList;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import de.dal3x.mobarena.utility.EnchantmentMeta;
 
@@ -31,6 +33,11 @@ public class ItemGenerator {
 			meta.setLore(lore);
 			// Set unbreaking
 			meta.setUnbreakable(true);
+			// Set color if needed
+			if(itemBP.isColored()) {
+				LeatherArmorMeta lMeta = (LeatherArmorMeta) meta;
+				lMeta.setColor(Color.fromRGB(itemBP.getColor()));
+			}
 			// Set the meta to item
 			item.setItemMeta(meta);
 		}

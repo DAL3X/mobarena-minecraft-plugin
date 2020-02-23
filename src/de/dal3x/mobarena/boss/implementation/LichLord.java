@@ -25,16 +25,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import de.dal3x.mobarena.arena.Arena;
-import de.dal3x.mobarena.boss.IBoss;
 import de.dal3x.mobarena.boss.MinionBoss;
 import de.dal3x.mobarena.config.Config;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 
-public class LichLord extends MinionBoss implements IBoss, Listener {
+public class LichLord extends MinionBoss implements Listener {
 
 	public LichLord(Arena arena) {
 		super("§0§lLich§f§lLord", arena);
-		this.arena = arena;
 	}
 
 	public Mob spawn(Location loc) {

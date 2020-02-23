@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -72,8 +73,7 @@ public class Filehandler {
 	private void loadMobBlueprints() {
 		File mobFile = new File(Config.dirPath + Config.mobFileName);
 		if (!mobFile.exists()) {
-			System.out.println(
-					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.mobs + ") " + ConsoleOutputs.fileNotFound);
+			System.out.println(ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.mobs + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(mobFile);
@@ -101,15 +101,13 @@ public class Filehandler {
 			this.mobStorage.addMobBlueprint(mob);
 			counter++;
 		}
-		System.out.println(
-				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.mobs + ConsoleOutputs.successload);
+		System.out.println(ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.mobs + ConsoleOutputs.successload);
 	}
 
 	private void loadItemBlueprints() {
 		File itemFile = new File(Config.dirPath + Config.itemFileName);
 		if (!itemFile.exists()) {
-			System.out.println(
-					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.items + ") " + ConsoleOutputs.fileNotFound);
+			System.out.println(ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.items + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(itemFile);
@@ -125,6 +123,14 @@ public class Filehandler {
 			// Load and set Itemlore
 			String lore = cfg.getString(entry + ".lore");
 			item.setLore(lore);
+			// Load colour of leather equip
+			Material mat = Material.valueOf(type);
+			if (mat != null && (mat.equals(Material.LEATHER_BOOTS) || mat.equals(Material.LEATHER_CHESTPLATE) || mat.equals(Material.LEATHER_HELMET)
+					|| mat.equals(Material.LEATHER_LEGGINGS))) {
+				if(cfg.contains(entry + ".color")) {
+					item.setColor(cfg.getInt(entry + ".color"));
+				}
+			}
 			// Load and set Enchantments
 			if (cfg.getConfigurationSection(entry + ".enchantments") != null) {
 				Set<String> enchEntrys = cfg.getConfigurationSection((entry + ".enchantments")).getKeys(false);
@@ -141,15 +147,13 @@ public class Filehandler {
 			this.itemStorage.addItem(item);
 			counter++;
 		}
-		System.out.println(
-				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.items + ConsoleOutputs.successload);
+		System.out.println(ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.items + ConsoleOutputs.successload);
 	}
 
 	private void loadClasses() {
 		File classFile = new File(Config.dirPath + Config.classFileName);
 		if (!classFile.exists()) {
-			System.out.println(
-					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.classes + ") " + ConsoleOutputs.fileNotFound);
+			System.out.println(ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.classes + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(classFile);
@@ -190,15 +194,13 @@ public class Filehandler {
 			this.classController.addClass(playerClass);
 			counter++;
 		}
-		System.out.println(
-				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.classes + ConsoleOutputs.successload);
+		System.out.println(ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.classes + ConsoleOutputs.successload);
 	}
 
 	private void loadArenas() {
 		File arenaFile = new File(Config.dirPath + Config.arenaFileName);
 		if (!arenaFile.exists()) {
-			System.out.println(
-					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.arenas + ") " + ConsoleOutputs.fileNotFound);
+			System.out.println(ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.arenas + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(arenaFile);
@@ -218,15 +220,13 @@ public class Filehandler {
 			Location spawnLocation = createLocation(cfg, entry + ".spawn", spawnWorld);
 			// Load playerSpawnpoints
 			List<Location> playerspawnpoints = new LinkedList<Location>();
-			Set<String> playerSpawnpointEntrys = cfg.getConfigurationSection((entry + ".spielerSpawnPunkte"))
-					.getKeys(false);
+			Set<String> playerSpawnpointEntrys = cfg.getConfigurationSection((entry + ".spielerSpawnPunkte")).getKeys(false);
 			for (String playerSpawnPunkt : playerSpawnpointEntrys) {
 				playerspawnpoints.add(createLocation(cfg, entry + ".spielerSpawnPunkte." + playerSpawnPunkt, world));
 			}
 			// Load mobSpawnpoints
 			List<Location> mobspawnpoints = new LinkedList<Location>();
-			Set<String> mobSpawnpointEntrys = cfg.getConfigurationSection((entry + ".monsterSpawnPunkte"))
-					.getKeys(false);
+			Set<String> mobSpawnpointEntrys = cfg.getConfigurationSection((entry + ".monsterSpawnPunkte")).getKeys(false);
 			for (String mobSpawnPunkt : mobSpawnpointEntrys) {
 				mobspawnpoints.add(createLocation(cfg, entry + ".monsterSpawnPunkte." + mobSpawnPunkt, world));
 			}
@@ -242,20 +242,17 @@ public class Filehandler {
 				}
 			}
 			// Register
-			Arena arena = new Arena(entry, lobby, spectator, spawnLocation, bossLocation, mobspawnpoints,
-					playerspawnpoints, mobwaves);
+			Arena arena = new Arena(entry, lobby, spectator, spawnLocation, bossLocation, mobspawnpoints, playerspawnpoints, mobwaves);
 			this.arenaStorage.addArena(arena);
 			counter++;
 		}
-		System.out.println(
-				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.arenas + ConsoleOutputs.successload);
+		System.out.println(ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.arenas + ConsoleOutputs.successload);
 	}
 
 	private void loadWaves() {
 		File waveFile = new File(Config.dirPath + Config.waveFileName);
 		if (!waveFile.exists()) {
-			System.out.println(
-					ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.waves + ") " + ConsoleOutputs.fileNotFound);
+			System.out.println(ConsoleOutputs.consolePrefix + " (" + ConsoleOutputs.waves + ") " + ConsoleOutputs.fileNotFound);
 			return;
 		}
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(waveFile);
@@ -279,8 +276,7 @@ public class Filehandler {
 			this.mobwaveController.addWave(number, mobwave);
 			counter++;
 		}
-		System.out.println(
-				ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.waves + ConsoleOutputs.successload);
+		System.out.println(ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.waves + ConsoleOutputs.successload);
 	}
 
 	private Location createLocation(FileConfiguration cfg, String path, World w) {

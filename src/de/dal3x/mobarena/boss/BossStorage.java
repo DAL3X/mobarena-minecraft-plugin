@@ -13,6 +13,7 @@ import de.dal3x.mobarena.arena.ArenaStorage;
 import de.dal3x.mobarena.boss.implementation.BigSlime;
 import de.dal3x.mobarena.boss.implementation.BroodMother;
 import de.dal3x.mobarena.boss.implementation.LichLord;
+import de.dal3x.mobarena.boss.implementation.Shuffler;
 
 public class BossStorage {
 
@@ -32,6 +33,7 @@ public class BossStorage {
 			bossList.add(new BigSlime(a));
 			bossList.add(new LichLord(a));
 			bossList.add(new BroodMother(a));
+			bossList.add(new Shuffler(a));
 			// -----------------------------
 			this.bosses.put(a, bossList);
 		}

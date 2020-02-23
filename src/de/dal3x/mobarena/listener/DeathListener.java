@@ -81,7 +81,7 @@ public class DeathListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onArenaPlayerDeath(EntityDamageEvent event) {
+	public void onArenaPlayerNaturalDeath(EntityDamageEvent event) {
 		if (!(event.getEntity() instanceof Player)) {
 			return;
 		}

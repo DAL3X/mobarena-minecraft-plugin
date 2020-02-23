@@ -10,6 +10,8 @@ public class ItemBlueprint {
 	private String name;
 	private String lore;
 	private List<EnchantmentMeta> enchantments;
+	private int color;
+	private boolean isColored;
 
 	public String getItemType() {
 		return itemType;
@@ -41,6 +43,19 @@ public class ItemBlueprint {
 
 	public void setEnchantments(List<EnchantmentMeta> enchantments) {
 		this.enchantments = enchantments;
+	}
+
+	public int getColor() {
+		return color;
+	}
+
+	public void setColor(int color) {
+		this.isColored = true;
+		this.color = color;
+	}
+	
+	public boolean isColored() {
+		return this.isColored;
 	}
 
 }
