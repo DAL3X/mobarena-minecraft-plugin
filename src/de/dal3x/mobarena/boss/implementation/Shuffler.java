@@ -77,7 +77,13 @@ public class Shuffler extends MinionBoss implements Listener {
 		if (this.bossInstance != null) {
 			if (this.bossInstance.getHealth() > 0 && this.arena.getActiveBoss().equals(this.bossInstance)) {
 				if (vex.getLocation().distance(bossInstance.getLocation()) < 16) {
-					addToMinions(vex, arena);
+					int minionSize = this.minions.size();
+					if (minionSize > (arena.getParticipants().size() * 3)) {
+						vex.setHealth(0);
+						event.setCancelled(true);
+					} else {
+						addToMinions(vex, arena);
+					}
 				}
 			}
 		}
