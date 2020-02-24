@@ -1,4 +1,4 @@
-package de.dal3x.mobarena.skill.implementation;
+package de.dal3x.mobarena.skill.implementation.active;
 
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -6,11 +6,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import de.dal3x.mobarena.arena.Arena;
-import de.dal3x.mobarena.output.IngameOutput;
 import de.dal3x.mobarena.skill.CooldownSkill;
 import de.dal3x.mobarena.skill.IRightClickSkill;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class TauntSkill extends CooldownSkill implements IRightClickSkill {
 
@@ -33,7 +30,7 @@ public class TauntSkill extends CooldownSkill implements IRightClickSkill {
 					}
 				}
 			} else {
-				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));
+				sendSkillNotReady(p);
 			}
 		}
 	}

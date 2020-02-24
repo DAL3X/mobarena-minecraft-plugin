@@ -1,14 +1,14 @@
 package de.dal3x.mobarena.skill;
 
-import de.dal3x.mobarena.skill.implementation.ArrowBurnSkill;
-import de.dal3x.mobarena.skill.implementation.BerserkerSkill;
-import de.dal3x.mobarena.skill.implementation.BuffRangePassiveSkill;
-import de.dal3x.mobarena.skill.implementation.InfiniteArrowSkill;
-import de.dal3x.mobarena.skill.implementation.SelfHealSkill;
-import de.dal3x.mobarena.skill.implementation.SlowRangeSkill;
-import de.dal3x.mobarena.skill.implementation.SpeedUpSkill;
-import de.dal3x.mobarena.skill.implementation.TargetHealSkill;
-import de.dal3x.mobarena.skill.implementation.TauntSkill;
+import de.dal3x.mobarena.skill.implementation.active.BerserkerSkill;
+import de.dal3x.mobarena.skill.implementation.active.SelfHealSkill;
+import de.dal3x.mobarena.skill.implementation.active.SlowRangeSkill;
+import de.dal3x.mobarena.skill.implementation.active.TargetHealSkill;
+import de.dal3x.mobarena.skill.implementation.active.TauntSkill;
+import de.dal3x.mobarena.skill.implementation.passive.ArrowBurnSkill;
+import de.dal3x.mobarena.skill.implementation.passive.BuffRangePassiveSkill;
+import de.dal3x.mobarena.skill.implementation.passive.InfiniteArrowSkill;
+import de.dal3x.mobarena.skill.implementation.passive.SpeedUpSkill;
 
 public class SkillController {
 

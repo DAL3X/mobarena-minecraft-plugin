@@ -1,4 +1,4 @@
-package de.dal3x.mobarena.skill.implementation;
+package de.dal3x.mobarena.skill.implementation.passive;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
