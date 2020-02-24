@@ -33,10 +33,12 @@ public class BroodMother extends MinionBoss {
 		this.blockChanger = new TempBlockChanger();
 	}
 
+	@SuppressWarnings("deprecation")
 	public Mob spawn(Location loc) {
 		Spider mother = (Spider) loc.getWorld().spawnEntity(loc, EntityType.SPIDER);
 		mother.setGlowing(true);
 		mother.setTarget(getNearestPlayer(loc));
+		mother.setPersistent(true);
 		spawnMinions(mother.getLocation());
 		startWebSequence(mother.getLocation());
 		startSpawnSequence();
@@ -107,6 +109,7 @@ public class BroodMother extends MinionBoss {
 		}, (long) (Config.BroodMotherWebCD * 20));
 	}
 
+	@SuppressWarnings("deprecation")
 	private void spawnMinions(Location loc) {
 		List<Mob> newMinions = new LinkedList<Mob>();
 		int spawns = Config.BroodMotherMinionPerPlayer * arena.getParticipants().size();
@@ -114,6 +117,7 @@ public class BroodMother extends MinionBoss {
 			Mob m = (Mob) loc.getWorld().spawnEntity(getMinionSpawnPosition(i, loc), EntityType.CAVE_SPIDER);
 			m.setCustomName("§2Gift§3Spinne");
 			m.setCustomNameVisible(true);
+			m.setPersistent(true);
 			addToMinions(m, arena);
 			newMinions.add(m);
 		}

@@ -35,11 +35,13 @@ public class LichLord extends MinionBoss implements Listener {
 		super("§0§lLich§f§lLord", arena);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Mob spawn(Location loc) {
 		WitherSkeleton lich = (WitherSkeleton) loc.getWorld().spawnEntity(loc, EntityType.WITHER_SKELETON);
 		lich.setGlowing(true);
 		lich.setCustomName(this.name);
 		lich.setCustomNameVisible(true);
+		lich.setPersistent(true);
 		// Lich Crown
 		ItemStack helmet = new ItemStack(Material.GOLDEN_HELMET, 1);
 		ItemMeta helmetMeta = helmet.getItemMeta();
@@ -116,6 +118,7 @@ public class LichLord extends MinionBoss implements Listener {
 		}, Config.LichLordSpawnCD * 20);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void spawnMinions() {
 		int amount = Config.LichLordMinionPerPlayer;
 		World w = this.bossInstance.getLocation().getWorld();
@@ -153,6 +156,7 @@ public class LichLord extends MinionBoss implements Listener {
 				this.arena.setScaledMobHealth(minion);
 				minion.setCustomName("§0Min§fion");
 				minion.setCustomNameVisible(true);
+				minion.setPersistent(true);
 				addToMinions(minion, this.arena);
 			}
 		}

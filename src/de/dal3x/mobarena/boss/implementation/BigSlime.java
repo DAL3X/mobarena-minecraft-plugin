@@ -24,16 +24,19 @@ public class BigSlime extends MinionBoss {
 		super("§6§lBig§c§lSlime", arena);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Mob spawn(Location loc) {
 		Slime bigSlime = (Slime) loc.getWorld().spawnEntity(loc, EntityType.SLIME);
 		bigSlime.setSize(8);
 		bigSlime.setCustomName(this.name);
 		bigSlime.setCustomNameVisible(true);
 		bigSlime.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0), true);
+		bigSlime.setPersistent(true);
 		this.bossInstance = bigSlime;
 		return bigSlime;
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBigSlimeDmg(EntityDamageByEntityEvent event) {
 		if (event.getDamager().equals(this.bossInstance)) {
@@ -54,6 +57,7 @@ public class BigSlime extends MinionBoss {
 			slime.setSize(2);
 			slime.setCustomName("§cSlime");
 			slime.setCustomNameVisible(true);
+			slime.setPersistent(true);
 			if (event.getDamager() instanceof Projectile) {
 				Vector vec = event.getDamager().getLocation().toVector().subtract(bossInstance.getLocation().toVector()).multiply(0.45);
 				slime.setVelocity(vec);

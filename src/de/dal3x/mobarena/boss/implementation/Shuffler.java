@@ -34,11 +34,13 @@ public class Shuffler extends MinionBoss implements Listener {
 		super("§a§lShuf§e§lfler", arena);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Mob spawn(Location loc) {
 		Evoker shuffler = (Evoker) loc.getWorld().spawnEntity(loc, EntityType.EVOKER);
 		shuffler.setPatrolLeader(false);
 		shuffler.setCustomName(this.name);
 		shuffler.setCustomNameVisible(true);
+		shuffler.setPersistent(true);
 		this.bossInstance = shuffler;
 		shufflePlayers();
 		startPlayerShuffleSequence();
@@ -68,6 +70,7 @@ public class Shuffler extends MinionBoss implements Listener {
 		}, Config.ShufflerCloneCD * 20);
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onVexSpawn(CreatureSpawnEvent event) {
 		if (!event.getEntityType().equals(EntityType.VEX)) {
@@ -82,6 +85,7 @@ public class Shuffler extends MinionBoss implements Listener {
 						vex.setHealth(0);
 						event.setCancelled(true);
 					} else {
+						vex.setPersistent(true);
 						addToMinions(vex, arena);
 					}
 				}
@@ -127,6 +131,7 @@ public class Shuffler extends MinionBoss implements Listener {
 			clone.addPotionEffects(bossInstance.getActivePotionEffects());
 			clone.setCustomName(this.name);
 			clone.setCustomNameVisible(true);
+			clone.setPersistent(true);
 			addToMinions(clone, this.arena);
 		}
 	}

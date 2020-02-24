@@ -23,7 +23,7 @@ public abstract class CooldownSkill {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
 				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + "§a ist wieder bereit"));
-				p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8F, 1);
+				p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1);
 				ready = true;
 			}
 		}, this.cooldown);

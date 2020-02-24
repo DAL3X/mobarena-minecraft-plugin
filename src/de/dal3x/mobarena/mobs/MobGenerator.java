@@ -31,6 +31,7 @@ public class MobGenerator {
 		instance = null;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Mob spawnMob(MobBlueprint mobBP, Location loc) {
 		// Spawn mob on location
 		Mob mob = (Mob) loc.getWorld().spawnEntity(loc, mobBP.getMobType());
@@ -38,6 +39,7 @@ public class MobGenerator {
 		// Set name
 		mob.setCustomName(mobBP.getName());
 		mob.setCustomNameVisible(true);
+		mob.setPersistent(true);
 		// Set equipment
 		if (mobBP.getEquip() != null) {
 			for (int i = 0; i < mobBP.getEquip().length; i++) {
