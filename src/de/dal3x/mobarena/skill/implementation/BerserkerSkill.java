@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class BerserkerSkill extends CooldownSkill implements IRightClickSkill {
 
 	public BerserkerSkill() {
+		this.name = "§4Berserker";
 		setCooldown(20);
 	}
 
@@ -22,12 +23,12 @@ public class BerserkerSkill extends CooldownSkill implements IRightClickSkill {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown();
+			putOnCooldown(p);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 2), true);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1), true);
 		}
 		else {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));
 		}
 	}
 

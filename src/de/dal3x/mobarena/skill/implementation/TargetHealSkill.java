@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class TargetHealSkill extends CooldownSkill implements ILeftClickSkill {
 
 	public TargetHealSkill() {
+		this.name = "§eHeilung";
 		setCooldown(6);
 	}
 
@@ -26,14 +27,14 @@ public class TargetHealSkill extends CooldownSkill implements ILeftClickSkill {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown();
+			putOnCooldown(p);
 			if (targetPlayer.getHealth() + 8 < targetPlayer.getMaxHealth()) {
 				targetPlayer.setHealth(targetPlayer.getHealth() + 8);
 			} else {
 				targetPlayer.setHealth(targetPlayer.getMaxHealth());
 			}
 		} else {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));
 		}
 	}
 

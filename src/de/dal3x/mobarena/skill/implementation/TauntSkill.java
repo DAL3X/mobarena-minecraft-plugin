@@ -15,24 +15,26 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class TauntSkill extends CooldownSkill implements IRightClickSkill {
 
 	public TauntSkill() {
+		this.name = "§3Verspotten";
 		setCooldown(10);
 	}
-	
+
 	public void execute(Player p, Arena a) {
-		if(!a.isParticipant(p)) {
+		if (!a.isParticipant(p)) {
 			return;
 		}
-		if (this.isReady()) {
-			putOnCooldown();
-			for(Mob m : a.getActiveMobs()) {
-				if(p.getLocation().distance(m.getLocation()) < 20){
-					m.setTarget(p);
-					m.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0), true);
+		if (p.isSneaking()) {
+			if (this.isReady()) {
+				putOnCooldown(p);
+				for (Mob m : a.getActiveMobs()) {
+					if (p.getLocation().distance(m.getLocation()) < 20) {
+						m.setTarget(p);
+						m.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0), true);
+					}
 				}
+			} else {
+				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));
 			}
-		}
-		else {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));
 		}
 	}
 

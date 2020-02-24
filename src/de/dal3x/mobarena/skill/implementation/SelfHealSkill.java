@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class SelfHealSkill extends CooldownSkill implements IRightClickSkill {
 
 	public SelfHealSkill() {
+		this.name = "§bSelbstheilung";
 		setCooldown(8);
 	}
 
@@ -21,14 +22,14 @@ public class SelfHealSkill extends CooldownSkill implements IRightClickSkill {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown();
+			putOnCooldown(p);
 			if (p.getHealth() + 8 < p.getMaxHealth()) {
 				p.setHealth(p.getHealth() + 8);
 			} else {
 				p.setHealth(p.getMaxHealth());
 			}
 		} else {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));
 		}
 	}
 }

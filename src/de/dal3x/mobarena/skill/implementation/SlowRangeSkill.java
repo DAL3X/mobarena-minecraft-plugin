@@ -15,6 +15,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class SlowRangeSkill extends CooldownSkill implements IRightClickSkill {
 
 	public SlowRangeSkill() {
+		this.name = "§dFurcht";
 		setCooldown(13);
 	}
 	
@@ -23,7 +24,7 @@ public class SlowRangeSkill extends CooldownSkill implements IRightClickSkill {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown();
+			putOnCooldown(p);
 			for(Mob m : a.getActiveMobs()) {
 				if(p.getLocation().distance(m.getLocation()) < 15){
 					m.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 1), true);
@@ -31,7 +32,7 @@ public class SlowRangeSkill extends CooldownSkill implements IRightClickSkill {
 			}
 		}
 		else {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.SkillNotReady));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));
 		}
 	}
 
