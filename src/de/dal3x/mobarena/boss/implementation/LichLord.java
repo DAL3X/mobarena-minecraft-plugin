@@ -58,6 +58,7 @@ public class LichLord extends MinionBoss implements Listener {
 		lich.getEquipment().setItemInMainHand(stick);
 		// init
 		this.bossInstance = lich;
+		this.addBossBar();
 		spawnMinions();
 		startSpawnSequence();
 		startDebuffSequence();

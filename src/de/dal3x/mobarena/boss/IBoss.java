@@ -7,4 +7,5 @@ public interface IBoss {
 	
 	public Mob spawn(Location loc);
 	public String getBossName();
+	public Mob getMobInstance();
 }

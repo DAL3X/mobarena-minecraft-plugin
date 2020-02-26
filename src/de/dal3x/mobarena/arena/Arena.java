@@ -13,6 +13,7 @@ import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
+import de.dal3x.mobarena.boss.AbstractBoss;
 import de.dal3x.mobarena.boss.BossStorage;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.config.Config;
@@ -53,7 +54,7 @@ public class Arena {
 	private List<Mob> activeMobs;
 	private final int bossWaveDivi = 10;
 	private boolean running;
-	private Mob activeBoss;
+	private AbstractBoss activeBoss;
 
 	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation, List<Location> mobspawns,
 			List<Location> playerspawn, List<Mobwave> waves) {
@@ -143,11 +144,12 @@ public class Arena {
 			@SuppressWarnings("deprecation")
 			public void run() {
 				if (isRunning()) {
-					Mob boss = BossStorage.getInstance().spawnRandomBoss(bossLocation, instance);
-					boss.setMaxHealth((Config.baseBossHealth
+					AbstractBoss boss = BossStorage.getInstance().getRandomBoss(bossLocation, instance);
+					Mob bossInstance = boss.spawn(bossLocation);
+					bossInstance.setMaxHealth((Config.baseBossHealth
 							* (1 + (getWaveCounter() * Config.healtAddMultiPerWave * (getParticipants().size() * Config.bossHealthMultiPerPlayer)))));
-					boss.setHealth(boss.getMaxHealth());
-					activeMobs.add(boss);
+					bossInstance.setHealth(bossInstance.getMaxHealth());
+					activeMobs.add(bossInstance);
 					setActiveBoss(boss);
 					waveCounter++;
 				}
@@ -198,7 +200,8 @@ public class Arena {
 			p.removePotionEffect(effect.getType());
 		}
 		ClassController.getInstance().clearClassForPlayer(p);
-		if (this.participants.size() == 0) {
+		this.clearBossBar(p);
+		if (this.getAliveParticipants().size() == 0) {
 			reset();
 		}
 	}
@@ -228,16 +231,35 @@ public class Arena {
 	}
 
 	public void reset() {
-		this.running = false;
-		this.activeBoss = null;
+		LinkedList<Mob> toKill = new LinkedList<Mob>();
 		for (Mob mob : this.activeMobs) {
-			mob.setHealth(0);
+			toKill.add(mob);
+		}
+		for (Player p : this.participants) {
+			this.participants.remove(p);
+			this.spectator.remove(p);
+			p.teleport(this.spawnLocation);
+			clearInventory(p);
+			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+			Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
+			IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
+			this.arenaPoints.remove(p);
+			if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
+				ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().disapply(p, this);
+			}
+			for (PotionEffect effect : p.getActivePotionEffects()) {
+				p.removePotionEffect(effect.getType());
+			}
+			ClassController.getInstance().clearClassForPlayer(p);
+			this.clearBossBar(p);
 		}
 		int count = this.waveCounter - 1;
 		IngameOutput.sendDefeatMessage(count, this.participants);
-		for (Player p : this.participants) {
-			removeParticipant(p);
+		this.running = false;
+		for (Mob m : toKill) {
+			m.setHealth(0);
 		}
+		this.activeBoss = null;
 		this.activeMobs.clear();
 		this.spectator.clear();
 		this.participants.clear();
@@ -249,7 +271,7 @@ public class Arena {
 	public boolean removeMobAndAskIfEmpty(Mob mob, Player killer) {
 		this.activeMobs.remove(mob);
 		if (this.activeBoss != null) {
-			if (this.activeBoss.equals(mob)) {
+			if (this.activeBoss.getMobInstance().equals(mob)) {
 				if (killer != null) {
 					addBossPoints();
 				}
@@ -402,18 +424,18 @@ public class Arena {
 		this.spawnLocation = spawnLocation;
 	}
 
-	public Mob getActiveBoss() {
+	public AbstractBoss getActiveBoss() {
 		return activeBoss;
 	}
 
 	public boolean isActiveBoss(Mob mob) {
-		if (mob.equals(this.activeBoss)) {
+		if (mob.equals(this.activeBoss.getMobInstance())) {
 			return true;
 		}
 		return false;
 	}
 
-	public void setActiveBoss(Mob boss) {
+	public void setActiveBoss(AbstractBoss boss) {
 		this.activeBoss = boss;
 	}
 
@@ -430,6 +452,12 @@ public class Arena {
 	public void addWavePoints() {
 		for (Player p : this.arenaPoints.keySet()) {
 			this.arenaPoints.put(p, this.arenaPoints.get(p) + Config.pointPerWave);
+		}
+	}
+
+	private void clearBossBar(Player p) {
+		if (this.activeBoss != null) {
+			activeBoss.removePlayerFromBossBar(p);
 		}
 	}
 

@@ -33,6 +33,7 @@ public class BigSlime extends MinionBoss {
 		bigSlime.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0), true);
 		bigSlime.setPersistent(true);
 		this.bossInstance = bigSlime;
+		this.addBossBar();
 		return bigSlime;
 	}
 

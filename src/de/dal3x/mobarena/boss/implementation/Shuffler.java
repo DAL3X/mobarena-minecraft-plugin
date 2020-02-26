@@ -42,6 +42,7 @@ public class Shuffler extends MinionBoss implements Listener {
 		shuffler.setCustomNameVisible(true);
 		shuffler.setPersistent(true);
 		this.bossInstance = shuffler;
+		this.addBossBar();
 		shufflePlayers();
 		startPlayerShuffleSequence();
 		startCloneSequence();
@@ -51,7 +52,7 @@ public class Shuffler extends MinionBoss implements Listener {
 	private void startPlayerShuffleSequence() {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
-				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().getMobInstance().equals(bossInstance)) {
 					shufflePlayers();
 					startPlayerShuffleSequence();
 				}
@@ -62,7 +63,7 @@ public class Shuffler extends MinionBoss implements Listener {
 	private void startCloneSequence() {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
-				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().getMobInstance().equals(bossInstance)) {
 					spawnClonesAndShuffle();
 					startCloneSequence();
 				}
@@ -78,7 +79,7 @@ public class Shuffler extends MinionBoss implements Listener {
 		}
 		Vex vex = (Vex) event.getEntity();
 		if (this.bossInstance != null) {
-			if (this.bossInstance.getHealth() > 0 && this.arena.getActiveBoss().equals(this.bossInstance)) {
+			if (this.bossInstance.getHealth() > 0 && this.arena.getActiveBoss().getMobInstance().equals(this.bossInstance)) {
 				if (vex.getLocation().distance(bossInstance.getLocation()) < 16) {
 					int minionSize = this.minions.size();
 					if (minionSize > (arena.getParticipants().size() * 3)) {
@@ -108,8 +109,7 @@ public class Shuffler extends MinionBoss implements Listener {
 				}
 			}
 			if (target != null) {
-				target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0), true);
-				target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 0), true);
+				target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 0), true);
 			}
 		}
 	}

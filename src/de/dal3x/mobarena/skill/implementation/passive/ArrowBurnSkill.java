@@ -1,5 +1,6 @@
 package de.dal3x.mobarena.skill.implementation.passive;
 
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,6 +10,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 import de.dal3x.mobarena.skill.IPassiveSkill;
+import de.dal3x.mobarena.utility.EffectSpawner;
 
 public class ArrowBurnSkill implements IPassiveSkill, Listener {
 
@@ -34,6 +36,7 @@ public class ArrowBurnSkill implements IPassiveSkill, Listener {
 				if (a.isParticipant(p)) {
 					if (p.isSneaking()) {
 						event.getProjectile().setFireTicks(200);
+						EffectSpawner.spawnParticleCloud(p.getLocation().add(0, 1.1, 0), Particle.LAVA, 4, 0.3);
 					}
 				}
 			}

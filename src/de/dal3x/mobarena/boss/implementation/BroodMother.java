@@ -45,6 +45,7 @@ public class BroodMother extends MinionBoss {
 		mother.setCustomName(name);
 		mother.setCustomNameVisible(true);
 		bossInstance = mother;
+		this.addBossBar();
 		return mother;
 	}
 
@@ -82,7 +83,7 @@ public class BroodMother extends MinionBoss {
 	private void startSpawnSequence() {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
-				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().getMobInstance().equals(bossInstance)) {
 					clearMinions();
 					spawnMinions(bossInstance.getLocation());
 					bossInstance.setTarget(getNearestPlayer(bossInstance.getLocation()));
@@ -96,7 +97,7 @@ public class BroodMother extends MinionBoss {
 		final Location old = loc;
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
-				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().getMobInstance().equals(bossInstance)) {
 					for (int i = 0; i < Config.BroodMotherWebPerCycle; i++) {
 						Location webLoc = getWebPosition(old);
 						if (webLoc.getBlock().getType().equals(Material.AIR)) {
@@ -128,13 +129,13 @@ public class BroodMother extends MinionBoss {
 		int mod = counter % 4;
 		switch (mod) {
 		case 0:
-			return loc.add(1, 1, 0);
+			return loc.add(1, 0.3, 0);
 		case 1:
-			return loc.add(-1, 1, 0);
+			return loc.add(-1, 0.3, 0);
 		case 2:
-			return loc.add(0, 1, 1);
+			return loc.add(0, 0.3, 1);
 		case 3:
-			return loc.add(0, 1, -1);
+			return loc.add(0, 0.3, -1);
 		}
 		return loc;
 	}

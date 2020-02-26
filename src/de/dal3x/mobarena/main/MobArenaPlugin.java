@@ -50,15 +50,15 @@ public class MobArenaPlugin extends JavaPlugin{
 	
 	private void clearInstances() {
 		MobArenaPlugin.clearInstance();
-		ClassController.clearInstance();
 		ArenaStorage.clearInstance();
+		BossStorage.clearInstance();
+		ClassController.clearInstance();
 		ItemStorage.clearInstance();
 		MobBlueprintStorage.clearInstance();
 		MobGenerator.clearInstance();
 		MobwaveController.clearInstance();
 		InventoryStorage.clearInstance();
 		Filehandler.clearInstance();
-		BossStorage.clearInstance();
 	}
 
 	public Filehandler getFileHandler() {
