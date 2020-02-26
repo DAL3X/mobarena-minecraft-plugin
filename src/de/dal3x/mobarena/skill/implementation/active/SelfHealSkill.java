@@ -19,14 +19,18 @@ public class SelfHealSkill extends CooldownSkill implements IRightClickSkill {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown(p);
+			putOnCooldown(p, a);
 			if (p.getHealth() + 8 < p.getMaxHealth()) {
 				p.setHealth(p.getHealth() + 8);
 			} else {
 				p.setHealth(p.getMaxHealth());
 			}
 		} else {
-			sendSkillNotReady(p);
+			sendSkillNotReady(p, a);
 		}
+	}
+	
+	public SelfHealSkill clone() {
+		return new SelfHealSkill();
 	}
 }

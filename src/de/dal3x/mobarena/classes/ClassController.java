@@ -13,12 +13,12 @@ import de.dal3x.mobarena.item.ItemStorage;
 public class ClassController {
 
 	private static ClassController instance;
-	private List<PlayerClass> classes;
+	private List<PlayerClass> rawClasses;
 	private HashMap<Player, PlayerClass> playerClasses;
 	private ItemStorage itemStorage;
 
 	private ClassController(ItemStorage itemStorage) {
-		this.classes = new LinkedList<PlayerClass>();
+		this.rawClasses = new LinkedList<PlayerClass>();
 		this.playerClasses = new HashMap<Player, PlayerClass>();
 		this.itemStorage = itemStorage;
 	}
@@ -34,12 +34,17 @@ public class ClassController {
 		instance = null;
 	}
 
-	public void addClass(PlayerClass playerClass) {
-		this.classes.add(playerClass);
+	public void addRawClass(PlayerClass playerClass) {
+		this.rawClasses.add(playerClass);
 	}
 
-	public void addClassToPlayer(Player p, PlayerClass playerClass) {
-		this.playerClasses.put(p, playerClass);
+	public void addClassToPlayer(Player p, String klassenName) {
+		this.playerClasses.put(p, this.getRawClassByName(klassenName).clone());
+	}
+	
+	public PlayerClass getRawClassForPlayer(Player p) {
+		String name = this.getClassForPlayer(p).getName();
+		return this.getRawClassByName(name);
 	}
 
 	public PlayerClass getClassForPlayer(Player p) {
@@ -62,26 +67,22 @@ public class ClassController {
 		this.playerClasses = new HashMap<Player, PlayerClass>();
 	}
 
-	public PlayerClass getClassByName(String name) {
-		for (PlayerClass pClass : this.classes) {
-			if (pClass.getName().equalsIgnoreCase(name)) {
-				return pClass;
+	public PlayerClass getRawClassByName(String name) {
+		for (PlayerClass rawClass : this.rawClasses) {
+			if (rawClass.getName().equalsIgnoreCase(name)) {
+				return rawClass;
 			}
 		}
 		return null;
 	}
 
-	public String[] getEquipForClass(PlayerClass playerClass) {
-		for (PlayerClass pClass : this.classes) {
-			if (pClass.equals(playerClass)) {
-				return pClass.getEquip();
-			}
-		}
-		return null;
+	private String[] getEquipPlayer(Player p) {
+		PlayerClass rawClass = getRawClassForPlayer(p);
+		return rawClass.getEquip();
 	}
 
 	public void equipPlayer(Player p) {
-		String[] eq = getEquipForClass(getClassForPlayer(p));
+		String eq[] = getEquipPlayer(p);
 		if (eq == null) {
 			return;
 		}
@@ -113,12 +114,16 @@ public class ClassController {
 		}
 	}
 	
-	public boolean hasClass(Player p, PlayerClass klasse) {
+	public boolean hasClass(Player p, String klassenName) {
+		PlayerClass klasse = getRawClassByName(klassenName);
 		if(klasse.getGlory() == 0) {
 			return true;
 		}
-		if(Filehandler.getInstance().getPlayersClasses(p).contains(klasse)) {
+		List<String> classes = Filehandler.getInstance().getPlayersClasses(p);
+		for(String c : classes) {
+		if(c.equalsIgnoreCase(klassenName)) {
 			return true;
+		}
 		}
 		return false;
 	}

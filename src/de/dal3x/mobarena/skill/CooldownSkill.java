@@ -1,9 +1,11 @@
 package de.dal3x.mobarena.skill;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 import de.dal3x.mobarena.output.IngameOutput;
 import net.md_5.bungee.api.ChatMessageType;
@@ -20,25 +22,38 @@ public abstract class CooldownSkill {
 		this.cooldown = seconds * 20;
 	}
 
-	protected void putOnCooldown(final Player p) {
+	protected void putOnCooldown(final Player p, final Arena a) {
 		this.ready = false;
 		this.isOnActionCooldown = true;
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
 				isOnActionCooldown = false;
 			}
-		}, 10);
+		}, 20);
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
-				p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + "§a ist wieder bereit"));
-				p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8F, 1);
-				ready = true;
+				if (a.isParticipant(p)) {
+					p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + "§a ist wieder bereit"));
+					p.playSound(p.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 1F, 1);
+					ready = true;
+				}
 			}
 		}, this.cooldown);
 	}
+	
+	public void activateSkill() {
+		this.ready = false;
+		this.isOnActionCooldown = true;
+		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
+			public void run() {
+				isOnActionCooldown = false;
+				ready = true;
+			}
+		}, 40);
+	}
 
-	protected void sendSkillNotReady(Player p) {
-		if (!this.isOnActionCooldown) {
+	protected void sendSkillNotReady(Player p, Arena a) {
+		if (!this.isOnActionCooldown && a.isParticipant(p)) {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));
 		}
 	}

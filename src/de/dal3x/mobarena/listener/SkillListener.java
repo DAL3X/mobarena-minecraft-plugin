@@ -56,18 +56,4 @@ public class SkillListener implements Listener {
 		}
 	}
 
-	public void applyPassive(Player p) {
-		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(p);
-		if (pClass.getPassiveSkill() != null) {
-			pClass.getPassiveSkill().apply(p, arena);
-		}
-	}
-
-	public void disapplyPassive(Player p) {
-		PlayerClass pClass = ClassController.getInstance().getClassForPlayer(p);
-		if (pClass.getPassiveSkill() != null) {
-			pClass.getPassiveSkill().disapply(p, arena);
-		}
-	}
-
 }

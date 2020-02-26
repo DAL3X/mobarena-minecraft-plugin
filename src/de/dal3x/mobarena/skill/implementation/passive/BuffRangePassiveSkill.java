@@ -40,4 +40,7 @@ public class BuffRangePassiveSkill implements IPassiveSkill {
 		running = false;
 	}
 
+	public BuffRangePassiveSkill clone() {
+		return new BuffRangePassiveSkill();
+	}
 }

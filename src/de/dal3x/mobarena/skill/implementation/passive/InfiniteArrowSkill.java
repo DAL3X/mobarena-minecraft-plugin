@@ -38,5 +38,9 @@ public class InfiniteArrowSkill implements IPassiveSkill, Listener {
 			}
 		}
 	}
+	
+	public InfiniteArrowSkill clone() {
+		return new InfiniteArrowSkill();
+	}
 
 }

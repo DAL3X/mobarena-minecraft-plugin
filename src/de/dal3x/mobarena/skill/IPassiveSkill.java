@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 import de.dal3x.mobarena.arena.Arena;
 
-public interface IPassiveSkill {
+public interface IPassiveSkill extends IClonableSkill {
 
 	public void apply(Player p, Arena a);
 	

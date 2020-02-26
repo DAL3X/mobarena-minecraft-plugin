@@ -1,5 +1,7 @@
 package de.dal3x.mobarena.classes;
 
+import de.dal3x.mobarena.skill.CooldownSkill;
+import de.dal3x.mobarena.skill.IClonableSkill;
 import de.dal3x.mobarena.skill.ILeftClickSkill;
 import de.dal3x.mobarena.skill.IPassiveSkill;
 import de.dal3x.mobarena.skill.IRightClickSkill;
@@ -26,6 +28,16 @@ public class PlayerClass {
 		setName(name);
 	}
 	
+	//Constructor is only for cloning and should only be used for that
+	private PlayerClass(String name ,IClonableSkill clone, IClonableSkill clone2, IClonableSkill clone3, String[] eq, int glory) {
+		setGlory(glory);
+		setName(name);
+		setLeftClickSkill((ILeftClickSkill) clone);
+		setRightClickSkill((IRightClickSkill) clone2);
+		setEquip(equip);
+		setPassiveSkill((IPassiveSkill) clone3);
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -74,6 +86,29 @@ public class PlayerClass {
 		this.passiveSkill = passiveSkill;
 	}
 	
+	public PlayerClass clone() {
+		IClonableSkill left = null;
+		IClonableSkill right = null;
+		IClonableSkill passive = null;
+		if(leftClickSkill != null) {
+			left = leftClickSkill.clone();
+		}
+		if(rightClickSkill != null) {
+			right = rightClickSkill.clone();
+		}
+		if(passiveSkill != null) {
+			passive = passiveSkill.clone();
+		}
+		return new PlayerClass(this.name, left, right, passive, this.equip, this.glory);
+	}
 	
+	public void activateSkills() {
+		if(this.leftClickSkill instanceof CooldownSkill) {
+			((CooldownSkill)leftClickSkill).activateSkill();
+		}
+		if(this.rightClickSkill instanceof CooldownSkill) {
+			((CooldownSkill)rightClickSkill).activateSkill();
+		}
+	}
 
 }

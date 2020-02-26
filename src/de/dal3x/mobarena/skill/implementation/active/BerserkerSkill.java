@@ -16,17 +16,19 @@ public class BerserkerSkill extends CooldownSkill implements IRightClickSkill {
 	}
 
 	public void execute(Player p, Arena a) {
-		if(!a.isParticipant(p)) {
+		if (!a.isParticipant(p)) {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown(p);
+			putOnCooldown(p, a);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 2), true);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1), true);
-		}
-		else {
-			sendSkillNotReady(p);
+		} else {
+			sendSkillNotReady(p, a);
 		}
 	}
 
+	public BerserkerSkill clone() {
+		return new BerserkerSkill();
+	}
 }

@@ -39,5 +39,9 @@ public class ArrowBurnSkill implements IPassiveSkill, Listener {
 			}
 		}
 	}
+	
+	public ArrowBurnSkill clone() {
+		return new ArrowBurnSkill();
+	}
 
 }

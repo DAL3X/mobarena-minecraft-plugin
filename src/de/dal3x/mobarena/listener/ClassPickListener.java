@@ -54,23 +54,23 @@ public class ClassPickListener implements Listener {
 				if(s.getLine(1).contains("&") || s.getLine(1).contains("§")) {
 					klassenName = s.getLine(1).substring(2);
 				}
-				PlayerClass klasse = ClassController.getInstance().getClassByName(klassenName);
 				//Class unlocked
-				if(ClassController.getInstance().hasClass(event.getPlayer(), klasse)) {
-					ClassController.getInstance().addClassToPlayer(event.getPlayer(), klasse);
+				if(ClassController.getInstance().hasClass(event.getPlayer(), klassenName)) {
+					ClassController.getInstance().addClassToPlayer(event.getPlayer(), klassenName);
 					IngameOutput.sendClassPickMessage(event.getPlayer(), klassenName);
 					return;
 				}
 				//Class locked
 				else {
-					if(Filehandler.getInstance().getArenaPoints(event.getPlayer()) >= klasse.getGlory()) {
-						Filehandler.getInstance().addArenaPoints(event.getPlayer(), -klasse.getGlory());
-						Filehandler.getInstance().unlockPlayerClass(event.getPlayer(), klasse);
-						IngameOutput.sendClassEnabled(event.getPlayer(), klasse);
+					PlayerClass rawClass = ClassController.getInstance().getRawClassByName(klassenName);
+					if(Filehandler.getInstance().getArenaPoints(event.getPlayer()) >= rawClass.getGlory()) {
+						Filehandler.getInstance().addArenaPoints(event.getPlayer(), -rawClass.getGlory());
+						Filehandler.getInstance().unlockPlayerClass(event.getPlayer(), rawClass);
+						IngameOutput.sendClassEnabled(event.getPlayer(), rawClass);
 						return;
 					}
 					else{
-						IngameOutput.sendClassNotUnlocked(event.getPlayer(), klasse);
+						IngameOutput.sendClassNotUnlocked(event.getPlayer(), rawClass);
 					}
 				}
 			}

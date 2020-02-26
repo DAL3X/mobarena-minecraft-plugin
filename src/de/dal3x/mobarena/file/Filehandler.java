@@ -191,7 +191,7 @@ public class Filehandler {
 			}
 			playerClass.setEquip(eq);
 			// Register
-			this.classController.addClass(playerClass);
+			this.classController.addRawClass(playerClass);
 			counter++;
 		}
 		System.out.println(ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.classes + ConsoleOutputs.successload);
@@ -312,15 +312,15 @@ public class Filehandler {
 		return cfg.getInt(Config.points);
 	}
 
-	public List<PlayerClass> getPlayersClasses(Player p) {
-		List<PlayerClass> classes = new LinkedList<PlayerClass>();
+	public List<String> getPlayersClasses(Player p) {
+		List<String> classes = new LinkedList<String>();
 		File playerfile = new File(Config.pointFilePath + p.getUniqueId() + ".yml");
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerfile);
 		if (!playerfile.exists()) {
 			return classes;
 		}
 		for (String s : cfg.getStringList("classes")) {
-			classes.add(this.classController.getClassByName(s));
+			classes.add(s);
 		}
 		return classes;
 	}

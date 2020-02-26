@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import de.dal3x.mobarena.arena.Arena;
 
-public interface ILeftClickSkill {
+public interface ILeftClickSkill extends IClonableSkill {
 
 	public void execute(Player p, LivingEntity target, Arena a);
 }

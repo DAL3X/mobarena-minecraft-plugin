@@ -22,7 +22,7 @@ public class TauntSkill extends CooldownSkill implements IRightClickSkill {
 		}
 		if (p.isSneaking()) {
 			if (this.isReady()) {
-				putOnCooldown(p);
+				putOnCooldown(p, a);
 				for (Mob m : a.getActiveMobs()) {
 					if (p.getLocation().distance(m.getLocation()) < 20) {
 						m.setTarget(p);
@@ -30,9 +30,13 @@ public class TauntSkill extends CooldownSkill implements IRightClickSkill {
 					}
 				}
 			} else {
-				sendSkillNotReady(p);
+				sendSkillNotReady(p, a);
 			}
 		}
+	}
+	
+	public TauntSkill clone() {
+		return new TauntSkill();
 	}
 
 }

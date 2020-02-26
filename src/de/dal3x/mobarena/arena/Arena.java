@@ -54,7 +54,6 @@ public class Arena {
 	private final int bossWaveDivi = 10;
 	private boolean running;
 	private Mob activeBoss;
-	private SkillListener skillListener;
 
 	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation, List<Location> mobspawns,
 			List<Location> playerspawn, List<Mobwave> waves) {
@@ -75,7 +74,7 @@ public class Arena {
 		this.arenaPoints = new HashMap<Player, Integer>();
 		this.waveCounter = 1;
 		this.numberOfCurrentWave = 0;
-		this.skillListener = new SkillListener(this, plugin);
+		new SkillListener(this, plugin);
 		isFree = true;
 		running = false;
 		registerListeners();
@@ -176,8 +175,11 @@ public class Arena {
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		this.participants.add(p);
 		setInventory(p);
+		ClassController.getInstance().getClassForPlayer(p).activateSkills();
 		this.arenaPoints.put(p, 0);
-		this.skillListener.applyPassive(p);
+		if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
+			ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().apply(p, this);
+		}
 	}
 
 	public void removeParticipant(Player p) {
@@ -185,13 +187,16 @@ public class Arena {
 		this.spectator.remove(p);
 		p.teleport(this.spawnLocation);
 		clearInventory(p);
-		for(PotionEffect effect : p.getActivePotionEffects()) {
-			p.removePotionEffect(effect.getType());
-		}
+		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
 		IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
 		this.arenaPoints.remove(p);
-		this.skillListener.disapplyPassive(p);
+		if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
+			ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().disapply(p, this);
+		}
+		for (PotionEffect effect : p.getActivePotionEffects()) {
+			p.removePotionEffect(effect.getType());
+		}
 		ClassController.getInstance().clearClassForPlayer(p);
 		if (this.participants.size() == 0) {
 			reset();
@@ -205,11 +210,11 @@ public class Arena {
 	public List<Player> getParticipants() {
 		return this.participants;
 	}
-	
-	public List<Player> getAliveParticipants(){
+
+	public List<Player> getAliveParticipants() {
 		List<Player> alive = new LinkedList<Player>();
-		for(Player p : this.participants) {
-			if(!this.spectator.contains(p)) {
+		for (Player p : this.participants) {
+			if (!this.spectator.contains(p)) {
 				alive.add(p);
 			}
 		}
@@ -231,11 +236,7 @@ public class Arena {
 		int count = this.waveCounter - 1;
 		IngameOutput.sendDefeatMessage(count, this.participants);
 		for (Player p : this.participants) {
-			clearInventory(p);
-			Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
-			IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
-			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-			p.teleport(this.spawnLocation);
+			removeParticipant(p);
 		}
 		this.activeMobs.clear();
 		this.spectator.clear();

@@ -24,15 +24,18 @@ public class TargetHealSkill extends CooldownSkill implements ILeftClickSkill {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown(p);
+			putOnCooldown(p,a );
 			if (targetPlayer.getHealth() + 8 < targetPlayer.getMaxHealth()) {
 				targetPlayer.setHealth(targetPlayer.getHealth() + 8);
 			} else {
 				targetPlayer.setHealth(targetPlayer.getMaxHealth());
 			}
 		} else {
-			sendSkillNotReady(p);
+			sendSkillNotReady(p, a);
 		}
 	}
 
+	public TargetHealSkill clone() {
+		return new TargetHealSkill();
+	}
 }

@@ -21,7 +21,7 @@ public class SlowRangeSkill extends CooldownSkill implements IRightClickSkill {
 			return;
 		}
 		if (this.isReady()) {
-			putOnCooldown(p);
+			putOnCooldown(p, a);
 			for(Mob m : a.getActiveMobs()) {
 				if(p.getLocation().distance(m.getLocation()) < 15){
 					m.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 1), true);
@@ -29,8 +29,11 @@ public class SlowRangeSkill extends CooldownSkill implements IRightClickSkill {
 			}
 		}
 		else {
-			sendSkillNotReady(p);
+			sendSkillNotReady(p, a);
 		}
 	}
 
+	public SlowRangeSkill clone() {
+		return new SlowRangeSkill();
+	}
 }
