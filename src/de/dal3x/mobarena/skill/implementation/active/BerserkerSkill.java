@@ -25,7 +25,7 @@ public class BerserkerSkill extends CooldownSkill implements IRightClickSkill {
 			putOnCooldown(p, a);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 2), true);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 200, 1), true);
-			EffectSpawner.spawnParticle(p.getLocation().add(0, 1.5, 0), Particle.CAMPFIRE_COSY_SMOKE, 5);
+			EffectSpawner.spawnCircle(p.getLocation(), Particle.VILLAGER_HAPPY, 1, 1.5, 10);
 		} else {
 			sendSkillNotReady(p, a);
 		}

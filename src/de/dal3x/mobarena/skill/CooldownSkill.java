@@ -34,7 +34,7 @@ public abstract class CooldownSkill {
 			public void run() {
 				if (a.isParticipant(p)) {
 					p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + "§a ist wieder bereit"));
-					p.playSound(p.getLocation(), Sound.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, 0.8F, 1);
+					p.playSound(p.getLocation(), Sound.BLOCK_GRASS_BREAK, 0.7F, 1);
 					ready = true;
 				}
 			}
