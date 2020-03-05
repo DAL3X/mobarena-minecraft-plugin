@@ -9,6 +9,7 @@ import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
@@ -68,5 +69,9 @@ public abstract class AbstractBoss implements IBoss, Listener {
 				updateBossBar(event.getDamage());
 			}
 		}
+	}
+
+	public void unregister() {
+		HandlerList.unregisterAll(this);
 	}
 }

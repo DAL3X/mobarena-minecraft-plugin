@@ -9,7 +9,7 @@ import de.dal3x.mobarena.arena.Arena;
 public class TestBoss extends AbstractBoss {
 
 	protected TestBoss(Arena a) {
-		super("test", a);
+		super("Error", a);
 	}
 
 	public Mob spawn(Location loc) {

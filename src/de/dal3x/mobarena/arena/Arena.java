@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
 import de.dal3x.mobarena.boss.AbstractBoss;
-import de.dal3x.mobarena.boss.BossStorage;
+import de.dal3x.mobarena.boss.BossFactory;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.config.Config;
 import de.dal3x.mobarena.file.Filehandler;
@@ -55,6 +55,7 @@ public class Arena {
 	private final int bossWaveDivi = 10;
 	private boolean running;
 	private AbstractBoss activeBoss;
+	private LinkedList<AbstractBoss> slainBosses;
 
 	public Arena(String name, Location lobby, Location spectate, Location spawn, Location bossLocation, List<Location> mobspawns,
 			List<Location> playerspawn, List<Mobwave> waves) {
@@ -73,6 +74,7 @@ public class Arena {
 		this.setQueue(new QueueController());
 		this.spectator = new LinkedList<Player>();
 		this.arenaPoints = new HashMap<Player, Integer>();
+		this.slainBosses = new LinkedList<AbstractBoss>();
 		this.waveCounter = 1;
 		this.numberOfCurrentWave = 0;
 		new SkillListener(this, plugin);
@@ -144,7 +146,7 @@ public class Arena {
 			@SuppressWarnings("deprecation")
 			public void run() {
 				if (isRunning()) {
-					AbstractBoss boss = BossStorage.getInstance().getRandomBoss(bossLocation, instance);
+					AbstractBoss boss = BossFactory.getInstance().getRandomBoss(instance);
 					Mob bossInstance = boss.spawn(bossLocation);
 					bossInstance.setMaxHealth((Config.baseBossHealth
 							* (1 + (getWaveCounter() * Config.healtAddMultiPerWave * (getParticipants().size() * Config.bossHealthMultiPerPlayer)))));
@@ -259,7 +261,13 @@ public class Arena {
 		for (Mob m : toKill) {
 			m.setHealth(0);
 		}
-		this.activeBoss = null;
+		if (this.activeBoss != null) {
+			this.slainBosses.add(this.activeBoss);
+			this.activeBoss = null;
+		}
+		for(AbstractBoss slain: this.slainBosses) {
+			slain.unregister();
+		}
 		this.activeMobs.clear();
 		this.spectator.clear();
 		this.participants.clear();
@@ -275,6 +283,7 @@ public class Arena {
 				if (killer != null) {
 					addBossPoints();
 				}
+				this.slainBosses.add(this.activeBoss);
 				this.activeBoss = null;
 				return true;
 			}

@@ -10,6 +10,8 @@ import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -84,6 +86,16 @@ public class BigSlime extends MinionBoss {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
+	public void onLitteSlimeFallDmg(EntityDamageEvent event) {
+		if (this.minions.contains(event.getEntity())) {
+			// Little slime got dmg
+			if(event.getCause().equals(DamageCause.FALL)) {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onSlimeSplit(SlimeSplitEvent event) {
 		if (event.getEntity().equals(this.bossInstance)) {
 			event.setCancelled(true);
