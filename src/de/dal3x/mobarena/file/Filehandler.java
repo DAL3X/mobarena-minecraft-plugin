@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -30,6 +31,7 @@ import de.dal3x.mobarena.skill.IPassiveSkill;
 import de.dal3x.mobarena.skill.IRightClickSkill;
 import de.dal3x.mobarena.skill.SkillController;
 import de.dal3x.mobarena.utility.EnchantmentMeta;
+import de.dal3x.mobarena.utility.Highscore;
 import de.dal3x.mobarena.wave.Mobwave;
 import de.dal3x.mobarena.wave.MobwaveController;
 
@@ -68,6 +70,7 @@ public class Filehandler {
 		loadClasses();
 		loadWaves();
 		loadArenas();
+		loadHighscore();
 	}
 
 	private void loadMobBlueprints() {
@@ -277,6 +280,48 @@ public class Filehandler {
 			counter++;
 		}
 		System.out.println(ConsoleOutputs.consolePrefix + counter + " " + ConsoleOutputs.waves + ConsoleOutputs.successload);
+	}
+	
+	private void loadHighscore() {
+		File highscoreFile = new File(Config.dirPath + Config.highscoreFileName);
+		if (!highscoreFile.exists()) {
+			try {
+				highscoreFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(highscoreFile);
+		List<String> stringIDs = cfg.getStringList("spieler");
+		List<UUID> IDs = new LinkedList<UUID>();
+		for(String stringID : stringIDs) {
+			IDs.add(UUID.fromString(stringID));
+		}
+		int welle = cfg.getInt("welle");
+		Highscore.init(IDs, welle);
+	}
+	
+	public void saveHighscore() {
+		File highscoreFile = new File(Config.dirPath + Config.highscoreFileName);
+		if (!highscoreFile.exists()) {
+			try {
+				highscoreFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(highscoreFile);
+		List<String> stringIDs = new LinkedList<String>();
+		for(UUID id : Highscore.getIDs()) {
+			stringIDs.add(id.toString());
+		}
+		cfg.set("spieler", stringIDs);
+		cfg.set("welle", Highscore.getWelle());
+		try {
+			cfg.save(highscoreFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Location createLocation(FileConfiguration cfg, String path, World w) {

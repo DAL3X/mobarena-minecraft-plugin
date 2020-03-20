@@ -8,6 +8,7 @@ public class Config {
 	public static final String classFileName = "classes.yml";
 	public static final String waveFileName = "waves.yml";
 	public static final String arenaFileName = "arenas.yml";
+	public static final String highscoreFileName = "highscore.yml";
 	public static final String pointFilePath = dirPath + "PlayerData/";
 	public static final String points = "points";
 	
@@ -16,6 +17,7 @@ public class Config {
 	public static final String reloadCommand = "reload";
 	public static final String listCommand = "list";
 	public static final String gloryCommand = "glory";
+	public static final String highscoreCommand = "highscore";
 	
 	public static final String reloadPerm = "soulcraft.mobarena.admin";
 	

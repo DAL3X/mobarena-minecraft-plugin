@@ -73,6 +73,11 @@ public class MobarenaCommand implements CommandExecutor {
 			IngameOutput.sendGloryMessage(p);
 			return true;
 		}
+		// Highscore
+		else if (args.length == 1 && args[0].equalsIgnoreCase(Config.highscoreCommand)) {
+			IngameOutput.sendHighscore(p);
+			return true;
+		}
 		// Help
 		else {
 			IngameOutput.sendHelpMessage(p);

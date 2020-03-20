@@ -6,6 +6,7 @@ import java.util.Random;
 import de.dal3x.mobarena.arena.Arena;
 import de.dal3x.mobarena.boss.implementation.BigSlime;
 import de.dal3x.mobarena.boss.implementation.BroodMother;
+import de.dal3x.mobarena.boss.implementation.LichLord;
 import de.dal3x.mobarena.boss.implementation.Shuffler;
 
 public class BossFactory {
@@ -18,7 +19,7 @@ public class BossFactory {
 		names.add("BigSlime"); // 0
 		names.add("BroodMother"); // 1
 		names.add("Shuffler"); // 2
-		// names.add("LichLord"); // 3
+		names.add("LichLord"); // 3
 	}
 
 	private AbstractBoss getBossObject(String name, Arena arena) {
@@ -30,6 +31,9 @@ public class BossFactory {
 		}
 		else if(name.equalsIgnoreCase(names.get(2))) {
 			return new Shuffler(arena);
+		}
+		else if(name.equalsIgnoreCase(names.get(3))) {
+			return new LichLord(arena);
 		}
 		else {
 			return new TestBoss(arena);

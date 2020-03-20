@@ -80,6 +80,17 @@ public class LichLord extends MinionBoss implements Listener {
 				minion.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 80, 0), true);
 			}
 		}
+		if(event.getEntity().equals(this.bossInstance)) {
+		// Lich gets dmg
+			if(!(event.getDamager( ) instanceof Player)) {
+				return;
+			}
+			Player p = (Player) event.getDamager();
+			for(Mob m : this.minions) {
+				m.setTarget(p);
+			}
+			return;
+		}
 	}
 
 	private void startDebuffSequence() {
@@ -94,7 +105,7 @@ public class LichLord extends MinionBoss implements Listener {
 		final List<Player> slowTargets = partCopy.subList(border, partCopy.size());
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
-				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().getMobInstance().equals(bossInstance)) {
 					for(Player p : speedTargets) {
 						p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 140, 0), true);
 					}
@@ -110,7 +121,7 @@ public class LichLord extends MinionBoss implements Listener {
 	private void startSpawnSequence() {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
 			public void run() {
-				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().equals(bossInstance)) {
+				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().getMobInstance().equals(bossInstance)) {
 					clearMinions();
 					spawnMinions();
 					startSpawnSequence();
@@ -126,12 +137,16 @@ public class LichLord extends MinionBoss implements Listener {
 		Random rand = new Random();
 		for (Player p : this.arena.getAliveParticipants()) {
 			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 1), true);
-			for (int i = 0; i < amount; i++) {
-				Location loc = getMinionSpawnPosition(i, p.getLocation());
+			List<Location> spawnlocs = new LinkedList<Location>();
+			for (Location loc : arena.getMobspawns()) {
+				spawnlocs.add(loc);
+			}
+			Collections.shuffle(spawnlocs);
+			for (int i = 1; i < (arena.getParticipants().size() * amount); i++) {
 				Mob minion;
 				// Minion is skeleton
 				if (rand.nextInt(2) == 0) {
-					minion = (Mob) w.spawnEntity(loc, EntityType.SKELETON);
+					minion = (Mob) w.spawnEntity(spawnlocs.get(i % spawnlocs.size()), EntityType.SKELETON);
 					minion.setTarget(p);
 					// Minion is melee-skeleton
 					if (rand.nextInt(2) == 0) {
@@ -146,7 +161,7 @@ public class LichLord extends MinionBoss implements Listener {
 				}
 				// Minion is zombie
 				else {
-					minion = (Mob) w.spawnEntity(loc, EntityType.ZOMBIE);
+					minion = (Mob) w.spawnEntity(spawnlocs.get(i % spawnlocs.size()), EntityType.ZOMBIE);
 					((Zombie) minion).setBaby(false);
 					// Iron sword
 					ItemStack sword = new ItemStack(Material.IRON_SWORD, 1);
@@ -161,21 +176,6 @@ public class LichLord extends MinionBoss implements Listener {
 				addToMinions(minion, this.arena);
 			}
 		}
-	}
-
-	private Location getMinionSpawnPosition(int counter, Location loc) {
-		int mod = counter % 4;
-		switch (mod) {
-		case 0:
-			return loc.add(1, 1, 0);
-		case 1:
-			return loc.add(-1, 1, 0);
-		case 2:
-			return loc.add(0, 1, 1);
-		case 3:
-			return loc.add(0, 1, -1);
-		}
-		return loc;
 	}
 
 	private void equipRandomArmor(Mob minion) {

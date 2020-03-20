@@ -25,6 +25,7 @@ import de.dal3x.mobarena.listener.LeaveListener;
 import de.dal3x.mobarena.listener.SkillListener;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 import de.dal3x.mobarena.output.IngameOutput;
+import de.dal3x.mobarena.utility.Highscore;
 import de.dal3x.mobarena.utility.InventoryStorage;
 import de.dal3x.mobarena.utility.QueueController;
 import de.dal3x.mobarena.wave.Mobwave;
@@ -305,6 +306,7 @@ public class Arena {
 		this.spectator.add(p);
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		if (this.spectator.size() == this.participants.size()) {
+			Highscore.newHighScore(this.participants, this.getWaveCounter() - 1);
 			reset();
 		} else {
 			p.teleport(this.spectate);
