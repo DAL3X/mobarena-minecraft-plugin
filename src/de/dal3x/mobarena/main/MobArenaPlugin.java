@@ -1,5 +1,6 @@
 package de.dal3x.mobarena.main;
 
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.dal3x.mobarena.arena.ArenaStorage;
@@ -13,41 +14,46 @@ import de.dal3x.mobarena.mobs.MobGenerator;
 import de.dal3x.mobarena.utility.InventoryStorage;
 import de.dal3x.mobarena.wave.MobwaveController;
 
-public class MobArenaPlugin extends JavaPlugin{
-	
+public class MobArenaPlugin extends JavaPlugin {
+
 	private static MobArenaPlugin instance;
 	private Filehandler fileHandler;
-	
+
 	public static MobArenaPlugin getInstance() {
 		return instance;
 	}
-	
+
 	public static void clearInstance() {
 		instance = null;
 	}
-	
-	public void onEnable(){
+
+	public void onEnable() {
 		instance = this;
-		init();
 		getCommand("mobarena").setExecutor(new MobarenaCommand());
+		this.getServer().getScheduler().runTaskLater(this, new Runnable() {
+			public void run() {
+				init();
+			}
+		}, 20);
 	}
-	
+
 	public void onDisable() {
 		clearInstances();
 	}
-	
+
 	public void reload() {
 		onDisable();
+		HandlerList.unregisterAll(this);
 		onEnable();
 	}
-	
+
 	private void init() {
 		this.fileHandler = Filehandler.getInstance();
 		this.fileHandler.loadRessources();
 		InventoryStorage.getInstance();
 		BossFactory.getInstance();
 	}
-	
+
 	private void clearInstances() {
 		MobArenaPlugin.clearInstance();
 		ArenaStorage.clearInstance();

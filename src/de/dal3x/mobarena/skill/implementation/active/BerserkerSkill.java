@@ -17,6 +17,7 @@ public class BerserkerSkill extends CooldownSkill implements IRightClickSkill {
 		setCooldown(20);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void execute(Player p, Arena a) {
 		if (!a.isParticipant(p)) {
 			return;

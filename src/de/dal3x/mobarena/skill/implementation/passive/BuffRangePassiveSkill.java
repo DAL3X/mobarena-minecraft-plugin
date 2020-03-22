@@ -22,6 +22,7 @@ public class BuffRangePassiveSkill implements IPassiveSkill {
 	
 	private void startBuffSequence(final Player p) {
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
+			@SuppressWarnings("deprecation")
 			public void run() {
 				if(arena.isRunning() && arena.getAliveParticipants().contains(p) && running) {
 					for(Player target : arena.getAliveParticipants()) {

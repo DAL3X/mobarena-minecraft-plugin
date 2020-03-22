@@ -34,6 +34,7 @@ public class BigSlime extends MinionBoss {
 		bigSlime.setCustomNameVisible(true);
 		bigSlime.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 0), true);
 		bigSlime.setPersistent(true);
+		bigSlime.setRemoveWhenFarAway(false);
 		this.bossInstance = bigSlime;
 		this.addBossBar();
 		return bigSlime;
@@ -61,6 +62,7 @@ public class BigSlime extends MinionBoss {
 			slime.setCustomName("§cSlime");
 			slime.setCustomNameVisible(true);
 			slime.setPersistent(true);
+			slime.setRemoveWhenFarAway(false);
 			if (event.getDamager() instanceof Projectile) {
 				Vector vec = event.getDamager().getLocation().toVector().subtract(bossInstance.getLocation().toVector()).multiply(0.45);
 				slime.setVelocity(vec);
@@ -72,6 +74,7 @@ public class BigSlime extends MinionBoss {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLitteSlimeDmg(EntityDamageByEntityEvent event) {
 		if (this.minions.contains(event.getDamager())) {

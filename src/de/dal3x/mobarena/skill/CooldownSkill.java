@@ -31,6 +31,7 @@ public abstract class CooldownSkill {
 			}
 		}, 20);
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
+			@SuppressWarnings("deprecation")
 			public void run() {
 				if (a.isParticipant(p)) {
 					p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + "§a ist wieder bereit"));
@@ -52,6 +53,7 @@ public abstract class CooldownSkill {
 		}, 40);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void sendSkillNotReady(Player p, Arena a) {
 		if (!this.isOnActionCooldown && a.isParticipant(p)) {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(name + IngameOutput.SkillNotReady));

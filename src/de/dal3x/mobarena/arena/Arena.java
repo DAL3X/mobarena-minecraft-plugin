@@ -18,6 +18,7 @@ import de.dal3x.mobarena.boss.BossFactory;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.config.Config;
 import de.dal3x.mobarena.file.Filehandler;
+import de.dal3x.mobarena.listener.BottleDrinkListener;
 import de.dal3x.mobarena.listener.ClassPickListener;
 import de.dal3x.mobarena.listener.DamageListener;
 import de.dal3x.mobarena.listener.DeathListener;
@@ -79,6 +80,7 @@ public class Arena {
 		this.waveCounter = 1;
 		this.numberOfCurrentWave = 0;
 		new SkillListener(this, plugin);
+		new BottleDrinkListener(this, plugin);
 		isFree = true;
 		running = false;
 		registerListeners();
@@ -119,6 +121,7 @@ public class Arena {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void spawnInNormalWave() {
 		for (Player p : getParticipants()) {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.wave + getWaveCounter()));
@@ -138,13 +141,13 @@ public class Arena {
 		}, 140);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void spawnInBoss() {
 		for (Player p : getParticipants()) {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(IngameOutput.boss));
 		}
 		final Arena instance = this;
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			@SuppressWarnings("deprecation")
 			public void run() {
 				if (isRunning()) {
 					AbstractBoss boss = BossFactory.getInstance().getRandomBoss(instance);
@@ -190,8 +193,8 @@ public class Arena {
 	public void removeParticipant(Player p) {
 		this.participants.remove(p);
 		this.spectator.remove(p);
-		p.teleport(this.spawnLocation);
 		clearInventory(p);
+		p.teleport(this.spawnLocation);
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
 		IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
@@ -239,14 +242,12 @@ public class Arena {
 			toKill.add(mob);
 		}
 		for (Player p : this.participants) {
-			this.participants.remove(p);
-			this.spectator.remove(p);
-			p.teleport(this.spawnLocation);
 			clearInventory(p);
+			p.teleport(spawnLocation);
 			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-			Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
-			IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
-			this.arenaPoints.remove(p);
+			Filehandler.getInstance().addArenaPoints(p, arenaPoints.get(p));
+			IngameOutput.sendGloryGainMessage(p, arenaPoints.get(p));
+			arenaPoints.remove(p);
 			if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
 				ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().disapply(p, this);
 			}
@@ -254,7 +255,7 @@ public class Arena {
 				p.removePotionEffect(effect.getType());
 			}
 			ClassController.getInstance().clearClassForPlayer(p);
-			this.clearBossBar(p);
+			clearBossBar(p);
 		}
 		int count = this.waveCounter - 1;
 		IngameOutput.sendDefeatMessage(count, this.participants);
@@ -266,7 +267,7 @@ public class Arena {
 			this.slainBosses.add(this.activeBoss);
 			this.activeBoss = null;
 		}
-		for(AbstractBoss slain: this.slainBosses) {
+		for (AbstractBoss slain : this.slainBosses) {
 			slain.unregister();
 		}
 		this.activeMobs.clear();
@@ -302,14 +303,17 @@ public class Arena {
 		}
 	}
 
-	public void addToSpectator(Player p) {
+	public void addToSpectator(final Player p) {
 		this.spectator.add(p);
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+		p.teleport(spectate);
 		if (this.spectator.size() == this.participants.size()) {
 			Highscore.newHighScore(this.participants, this.getWaveCounter() - 1);
-			reset();
-		} else {
-			p.teleport(this.spectate);
+			MobArenaPlugin.getInstance().getServer().getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
+				public void run() {
+					reset();
+				}
+			}, 1);
 		}
 	}
 

@@ -73,6 +73,7 @@ public class IngameOutput {
 				prefix + "§cUm die Klasse §6" + klasse.getName() + " §cspielen zu können, musst du §6" + klasse.getGlory() + " §cRuhm besitzen");
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void sendRemainingMobs(int alive, int all, List<Player> players) {
 		for (Player p : players) {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(alive + " Mobs verbleiben"));

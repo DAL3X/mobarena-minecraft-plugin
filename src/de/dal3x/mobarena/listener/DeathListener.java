@@ -20,6 +20,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
+
 import de.dal3x.mobarena.arena.Arena;
 
 public class DeathListener implements Listener {
@@ -54,10 +56,30 @@ public class DeathListener implements Listener {
 				arena.spawnNextWave();
 			}
 		}
-		if (arena.getActiveBoss() != null && mob.equals(arena.getActiveBoss())) {
+		if (arena.getActiveBoss() != null && mob.equals(arena.getActiveBoss().getMobInstance())) {
 			event.setDroppedExp(0);
 			event.getDrops().clear();
 			return;
+		}
+	}
+
+	// Backup Event, if mobs are removed for whatever reason
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onArenaMobRemove(EntityRemoveFromWorldEvent event) {
+		if (!(event.getEntity() instanceof Mob) || event.getEntity() instanceof Player) {
+			return;
+		}
+		Mob mob = (Mob) event.getEntity();
+		if (arena.getActiveMobs().contains(mob)) {
+			if (!arena.isRunning()) {
+				return;
+			}
+			boolean waveDone = arena.removeMobAndAskIfEmpty(mob, arena.getAliveParticipants().get(0));
+			if (waveDone) {
+				arena.addWavePoints();
+				arena.respawnAllSpectators();
+				arena.spawnNextWave();
+			}
 		}
 	}
 
@@ -76,7 +98,7 @@ public class DeathListener implements Listener {
 		if ((p.getHealth() - event.getDamage()) <= 0) {
 			event.setDamage(0);
 			event.setCancelled(true);
-			arena.addToSpectator(p);
+			addToSpec(p);
 		}
 	}
 
@@ -93,7 +115,7 @@ public class DeathListener implements Listener {
 			if ((p.getHealth() - event.getDamage()) <= 0) {
 				event.setDamage(0);
 				event.setCancelled(true);
-				arena.addToSpectator(p);
+				addToSpec(p);
 			}
 		}
 	}
@@ -119,6 +141,10 @@ public class DeathListener implements Listener {
 			list.add(potion);
 		}
 		return list;
+	}
+
+	private void addToSpec(final Player p) {
+		arena.addToSpectator(p);
 	}
 
 }

@@ -18,6 +18,7 @@ public class TauntSkill extends CooldownSkill implements IRightClickSkill {
 		setCooldown(10);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void execute(Player p, Arena a) {
 		if (!a.isParticipant(p)) {
 			return;

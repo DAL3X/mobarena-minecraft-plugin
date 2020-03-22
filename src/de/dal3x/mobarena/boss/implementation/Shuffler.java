@@ -41,6 +41,7 @@ public class Shuffler extends MinionBoss implements Listener {
 		shuffler.setCustomName(this.name);
 		shuffler.setCustomNameVisible(true);
 		shuffler.setPersistent(true);
+		shuffler.setRemoveWhenFarAway(false);
 		this.bossInstance = shuffler;
 		this.addBossBar();
 		shufflePlayers();
@@ -87,6 +88,7 @@ public class Shuffler extends MinionBoss implements Listener {
 						event.setCancelled(true);
 					} else {
 						vex.setPersistent(true);
+						vex.setRemoveWhenFarAway(false);
 						addToMinions(vex, arena);
 					}
 				}
@@ -94,6 +96,7 @@ public class Shuffler extends MinionBoss implements Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCloneDamage(EntityDamageByEntityEvent event) {
 		Entity e = event.getEntity();
@@ -132,6 +135,7 @@ public class Shuffler extends MinionBoss implements Listener {
 			clone.setCustomName(this.name);
 			clone.setCustomNameVisible(true);
 			clone.setPersistent(true);
+			clone.setRemoveWhenFarAway(false);
 			addToMinions(clone, this.arena);
 		}
 	}

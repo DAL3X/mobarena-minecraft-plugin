@@ -39,6 +39,7 @@ public class BroodMother extends MinionBoss {
 		mother.setGlowing(true);
 		mother.setTarget(getNearestPlayer(loc));
 		mother.setPersistent(true);
+		mother.setRemoveWhenFarAway(false);
 		spawnMinions(mother.getLocation());
 		startWebSequence(mother.getLocation());
 		startSpawnSequence();
@@ -119,6 +120,7 @@ public class BroodMother extends MinionBoss {
 			m.setCustomName("§2Gift§3Spinne");
 			m.setCustomNameVisible(true);
 			m.setPersistent(true);
+			m.setRemoveWhenFarAway(false);
 			addToMinions(m, arena);
 			newMinions.add(m);
 		}

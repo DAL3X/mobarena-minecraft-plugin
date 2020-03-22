@@ -9,6 +9,7 @@ import de.dal3x.mobarena.skill.IPassiveSkill;
 
 public class SpeedUpSkill implements IPassiveSkill {
 
+	@SuppressWarnings("deprecation")
 	public void apply(Player p, Arena a) {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0), true);
 	}

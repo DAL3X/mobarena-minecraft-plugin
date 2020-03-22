@@ -42,6 +42,7 @@ public class LichLord extends MinionBoss implements Listener {
 		lich.setCustomName(this.name);
 		lich.setCustomNameVisible(true);
 		lich.setPersistent(true);
+		lich.setRemoveWhenFarAway(false);
 		// Lich Crown
 		ItemStack helmet = new ItemStack(Material.GOLDEN_HELMET, 1);
 		ItemMeta helmetMeta = helmet.getItemMeta();
@@ -65,6 +66,7 @@ public class LichLord extends MinionBoss implements Listener {
 		return lich;
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLichDmg(EntityDamageByEntityEvent event) {
 		if (event.getDamager().equals(this.bossInstance)) {
@@ -104,6 +106,7 @@ public class LichLord extends MinionBoss implements Listener {
 		final List<Player> speedTargets = partCopy.subList(0, border);
 		final List<Player> slowTargets = partCopy.subList(border, partCopy.size());
 		Bukkit.getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
+			@SuppressWarnings("deprecation")
 			public void run() {
 				if (bossInstance.getHealth() > 0 && arena.getActiveBoss().getMobInstance().equals(bossInstance)) {
 					for(Player p : speedTargets) {
@@ -173,6 +176,7 @@ public class LichLord extends MinionBoss implements Listener {
 				minion.setCustomName("§0Min§fion");
 				minion.setCustomNameVisible(true);
 				minion.setPersistent(true);
+				minion.setRemoveWhenFarAway(false);
 				addToMinions(minion, this.arena);
 			}
 		}

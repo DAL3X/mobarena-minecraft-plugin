@@ -40,6 +40,7 @@ public class MobGenerator {
 		mob.setCustomName(mobBP.getName());
 		mob.setCustomNameVisible(true);
 		mob.setPersistent(true);
+		mob.setRemoveWhenFarAway(false);
 		// Set equipment
 		if (mobBP.getEquip() != null) {
 			for (int i = 0; i < mobBP.getEquip().length; i++) {
