@@ -387,6 +387,10 @@ public class Arena {
 		return this.participants.contains(p);
 	}
 
+	public boolean isSpectator(Player p) {
+		return this.spectator.contains(p);
+	}
+
 	public boolean isFree() {
 		return this.isFree;
 	}
@@ -455,7 +459,9 @@ public class Arena {
 	}
 
 	public void addMobPoints(Player p) {
-		this.arenaPoints.put(p, this.arenaPoints.get(p) + Config.pointPerMobkill);
+		if (this.arenaPoints.containsKey(p)) {
+			this.arenaPoints.put(p, this.arenaPoints.get(p) + Config.pointPerMobkill);
+		}
 	}
 
 	public void addBossPoints() {

@@ -8,6 +8,7 @@ import de.dal3x.mobarena.skill.implementation.active.TauntSkill;
 import de.dal3x.mobarena.skill.implementation.passive.ArrowBurnSkill;
 import de.dal3x.mobarena.skill.implementation.passive.BuffRangePassiveSkill;
 import de.dal3x.mobarena.skill.implementation.passive.InfiniteArrowSkill;
+import de.dal3x.mobarena.skill.implementation.passive.SlowDownSkill;
 import de.dal3x.mobarena.skill.implementation.passive.SpeedUpSkill;
 
 public class SkillController {
@@ -38,6 +39,9 @@ public class SkillController {
 	public static IPassiveSkill getPassiveSkill(String name) {
 		if(name.equalsIgnoreCase("SpeedUp")) {
 			return new SpeedUpSkill();
+		}
+		if(name.equalsIgnoreCase("SlowDown")) {
+			return new SlowDownSkill();
 		}
 		if(name.equalsIgnoreCase("RangeBuff")) {
 			return new BuffRangePassiveSkill();

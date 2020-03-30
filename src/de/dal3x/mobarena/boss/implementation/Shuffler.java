@@ -128,6 +128,7 @@ public class Shuffler extends MinionBoss implements Listener {
 		bossInstance.teleport(spawnlocs.get(new Random().nextInt(spawnlocs.size())));
 		for (int i = 1; i < (arena.getParticipants().size() * Config.ShufflerClonePerPlayer); i++) {
 			Mob clone = (Mob) w.spawnEntity(spawnlocs.get(i % spawnlocs.size()), EntityType.EVOKER);
+			((Evoker)clone).setPatrolLeader(false);
 			clone.setMaxHealth(bossInstance.getMaxHealth());
 			clone.setHealth(bossInstance.getMaxHealth());
 			clone.setFireTicks(bossInstance.getFireTicks());
