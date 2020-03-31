@@ -69,25 +69,6 @@ public class DeathListener implements Listener {
 		}
 	}
 	
-//	// Event if killed Mob is slime
-//	@EventHandler(priority = EventPriority.HIGHEST)
-//	public void onArenaSlimeSplit(SlimeSplitEvent event) {
-//		Mob mob = (Mob) event.getEntity();
-//		if (arena.getActiveMobs().contains(mob) && arena.getActiveBoss() == null) {
-//			event.setCancelled(true);
-//			Player killer = event.getEntity().getKiller();
-//			if (event.getEntity().getKiller() instanceof Projectile) {
-//				killer = (Player) ((Projectile) event.getEntity().getKiller()).getShooter();
-//			}
-//			boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
-//			if (waveDone) {
-//				arena.addWavePoints();
-//				arena.respawnAllSpectators();
-//				arena.spawnNextWave();
-//			}
-//		}
-//	}
-	
 	// Backup Event, if mobs are removed for whatever reason
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onArenaMobRemove(EntityRemoveFromWorldEvent event) {

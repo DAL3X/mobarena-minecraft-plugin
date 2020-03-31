@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -24,6 +25,7 @@ import de.dal3x.mobarena.listener.DamageListener;
 import de.dal3x.mobarena.listener.DeathListener;
 import de.dal3x.mobarena.listener.LeaveListener;
 import de.dal3x.mobarena.listener.SkillListener;
+import de.dal3x.mobarena.listener.SpectatorTeleportListener;
 import de.dal3x.mobarena.main.MobArenaPlugin;
 import de.dal3x.mobarena.output.IngameOutput;
 import de.dal3x.mobarena.utility.Highscore;
@@ -172,6 +174,7 @@ public class Arena {
 	private void registerListeners() {
 		new SkillListener(this, plugin);
 		new BottleDrinkListener(this, plugin);
+		new SpectatorTeleportListener(this, plugin);
 		plugin.getServer().getPluginManager().registerEvents(new ClassPickListener(this), plugin);
 		plugin.getServer().getPluginManager().registerEvents(new DeathListener(this), plugin);
 		plugin.getServer().getPluginManager().registerEvents(new LeaveListener(this), plugin);
@@ -196,6 +199,7 @@ public class Arena {
 		this.participants.remove(p);
 		this.spectator.remove(p);
 		clearInventory(p);
+		p.setGameMode(GameMode.SURVIVAL);
 		p.teleport(this.spawnLocation);
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
@@ -245,6 +249,7 @@ public class Arena {
 		}
 		for (Player p : this.participants) {
 			clearInventory(p);
+			p.setGameMode(GameMode.SURVIVAL);
 			p.teleport(spawnLocation);
 			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 			Filehandler.getInstance().addArenaPoints(p, arenaPoints.get(p));
@@ -309,6 +314,16 @@ public class Arena {
 		this.spectator.add(p);
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		p.teleport(spectate);
+		List<Player> alive = getAliveParticipants();
+		if (alive.size() > 0) {
+			p.setGameMode(GameMode.SPECTATOR);
+			for(Player spec : spectator) {
+				if(p != spec && spec.getSpectatorTarget().equals(p)) {
+					spec.setSpectatorTarget(alive.get(0));
+				}
+			}
+			p.setSpectatorTarget(alive.get(0));
+		}
 		if (this.spectator.size() == this.participants.size()) {
 			Highscore.newHighScore(this.participants, this.getWaveCounter() - 1);
 			MobArenaPlugin.getInstance().getServer().getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
@@ -323,6 +338,7 @@ public class Arena {
 		for (Player p : this.spectator) {
 			p.teleport(getPlayerspawn().get(new Random().nextInt(getPlayerspawn().size())));
 			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+			p.setGameMode(GameMode.SURVIVAL);
 			this.spectator.remove(p);
 		}
 	}
