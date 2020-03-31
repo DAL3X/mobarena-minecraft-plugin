@@ -79,8 +79,6 @@ public class Arena {
 		this.slainBosses = new LinkedList<AbstractBoss>();
 		this.waveCounter = 1;
 		this.numberOfCurrentWave = 0;
-		new SkillListener(this, plugin);
-		new BottleDrinkListener(this, plugin);
 		isFree = true;
 		running = false;
 		registerListeners();
@@ -105,7 +103,9 @@ public class Arena {
 		} else {
 			List<Mobwave> possible = new LinkedList<Mobwave>();
 			possible.addAll(this.waves);
-			possible.remove(MobwaveController.getInstance().getMobwave(this.numberOfCurrentWave));
+			if (possible.size() > 1) {
+				possible.remove(MobwaveController.getInstance().getMobwave(this.numberOfCurrentWave));
+			}
 			return possible.get(new Random().nextInt(possible.size()));
 		}
 	}
@@ -170,6 +170,8 @@ public class Arena {
 	}
 
 	private void registerListeners() {
+		new SkillListener(this, plugin);
+		new BottleDrinkListener(this, plugin);
 		plugin.getServer().getPluginManager().registerEvents(new ClassPickListener(this), plugin);
 		plugin.getServer().getPluginManager().registerEvents(new DeathListener(this), plugin);
 		plugin.getServer().getPluginManager().registerEvents(new LeaveListener(this), plugin);

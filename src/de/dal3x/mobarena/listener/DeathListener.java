@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Slime;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -37,6 +38,12 @@ public class DeathListener implements Listener {
 			return;
 		}
 		Mob mob = (Mob) event.getEntity();
+		if(mob instanceof Slime && ((Slime)mob).getSize() > 1 && arena.getActiveBoss() == null) {
+			event.setDroppedExp(0);
+			event.getDrops().clear();
+			((Slime)mob).setSize(1);
+			mob.setHealth(0);
+		}
 		if (arena.getActiveMobs().contains(mob)) {
 			event.setDroppedExp(0);
 			event.getDrops().clear();
@@ -61,7 +68,26 @@ public class DeathListener implements Listener {
 			return;
 		}
 	}
-
+	
+//	// Event if killed Mob is slime
+//	@EventHandler(priority = EventPriority.HIGHEST)
+//	public void onArenaSlimeSplit(SlimeSplitEvent event) {
+//		Mob mob = (Mob) event.getEntity();
+//		if (arena.getActiveMobs().contains(mob) && arena.getActiveBoss() == null) {
+//			event.setCancelled(true);
+//			Player killer = event.getEntity().getKiller();
+//			if (event.getEntity().getKiller() instanceof Projectile) {
+//				killer = (Player) ((Projectile) event.getEntity().getKiller()).getShooter();
+//			}
+//			boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
+//			if (waveDone) {
+//				arena.addWavePoints();
+//				arena.respawnAllSpectators();
+//				arena.spawnNextWave();
+//			}
+//		}
+//	}
+	
 	// Backup Event, if mobs are removed for whatever reason
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onArenaMobRemove(EntityRemoveFromWorldEvent event) {
