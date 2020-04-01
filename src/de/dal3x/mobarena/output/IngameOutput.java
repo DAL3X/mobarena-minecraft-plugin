@@ -31,7 +31,7 @@ public class IngameOutput {
 
 	public static final String successfullReload = "§aPlugin wurde erfolgreich neu geladen.";
 
-	public static final String wave = "Welle ";
+	public static final String wave = "§7Welle§e ";
 	public static final String boss = "§cBosswelle";
 
 	public static final String SkillNotReady = "§c ist nicht bereit";
@@ -76,7 +76,7 @@ public class IngameOutput {
 	@SuppressWarnings("deprecation")
 	public static void sendRemainingMobs(int alive, int all, List<Player> players) {
 		for (Player p : players) {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(alive + " Mobs verbleiben"));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§e" + alive + "§7 Mobs verbleiben"));
 		}
 	}
 
