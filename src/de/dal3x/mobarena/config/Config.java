@@ -45,8 +45,8 @@ public class Config {
 	public static final int BroodMotherWebPerCycle = 70; //In reality less, bc some blocks are blocked 
 	public static final int BroodMotherMinionPerPlayer = 5;
 	
-	public static final int ShufflerPlayerCD = 8;
-	public static final int ShufflerCloneCD = 16;
+	public static final int ShufflerPlayerCD = 20;
+	public static final int ShufflerCloneCD = 14;
 	public static final int ShufflerClonePerPlayer = 2;
 	
 }
