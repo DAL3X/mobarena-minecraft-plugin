@@ -17,16 +17,16 @@ import de.dal3x.mobarena.main.MobArenaPlugin;
 public abstract class MinionBoss extends AbstractBoss implements Listener {
 
 	protected List<Mob> minions;
-	
+
 	protected MinionBoss(String name, Arena arena) {
 		super(name, arena);
 		this.minions = new LinkedList<Mob>();
 		MobArenaPlugin.getInstance().getServer().getPluginManager().registerEvents(this, MobArenaPlugin.getInstance());
 	}
-	
-	protected void clearMinions() {
+
+	public void clearMinions() {
 		List<Mob> toKill = new LinkedList<Mob>();
-		for (Mob minion : this.minions) {
+		for (Mob minion : minions) {
 			toKill.add(minion);
 		}
 		for (Mob kill : toKill) {
@@ -48,7 +48,7 @@ public abstract class MinionBoss extends AbstractBoss implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBossDeath(EntityDeathEvent event) {
 		if (event.getEntity().equals(this.bossInstance)) {

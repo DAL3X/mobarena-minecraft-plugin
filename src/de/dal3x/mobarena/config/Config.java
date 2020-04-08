@@ -17,6 +17,7 @@ public class Config {
 	public static final String reloadCommand = "reload";
 	public static final String listCommand = "list";
 	public static final String gloryCommand = "glory";
+	public static final String gloryAlias = "ruhm";
 	public static final String highscoreCommand = "highscore";
 	
 	public static final String reloadPerm = "soulcraft.mobarena.admin";
@@ -24,13 +25,13 @@ public class Config {
 	public static final String signClassIdentifier = "§8[§3Mob§bArena§8]";
 	public static final String signReadyIdentifier = "Ready";
 	
-	public static final float multiSpawnForPlayer = 0.8f;
+	public static final float multiSpawnForPlayer = 0.7f;
 	
-	public static final double healtAddMultiPerWave = 0.05;
-	public static final double bossHealthMultiPerPlayer = 3;
+	public static final double healtAddMultiPerWave = 0.03;
+	public static final double bossHealthMultiPerPlayer = 2;
 	public static final double baseBossHealth = 50;
 	
-	public static final double damageTakenMultiPerWave = 0.025;
+	public static final double damageTakenMultiPerWave = 0.015;
 	
 	public static final int pointPerMobkill = 1;
 	public static final int pointPerBosskill = 50;

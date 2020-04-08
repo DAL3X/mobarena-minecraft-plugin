@@ -71,13 +71,10 @@ public class LichLord extends MinionBoss implements Listener {
 	public void onLichDmg(EntityDamageByEntityEvent event) {
 		if (event.getDamager().equals(this.bossInstance)) {
 			// Lich makes Dmg
-			event.setDamage(0);
+			event.setDamage(event.getDamage() * 0.2);
 			if (!(event.getEntity() instanceof Player)) {
 				return;
 			}
-			Player p = (Player) event.getEntity();
-			p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0), true);
-			event.setCancelled(true);
 			for (Mob minion : this.minions) {
 				minion.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 80, 0), true);
 			}
@@ -139,7 +136,6 @@ public class LichLord extends MinionBoss implements Listener {
 		World w = this.bossInstance.getLocation().getWorld();
 		Random rand = new Random();
 		for (Player p : this.arena.getAliveParticipants()) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 200, 1), true);
 			List<Location> spawnlocs = new LinkedList<Location>();
 			for (Location loc : arena.getMobspawns()) {
 				spawnlocs.add(loc);

@@ -30,11 +30,11 @@ public class MobArenaPlugin extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		getCommand("mobarena").setExecutor(new MobarenaCommand());
-		this.getServer().getScheduler().runTaskLater(this, new Runnable() {
+		this.getServer().getScheduler().runTask(this, new Runnable() {
 			public void run() {
 				init();
 			}
-		}, 20);
+		});
 	}
 
 	public void onDisable() {

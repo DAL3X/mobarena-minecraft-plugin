@@ -42,7 +42,7 @@ public class DamageListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onArenaMobDamagesPlayer(EntityDamageByEntityEvent event) {
 		if (event.isCancelled()) {
 			return;

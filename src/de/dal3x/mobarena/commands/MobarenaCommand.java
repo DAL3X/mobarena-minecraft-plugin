@@ -17,7 +17,7 @@ import de.dal3x.mobarena.output.IngameOutput;
 public class MobarenaCommand implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		//reload
+		// reload
 		if (args.length == 1 && args[0].equalsIgnoreCase(Config.reloadCommand)) {
 			reload(sender);
 			return true;
@@ -54,7 +54,7 @@ public class MobarenaCommand implements CommandExecutor {
 					a.removeParticipant(p);
 					return true;
 				}
-				if(a.getQueue().isJoined(p)) {
+				if (a.getQueue().isJoined(p)) {
 					a.getQueue().takeOutOfJoinedQueue(p);
 					a.getQueue().takeOutOfReadyQueue(p);
 					p.teleport(a.getSpawnLocation());
@@ -69,7 +69,7 @@ public class MobarenaCommand implements CommandExecutor {
 			return true;
 		}
 		// Glory
-		else if (args.length == 1 && args[0].equalsIgnoreCase(Config.gloryCommand)) {
+		else if (args.length == 1 && (args[0].equalsIgnoreCase(Config.gloryCommand) || args[0].equalsIgnoreCase(Config.gloryAlias))) {
 			IngameOutput.sendGloryMessage(p);
 			return true;
 		}

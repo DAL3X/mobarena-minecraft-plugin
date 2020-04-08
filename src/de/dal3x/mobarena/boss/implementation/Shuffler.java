@@ -38,6 +38,7 @@ public class Shuffler extends MinionBoss implements Listener {
 	public Mob spawn(Location loc) {
 		Evoker shuffler = (Evoker) loc.getWorld().spawnEntity(loc, EntityType.EVOKER);
 		shuffler.setPatrolLeader(false);
+		shuffler.getEquipment().setHelmet(null);
 		shuffler.setCustomName(this.name);
 		shuffler.setCustomNameVisible(true);
 		shuffler.setPersistent(true);
@@ -81,15 +82,19 @@ public class Shuffler extends MinionBoss implements Listener {
 		Vex vex = (Vex) event.getEntity();
 		if (this.bossInstance != null) {
 			if (this.bossInstance.getHealth() > 0 && this.arena.getActiveBoss().getMobInstance().equals(this.bossInstance)) {
-				if (vex.getLocation().distance(bossInstance.getLocation()) < 16) {
-					int minionSize = this.minions.size();
-					if (minionSize > (arena.getParticipants().size() * 3)) {
-						vex.setHealth(0);
-						event.setCancelled(true);
-					} else {
-						vex.setPersistent(true);
-						vex.setRemoveWhenFarAway(false);
-						addToMinions(vex, arena);
+				if (vex.getLocation().getWorld().equals(this.arena.getLobby().getWorld())) {
+					if (vex.getLocation().distance(this.bossInstance.getLocation()) < 3) {
+						int minionSize = this.minions.size();
+						if (minionSize > (arena.getParticipants().size() * 3)) {
+							vex.setHealth(0);
+							event.setCancelled(true);
+							return;
+						} else {
+							vex.setPersistent(true);
+							vex.setRemoveWhenFarAway(false);
+							addToMinions(vex, arena);
+							return;
+						}
 					}
 				}
 			}
@@ -128,7 +133,8 @@ public class Shuffler extends MinionBoss implements Listener {
 		bossInstance.teleport(spawnlocs.get(new Random().nextInt(spawnlocs.size())));
 		for (int i = 1; i < (arena.getParticipants().size() * Config.ShufflerClonePerPlayer); i++) {
 			Mob clone = (Mob) w.spawnEntity(spawnlocs.get(i % spawnlocs.size()), EntityType.EVOKER);
-			((Evoker)clone).setPatrolLeader(false);
+			((Evoker) clone).setPatrolLeader(false);
+			((Evoker) clone).getEquipment().setHelmet(null);
 			clone.setMaxHealth(bossInstance.getMaxHealth());
 			clone.setHealth(bossInstance.getMaxHealth());
 			clone.setFireTicks(bossInstance.getFireTicks());

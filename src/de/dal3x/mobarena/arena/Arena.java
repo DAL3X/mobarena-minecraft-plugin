@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffect;
 
 import de.dal3x.mobarena.boss.AbstractBoss;
 import de.dal3x.mobarena.boss.BossFactory;
+import de.dal3x.mobarena.boss.MinionBoss;
 import de.dal3x.mobarena.classes.ClassController;
 import de.dal3x.mobarena.config.Config;
 import de.dal3x.mobarena.file.Filehandler;
@@ -79,8 +80,8 @@ public class Arena {
 		this.slainBosses = new LinkedList<AbstractBoss>();
 		this.waveCounter = 1;
 		this.numberOfCurrentWave = 0;
-		isFree = true;
-		running = false;
+		this.isFree = true;
+		this.running = false;
 		registerListeners();
 	}
 
@@ -164,9 +165,13 @@ public class Arena {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void setScaledMobHealth(Mob mob) {
-		mob.setMaxHealth((mob.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave))));
-		mob.setHealth(mob.getMaxHealth());
+	public void setScaledMobHealth(final Mob mob) {
+		Bukkit.getScheduler().runTask(plugin, new Runnable() {
+			public void run() {
+				mob.setMaxHealth((mob.getMaxHealth() * (1 + (getWaveCounter() * Config.healtAddMultiPerWave))));
+				mob.setHealth(mob.getMaxHealth());
+			}
+		});
 	}
 
 	private void registerListeners() {
@@ -178,38 +183,40 @@ public class Arena {
 		plugin.getServer().getPluginManager().registerEvents(new DamageListener(this), plugin);
 	}
 
-	public void addParticipant(Player p) {
-		if (this.isFree) {
-			this.isFree = false;
-		}
-		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-		this.participants.add(p);
-		setInventory(p);
-		ClassController.getInstance().getClassForPlayer(p).activateSkills();
-		this.arenaPoints.put(p, 0);
-		if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
-			ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().apply(p, this);
-		}
+	public void addParticipant(final Player p) {
+		final Arena a = this;
+		Bukkit.getScheduler().runTask(plugin, new Runnable() {
+			public void run() {
+				if (isFree) {
+					isFree = false;
+				}
+				p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+				participants.add(p);
+				setInventory(p);
+				ClassController.getInstance().getClassForPlayer(p).activateSkills();
+				arenaPoints.put(p, 0);
+				if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
+					ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().apply(p, a);
+				}
+			}
+		});
 	}
 
 	public void removeParticipant(Player p) {
-		this.participants.remove(p);
-		this.spectator.remove(p);
+		participants.remove(p);
+		spectator.remove(p);
 		clearInventory(p);
-		p.teleport(this.spawnLocation);
+		p.teleport(spawnLocation);
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-		Filehandler.getInstance().addArenaPoints(p, this.arenaPoints.get(p));
-		IngameOutput.sendGloryGainMessage(p, this.arenaPoints.get(p));
-		this.arenaPoints.remove(p);
-		if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
-			ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().disapply(p, this);
-		}
+		Filehandler.getInstance().addArenaPoints(p, arenaPoints.get(p));
+		IngameOutput.sendGloryGainMessage(p, arenaPoints.get(p));
+		arenaPoints.remove(p);
 		for (PotionEffect effect : p.getActivePotionEffects()) {
 			p.removePotionEffect(effect.getType());
 		}
 		ClassController.getInstance().clearClassForPlayer(p);
-		this.clearBossBar(p);
-		if (this.getAliveParticipants().size() == 0) {
+		clearBossBar(p);
+		if (getAliveParticipants().size() == 0) {
 			reset();
 		}
 	}
@@ -239,45 +246,50 @@ public class Arena {
 	}
 
 	public void reset() {
-		LinkedList<Mob> toKill = new LinkedList<Mob>();
-		for (Mob mob : this.activeMobs) {
-			toKill.add(mob);
-		}
-		for (Player p : this.participants) {
-			clearInventory(p);
-			p.teleport(spawnLocation);
-			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-			Filehandler.getInstance().addArenaPoints(p, arenaPoints.get(p));
-			IngameOutput.sendGloryGainMessage(p, arenaPoints.get(p));
-			arenaPoints.remove(p);
-			if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
-				ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().disapply(p, this);
+		final Arena a = this;
+		Bukkit.getScheduler().runTask(plugin, new Runnable() {
+			public void run() {
+				LinkedList<Mob> toKill = new LinkedList<Mob>();
+				for (Mob mob : activeMobs) {
+					toKill.add(mob);
+				}
+				for (Player p : participants) {
+					clearInventory(p);
+					p.teleport(spawnLocation);
+					p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+					Filehandler.getInstance().addArenaPoints(p, arenaPoints.get(p));
+					IngameOutput.sendGloryGainMessage(p, arenaPoints.get(p));
+					arenaPoints.remove(p);
+					if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
+						ClassController.getInstance().getClassForPlayer(p).getPassiveSkill().disapply(p, a);
+					}
+					for (PotionEffect effect : p.getActivePotionEffects()) {
+						p.removePotionEffect(effect.getType());
+					}
+					ClassController.getInstance().clearClassForPlayer(p);
+					clearBossBar(p);
+				}
+				int count = waveCounter - 1;
+				IngameOutput.sendDefeatMessage(count, participants);
+				running = false;
+				for (Mob m : toKill) {
+					m.setHealth(0);
+				}
+				if (activeBoss != null) {
+					slainBosses.add(activeBoss);
+					activeBoss = null;
+				}
+				for (AbstractBoss slain : slainBosses) {
+					slain.unregister();
+				}
+				activeMobs.clear();
+				spectator.clear();
+				participants.clear();
+				arenaPoints.clear();
+				isFree = true;
+				waveCounter = 1;
 			}
-			for (PotionEffect effect : p.getActivePotionEffects()) {
-				p.removePotionEffect(effect.getType());
-			}
-			ClassController.getInstance().clearClassForPlayer(p);
-			clearBossBar(p);
-		}
-		int count = this.waveCounter - 1;
-		IngameOutput.sendDefeatMessage(count, this.participants);
-		this.running = false;
-		for (Mob m : toKill) {
-			m.setHealth(0);
-		}
-		if (this.activeBoss != null) {
-			this.slainBosses.add(this.activeBoss);
-			this.activeBoss = null;
-		}
-		for (AbstractBoss slain : this.slainBosses) {
-			slain.unregister();
-		}
-		this.activeMobs.clear();
-		this.spectator.clear();
-		this.participants.clear();
-		this.arenaPoints.clear();
-		this.isFree = true;
-		this.waveCounter = 1;
+		});
 	}
 
 	public boolean removeMobAndAskIfEmpty(Mob mob, Player killer) {
@@ -286,6 +298,9 @@ public class Arena {
 			if (this.activeBoss.getMobInstance().equals(mob)) {
 				if (killer != null) {
 					addBossPoints();
+				}
+				if(this.activeBoss instanceof MinionBoss) {
+					((MinionBoss)this.activeBoss).clearMinions();
 				}
 				this.slainBosses.add(this.activeBoss);
 				this.activeBoss = null;
@@ -306,25 +321,29 @@ public class Arena {
 	}
 
 	public void addToSpectator(final Player p) {
-		this.spectator.add(p);
-		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-		p.teleport(spectate);
-		if (this.spectator.size() == this.participants.size()) {
-			Highscore.newHighScore(this.participants, this.getWaveCounter() - 1);
-			MobArenaPlugin.getInstance().getServer().getScheduler().runTaskLater(MobArenaPlugin.getInstance(), new Runnable() {
-				public void run() {
+		Bukkit.getScheduler().runTask(plugin, new Runnable() {
+			public void run() {
+				spectator.add(p);
+				p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+				p.teleport(spectate);
+				if (spectator.size() == participants.size()) {
+					Highscore.newHighScore(participants, getWaveCounter() - 1);
 					reset();
 				}
-			}, 1);
-		}
+			}
+		});
 	}
 
 	public void respawnAllSpectators() {
-		for (Player p : this.spectator) {
-			p.teleport(getPlayerspawn().get(new Random().nextInt(getPlayerspawn().size())));
-			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-			this.spectator.remove(p);
-		}
+		Bukkit.getScheduler().runTask(plugin, new Runnable() {
+			public void run() {
+				for (Player p : spectator) {
+					p.teleport(getPlayerspawn().get(new Random().nextInt(getPlayerspawn().size())));
+					p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+				}
+				spectator.clear();
+			}
+		});
 	}
 
 	private void setInventory(Player p) {

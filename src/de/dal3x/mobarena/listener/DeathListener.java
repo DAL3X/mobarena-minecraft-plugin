@@ -1,9 +1,8 @@
 package de.dal3x.mobarena.listener;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -23,6 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 
 import de.dal3x.mobarena.arena.Arena;
+import de.dal3x.mobarena.main.MobArenaPlugin;
 
 public class DeathListener implements Listener {
 
@@ -37,11 +37,11 @@ public class DeathListener implements Listener {
 		if (!(event.getEntity() instanceof Mob) || event.getEntity() instanceof Player) {
 			return;
 		}
-		Mob mob = (Mob) event.getEntity();
-		if(mob instanceof Slime && ((Slime)mob).getSize() > 1 && arena.getActiveBoss() == null) {
+		final Mob mob = (Mob) event.getEntity();
+		if (arena.getActiveMobs().contains(mob) && mob instanceof Slime && ((Slime) mob).getSize() > 1 && arena.getActiveBoss() == null) {
 			event.setDroppedExp(0);
 			event.getDrops().clear();
-			((Slime)mob).setSize(1);
+			((Slime) mob).setSize(1);
 			mob.setHealth(0);
 		}
 		if (arena.getActiveMobs().contains(mob)) {
@@ -50,25 +50,29 @@ public class DeathListener implements Listener {
 			if (!arena.isRunning()) {
 				return;
 			}
-			event.getDrops().addAll(getDrops(event));
-			Player killer = event.getEntity().getKiller();
+			final Player killer;
 			if (event.getEntity().getKiller() instanceof Projectile) {
 				killer = (Player) ((Projectile) event.getEntity().getKiller()).getShooter();
+			} else {
+				killer = event.getEntity().getKiller();
 			}
-			boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
-			if (waveDone) {
-				arena.addWavePoints();
-				arena.respawnAllSpectators();
-				arena.spawnNextWave();
-			}
-		}
-		if (arena.getActiveBoss() != null && mob.equals(arena.getActiveBoss().getMobInstance())) {
-			event.setDroppedExp(0);
-			event.getDrops().clear();
-			return;
+			Bukkit.getScheduler().runTask(MobArenaPlugin.getInstance(), new Runnable() {
+				public void run() {
+					ItemStack item = getPotion();
+					if (item != null && killer != null) {
+						killer.getInventory().addItem(getPotion());
+					}
+					boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
+					if (waveDone) {
+						arena.addWavePoints();
+						arena.respawnAllSpectators();
+						arena.spawnNextWave();
+					}
+				}
+			});
 		}
 	}
-	
+
 	// Backup Event, if mobs are removed for whatever reason
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onArenaMobRemove(EntityRemoveFromWorldEvent event) {
@@ -101,10 +105,10 @@ public class DeathListener implements Listener {
 		if (event.getDamager() instanceof Player) {
 			return;
 		}
-		if ((p.getHealth() - event.getDamage()) <= 0) {
+		if ((p.getHealth() - event.getFinalDamage()) <= 0) {
 			event.setDamage(0);
 			event.setCancelled(true);
-			addToSpec(p);
+			arena.addToSpectator(p);
 		}
 	}
 
@@ -117,17 +121,22 @@ public class DeathListener implements Listener {
 		if (!arena.isParticipant(p)) {
 			return;
 		}
+		if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK
+				|| event.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
+			return;
+		}
 		if (!arena.isSpectator(p)) {
-			if ((p.getHealth() - event.getDamage()) <= 0) {
+			if ((p.getHealth() - event.getFinalDamage()) <= 0) {
 				event.setDamage(0);
 				event.setCancelled(true);
-				addToSpec(p);
+				arena.addToSpectator(p);
 			}
+		} else {
+			event.setCancelled(true);
 		}
 	}
 
-	private List<ItemStack> getDrops(EntityDeathEvent event) {
-		List<ItemStack> list = new LinkedList<ItemStack>();
+	private ItemStack getPotion() {
 		if ((new Random().nextInt(400) - arena.getWaveCounter()) <= 0) {
 			ItemStack potion = new ItemStack(Material.POTION);
 			PotionMeta meta = (PotionMeta) potion.getItemMeta();
@@ -144,13 +153,9 @@ public class DeathListener implements Listener {
 				break;
 			}
 			potion.setItemMeta(meta);
-			list.add(potion);
+			return potion;
 		}
-		return list;
-	}
-
-	private void addToSpec(final Player p) {
-		arena.addToSpectator(p);
+		return null;
 	}
 
 }

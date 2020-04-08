@@ -42,6 +42,12 @@ public class MobGenerator {
 		mob.setPersistent(true);
 		mob.setRemoveWhenFarAway(false);
 		// Set equipment
+		mob.getEquipment().setHelmet(null);
+		mob.getEquipment().setChestplate(null);
+		mob.getEquipment().setLeggings(null);
+		mob.getEquipment().setBoots(null);
+		mob.getEquipment().setItemInMainHand(null);
+		mob.getEquipment().setItemInOffHand(null);
 		if (mobBP.getEquip() != null) {
 			for (int i = 0; i < mobBP.getEquip().length; i++) {
 				if (mobBP.getEquip()[i] != null) {
