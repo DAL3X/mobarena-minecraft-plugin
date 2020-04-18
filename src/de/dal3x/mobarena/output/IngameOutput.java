@@ -103,6 +103,11 @@ public class IngameOutput {
 	public static void sendGloryGainMessage(Player p, int glory) {
 		p.sendMessage(prefix + "§7Du hast §e" + glory + " §7Ruhm erhalten");
 	}
+	
+	public static void sendLegionXpGainMessage(Player p, int xp) {
+		p.sendMessage(prefix +"(falls du ein Mitglied einer Legion bist: )");
+		p.sendMessage("§7Du hast §e" + xp + " §7XP für deine Legion gesammelt");
+	}
 
 	public static void sendHighscore(Player p) {
 		p.sendMessage(prefix + "§7Highscore:");

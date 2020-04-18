@@ -38,7 +38,9 @@ public class MobArenaPlugin extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		clearInstances();
+		if (this.isEnabled()) {
+			clearInstances();
+		}
 	}
 
 	public void reload() {

@@ -60,7 +60,10 @@ public class DeathListener implements Listener {
 				public void run() {
 					ItemStack item = getPotion();
 					if (item != null && killer != null) {
-						killer.getInventory().addItem(getPotion());
+						ItemStack potion = getPotion();
+						if (potion != null) {
+							killer.getInventory().addItem(potion);
+						}
 					}
 					boolean waveDone = arena.removeMobAndAskIfEmpty(mob, killer);
 					if (waveDone) {
@@ -137,7 +140,7 @@ public class DeathListener implements Listener {
 	}
 
 	private ItemStack getPotion() {
-		if ((new Random().nextInt(400) - arena.getWaveCounter()) <= 0) {
+		if ((new Random().nextInt(160) - arena.getWaveCounter()) <= 0) {
 			ItemStack potion = new ItemStack(Material.POTION);
 			PotionMeta meta = (PotionMeta) potion.getItemMeta();
 			int rand = new Random().nextInt(3);

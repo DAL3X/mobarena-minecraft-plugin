@@ -209,6 +209,9 @@ public class Arena {
 		p.teleport(spawnLocation);
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		Filehandler.getInstance().addArenaPoints(p, arenaPoints.get(p));
+		int legionxp = arenaPoints.get(p) / 7;
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "legion givexp " + p.getName() + " " + legionxp);
+		IngameOutput.sendLegionXpGainMessage(p, legionxp);
 		IngameOutput.sendGloryGainMessage(p, arenaPoints.get(p));
 		arenaPoints.remove(p);
 		for (PotionEffect effect : p.getActivePotionEffects()) {
@@ -258,6 +261,9 @@ public class Arena {
 					p.teleport(spawnLocation);
 					p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 					Filehandler.getInstance().addArenaPoints(p, arenaPoints.get(p));
+					int legionxp = arenaPoints.get(p) / 7;
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "legion givexp " + p.getName() + " " + legionxp);
+					IngameOutput.sendLegionXpGainMessage(p, legionxp);
 					IngameOutput.sendGloryGainMessage(p, arenaPoints.get(p));
 					arenaPoints.remove(p);
 					if (ClassController.getInstance().getClassForPlayer(p).getPassiveSkill() != null) {
@@ -299,8 +305,8 @@ public class Arena {
 				if (killer != null) {
 					addBossPoints();
 				}
-				if(this.activeBoss instanceof MinionBoss) {
-					((MinionBoss)this.activeBoss).clearMinions();
+				if (this.activeBoss instanceof MinionBoss) {
+					((MinionBoss) this.activeBoss).clearMinions();
 				}
 				this.slainBosses.add(this.activeBoss);
 				this.activeBoss = null;

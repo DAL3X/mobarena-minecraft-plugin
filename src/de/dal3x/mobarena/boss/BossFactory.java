@@ -9,7 +9,7 @@ import de.dal3x.mobarena.boss.implementation.BroodMother;
 import de.dal3x.mobarena.boss.implementation.LichLord;
 import de.dal3x.mobarena.boss.implementation.Shuffler;
 
-public class BossFactory {
+public final class BossFactory {
 
 	private static BossFactory instance;
 	private LinkedList<String> names;
@@ -23,19 +23,15 @@ public class BossFactory {
 	}
 
 	private AbstractBoss getBossObject(String name, Arena arena) {
-		if(name.equalsIgnoreCase(names.get(0))) {
+		if (name.equalsIgnoreCase(names.get(0))) {
 			return new BigSlime(arena);
-		}
-		else if(name.equalsIgnoreCase(names.get(1))) {
+		} else if (name.equalsIgnoreCase(names.get(1))) {
 			return new BroodMother(arena);
-		}
-		else if(name.equalsIgnoreCase(names.get(2))) {
+		} else if (name.equalsIgnoreCase(names.get(2))) {
 			return new Shuffler(arena);
-		}
-		else if(name.equalsIgnoreCase(names.get(3))) {
+		} else if (name.equalsIgnoreCase(names.get(3))) {
 			return new LichLord(arena);
-		}
-		else {
+		} else {
 			return new TestBoss(arena);
 		}
 	}
