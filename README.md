@@ -1,4 +1,4 @@
-_**This project is unsupported, deprecated and build for a old version of minecraft. All usage is at own risk**_
+_**This project is unsupported, deprecated and build for an old version of minecraft. All usage is at own risk**_
 
 # Mobarena
 
